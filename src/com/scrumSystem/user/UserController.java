@@ -1,5 +1,9 @@
 package com.scrumSystem.user;
 
+import com.scrumSystem.project.ProjectDetails;
+import com.scrumSystem.role.*;
+import com.scrumSystem.role.RoleFactory;
+
 /**
  * Controller class for user related functionality
  * Created by Matt on 4/05/2016.
@@ -13,19 +17,14 @@ public class UserController
     private UserEntity user;
 
     /**
-     * User details object to hold the details of the user
-     */
-    private UserDetails details;
-
-    /**
      * Role object used by the user
      */
-    //private Role role;
+    private Role role;
 
     /**
-     * Role factory object to create the role for the logged in user
+     * Role type of the user who is logged in
      */
-    //private RoleFactory rf;
+    private String userRoleType;
 
     /**
      * Default constructor
@@ -43,14 +42,40 @@ public class UserController
      */
     public boolean attemptLogin(String username, String password)
     {
-        String roleType = user.login(username, password);
+        userRoleType = user.login(username, password);
 
         //if login failed then we return false to GUI class (boundary class)
-        if ("Failure".equals(roleType))
+        if ("Failure".equals(userRoleType))
             return false;
 
         //pass the role type string to the role factory to create the role
-        //role = rf.createRole(roleType);
+        role = RoleFactory.createRole(userRoleType);
         return true;
+    }
+
+    /**
+     * Gets the role type of the user who is currently logged in
+     * @return The role type of the current user
+     */
+    public String getRoleType()
+    {
+        return userRoleType;
+    }
+
+    public ProjectDetails createProject(String projectName, String scrumMaster)
+    {
+        //ensures that role is an instance of System Admin object then casts to the correct type
+        if (role instanceof SystemAdmin)
+            return ((SystemAdmin)role).createProject(projectName, scrumMaster);
+        return null;
+    }
+
+    /**
+     * Calls the user entities getActiveProject method which returns the active project of the user
+     * @return A String containing the active project of the user
+     */
+    public String getUserActiveProject()
+    {
+        return getUserActiveProject();
     }
 }
