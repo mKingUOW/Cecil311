@@ -1,6 +1,7 @@
 package com.scrumSystem.main;
 
 import com.scrumSystem.GUI.SystemGUIFrame;
+import com.scrumSystem.GUI.TeamMemberView;
 
 /**
  * Simple class to start the system
