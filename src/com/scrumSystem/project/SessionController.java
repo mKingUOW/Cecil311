@@ -15,6 +15,11 @@ public class SessionController
     private UserController uc;
 
     /**
+     * Project details object holding all details of the project
+     */
+    private ProjectDetails pd;
+
+    /**
      * Default constructor
      */
     public SessionController()
@@ -33,4 +38,84 @@ public class SessionController
         return uc.attemptLogin(username, password);
     }
 
+    /**
+     * GUI class calls this method after login to determine what UI state should be displayed
+     * Three possible states can be returned
+     * Project - the user that logged in has a current active project so display project UI
+     * NoProject - the user that logged in has no current active project so display NoProject UI
+     * Setup - This is relevant only to a Scrum Master that has logged in and will display a project setup UI
+     * Error - An error occurred getting the state (invalid project or the like)
+     */
+    public String getStartingState()
+    {
+        String noProject = "noProject";
+        String setup = "setup";
+        String project = "project";
+        String error = "error";
+        String activeProject = uc.getUserActiveProject();
+
+        if ("none".equals(activeProject))
+            return noProject;
+
+        // find the project in the database and instantiate the project
+        else
+        {
+            //returns a project details object containing the info for the active project passed
+            pd = new ProjectDetails();
+
+            //if the project is correctly initialized
+            if (pd.initProject(activeProject))
+            {
+                //if the user logged in is a scrum master, check if their active project needs to be setup
+                if ("SM".equals(uc.getRoleType()) && pd.getCurrentSprint() == 0)
+                    return setup;
+                else
+                    return project;
+            }
+            else
+                return error;
+        }
+    }
+
+    /**
+     * GUI class calls this method to determine UI options for the user
+     * @return The role type of the current user
+     */
+    public String getUserRoleType()
+    {
+        return uc.getRoleType();
+    }
+
+    public boolean createProject(String projectName, String scrumMaster)
+    {
+        pd = uc.createProject(projectName, scrumMaster);
+
+        //after the project has been created by the system admin, is should be saved to the database
+        if (pd != null)
+        {
+            pd.saveToDB();
+            return true;
+        }
+         return false;
+    }
+
+    /**
+     * GUI class calls this method when a Scrum Master logs in and is required to setup a newly created project
+     * It will return the name of the project so that the GUI can display the project name at the top of the form
+     * to be filled out by the scrum master
+     * @return Returns the project name to be setup, which is the active project for the scrum master
+     */
+    public String initProjectSetup()
+    {
+        return uc.getUserActiveProject();
+    }
+
+    /**
+     * GUI class calls this method and passes all mandatory data for initial project setup
+     * @return Returns true if the project data was successfully added to the project, otherwise false
+     */
+    public boolean setupProject()
+    {
+        return false;
+    }
 }
