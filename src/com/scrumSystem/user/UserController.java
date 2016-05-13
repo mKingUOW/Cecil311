@@ -4,6 +4,8 @@ import com.scrumSystem.project.ProjectDetails;
 import com.scrumSystem.role.*;
 import com.scrumSystem.role.RoleFactory;
 
+import java.util.ArrayList;
+
 /**
  * Controller class for user related functionality
  * Created by Matt on 4/05/2016.
@@ -62,6 +64,13 @@ public class UserController
         return userRoleType;
     }
 
+    /**
+     * System admin exclusive method for creating a new project
+     * If the role object is not an instance of SystemAdmin, it will return null
+     * @param projectName The name of the project to be created
+     * @param scrumMaster The username of the scrum master assigned to the project
+     * @return The new project details object
+     */
     public ProjectDetails createProject(String projectName, String scrumMaster)
     {
         //ensures that role is an instance of System Admin object then casts to the correct type
@@ -71,11 +80,35 @@ public class UserController
     }
 
     /**
-     * Calls the user entities getActiveProject method which returns the active project of the user
+     * Calls the user entity's getActiveProject method which returns the active project of the user
      * @return A String containing the active project of the user
      */
     public String getUserActiveProject()
     {
-        return getUserActiveProject();
+        return user.getActiveProject();
+    }
+
+    /**
+     * Returns an array list of all product owners within the system that are not currently assigned to a project
+     * @return ArrayList of type String containing all available product owners within the system
+     */
+    public ArrayList<String> getAvailablePOs(ProjectDetails pd)
+    {
+        //only scrum master and system admin will ever need this functionality
+        if (role instanceof ScrumMaster || role instanceof SystemAdmin)
+            return pd.getAvailablePOs();
+        return null;
+    }
+
+    /**
+     * Returns an array list of all team members within the system that are not currently assigned to a project
+     * @return ArrayList of type String containing all available product owners within the system
+     */
+    public ArrayList<String> getAvailableTMs(ProjectDetails pd)
+    {
+        //only scrum master and system admin will ever need this functionality
+        if (role instanceof ScrumMaster || role instanceof SystemAdmin)
+            return pd.getAvailableTMs();
+        return null;
     }
 }

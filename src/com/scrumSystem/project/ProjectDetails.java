@@ -1,5 +1,6 @@
 package com.scrumSystem.project;
 
+import com.scrumSystem.Helpers.ProjectDetailsHelper;
 import com.scrumSystem.interfaces.Entity;
 import com.scrumSystem.project.productBacklog.ProdBacklogEntity;
 import com.scrumSystem.project.sprintBacklog.SprintBacklogEntity;
@@ -8,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Class for holding project details
@@ -106,6 +108,19 @@ public class ProjectDetails implements Entity
     }
 
     /**
+     * Constructor - for system admin use
+     */
+    public ProjectDetails(String projectName, String scrumMaster)
+    {
+        projectFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "project.csv";
+        POFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "projectPOs.csv";
+        TMFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "projectTMs.csv";
+
+        this.projectName = projectName;
+        this.scrumMaster = scrumMaster;
+    }
+
+    /**
      * Finds project the database and initializes attributes
      * This is used when a user logs in and they have an active project
      * It is fairly complex as it needs to read in fields from the database from
@@ -121,16 +136,13 @@ public class ProjectDetails implements Entity
     }
 
     /**
-     * Constructor - for system admin use
+     * Sets a new projects attributes. New project means a project that has just been setup by the scrum master of the project
+     * @param pdh A helper object holding project data obtained from the GUI
+     * @return Returns true if the project is successfully setup, otherwise false
      */
-    public ProjectDetails(String projectName, String scrumMaster)
+    public boolean setupProject(ProjectDetailsHelper pdh)
     {
-        projectFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "project.csv";
-        POFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "projectPOs.csv";
-        TMFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "projectTMs.csv";
-
-        this.projectName = projectName;
-        this.scrumMaster = scrumMaster;
+        return false;
     }
 
     //---------------------------------------------GET/SET METHODS------------------------------------------//
@@ -139,6 +151,25 @@ public class ProjectDetails implements Entity
     {
         return currentSprint;
     }
+
+    /**
+     * Returns a list of product owner usernames available for project assignment
+     * @return Array list of type String containing all product owner usernames available for project assignment
+     */
+    public ArrayList<String> getAvailablePOs()
+    {
+        return null;
+    }
+
+    /**
+     * Returns a list of team member usernames available for project assignment
+     * @return Array list of type String containing all team members usernames available for project assignment
+     */
+    public ArrayList<String> getAvailableTMs()
+    {
+        return null;
+    }
+
 
     //-------------------------------------ENTITY INTERFACE OVERRIDDEN METHODS------------------------------//
 

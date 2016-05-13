@@ -1,6 +1,10 @@
 package com.scrumSystem.project;
 
+import com.scrumSystem.Helpers.ProjectDetailsHelper;
 import com.scrumSystem.user.UserController;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Main class for interfacing with GUI classes
@@ -25,6 +29,7 @@ public class SessionController
     public SessionController()
     {
         uc = new UserController();
+        pd = null;
     }
 
     /**
@@ -112,10 +117,29 @@ public class SessionController
 
     /**
      * GUI class calls this method and passes all mandatory data for initial project setup
+     * @param pdh A helper object holding project data obtained from the GUI
      * @return Returns true if the project data was successfully added to the project, otherwise false
      */
-    public boolean setupProject()
+    public boolean setupProject(ProjectDetailsHelper pdh)
     {
-        return false;
+        return pd.setupProject(pdh);
+    }
+
+    /**
+     * Returns an array list of all product owners within the system that are not currently assigned to a project
+     * @return ArrayList of type String containing all available product owners within the system
+     */
+    public ArrayList<String> getAvailablePOs()
+    {
+        return uc.getAvailablePOs(pd);
+    }
+
+    /**
+     * Returns an array list of all team members within the system that are not currently assigned to a project
+     * @return ArrayList of type String containing all available product owners within the system
+     */
+    public ArrayList<String> getAvailableTMs()
+    {
+        return uc.getAvailableTMs(pd);
     }
 }
