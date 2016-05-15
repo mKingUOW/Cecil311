@@ -1,6 +1,7 @@
 package com.scrumSystem.GUI;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Main class for the system GUI
@@ -10,4 +11,19 @@ import javax.swing.*;
 public class SystemGUIFrame extends JFrame
 {
     //define system frame GUI
+    //frame = new JFrame("Team Member View");
+    //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    public SystemGUIFrame(){
+        setSize(new Dimension(1500, 720));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+        TeamMemberView teamMemberView = new TeamMemberView(this);
+        teamMemberView.showView();
+
+        //ProductOwnerView productOwnerView = new ProductOwnerView(this);
+        //productOwnerView.showView();
+
+    }
+
 }
