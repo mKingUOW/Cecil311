@@ -69,7 +69,7 @@ public class CreateNewIssueView extends JPanel{
         {
             public void actionPerformed(ActionEvent e)
             {
-                int res = JOptionPane.showConfirmDialog(parentFrame,"Isuue will not be saved. Proceed? ","Cancel Creation of Issue",JOptionPane.OK_CANCEL_OPTION);
+                int res = JOptionPane.showConfirmDialog(parentFrame,"Issue will not be saved. Proceed? ","Cancel Creation of Issue",JOptionPane.OK_CANCEL_OPTION);
                 if(res == JOptionPane.YES_OPTION){
                     parentFrame.remove(currentView);
                     parentFrame.add(returnView);
@@ -99,17 +99,21 @@ public class CreateNewIssueView extends JPanel{
         //WEST - this.borderLayout.west
         westLayoutPanel = new JPanel();
         westLayoutPanel.setBackground(Color.decode("#EBF0F2"));
-        westLayoutPanel.setLayout(new GridLayout(5,1));
+        westLayoutPanel.setLayout(new GridLayout(7,1));
 
+        JLabel title = new JLabel("Title: ", SwingConstants.CENTER);
         JLabel desc = new JLabel("Description: ", SwingConstants.CENTER);
         JLabel priority = new JLabel("Priority: ",SwingConstants.CENTER);
         JLabel type = new JLabel("Issue Type: ",SwingConstants.CENTER);
+        JLabel subType = new JLabel("Sub Type: ",SwingConstants.CENTER);
         JLabel storyPoints = new JLabel("Story Points: ",SwingConstants.CENTER);
         JLabel relatedBacklogItem = new JLabel("Related backlog item: ",SwingConstants.CENTER);
 
+        westLayoutPanel.add(title);
         westLayoutPanel.add(desc);
         westLayoutPanel.add(priority);
         westLayoutPanel.add(type);
+        westLayoutPanel.add(subType);
         westLayoutPanel.add(storyPoints);
         westLayoutPanel.add(relatedBacklogItem);
 
@@ -121,20 +125,23 @@ public class CreateNewIssueView extends JPanel{
         // CENTER LEFT
         centerLeftLayoutPanel = new JPanel();
         centerLeftLayoutPanel.setBackground(Color.decode("#EBF0F2"));
-        centerLeftLayoutPanel.setLayout(new GridLayout(5,1));
+        centerLeftLayoutPanel.setLayout(new GridLayout(7,1));
 
         //elements in center left panel
+        JTextField titleField = new JTextField();
         descArea = new JTextArea(4,52);
-        String[] optionsArray = new String[]{"Low","Medium","High"};
+        String[] optionsArray = new String[]{"Core","Non-Core","Stretch"};
         JComboBox<String> priorityOptions = new JComboBox<String>(optionsArray);
-        String[] typeArray = new String[]{"Story","Epic","Bug","Enhancement"};
+        String[] typeArray = new String[]{"Story","Epic"};
         JComboBox<String> typeOptions = new JComboBox<String>(typeArray);
+        String[] subTypeArray = new String[]{"Bug", "Extension", "Feature"};
+        JComboBox<String> subTypeOptions = new JComboBox<String>(subTypeArray);
         JTextField storyPointsField = new JTextField();
         JRadioButton yes = new JRadioButton("Yes");
         JRadioButton no = new JRadioButton("No");
 
         //CENTER RIGHT - needs to be instantiated here for layoutLeft
-        centerRightLayoutPanel = new JPanel(); //needs to be instantiated before next call
+        centerRightLayoutPanel = new JPanel();
         centerRightLayoutPanel.setBackground(Color.decode("#EBF0F2"));
         centerRightLayoutPanel.setLayout(new BorderLayout());
         ScrollPanel scrollPanel = new ScrollPanel(null);
@@ -144,11 +151,15 @@ public class CreateNewIssueView extends JPanel{
 
 
         //CENTER LEFT
+        TextFieldLayout titleLayout = new TextFieldLayout(titleField);
+        centerLeftLayoutPanel.add(titleLayout);
         centerLeftLayoutPanel.add(descArea);
         ComboBoxLayout poLayout = new ComboBoxLayout(priorityOptions);
         centerLeftLayoutPanel.add(poLayout);
         ComboBoxLayout tLayout = new ComboBoxLayout(typeOptions);
         centerLeftLayoutPanel.add(tLayout);
+        ComboBoxLayout stLayout = new ComboBoxLayout(subTypeOptions);
+        centerLeftLayoutPanel.add(stLayout);
         TextFieldLayout tfLayout = new TextFieldLayout(storyPointsField);
         centerLeftLayoutPanel.add(tfLayout);
         ButtonGroupLayout buttonGroupLayout = new ButtonGroupLayout(yes,no,backlogScrollPane,rightHeader);
@@ -268,15 +279,19 @@ class TextFieldLayout extends JPanel{
 
     public TextFieldLayout(JTextField tf){
         field = tf;
-        setLayout(new GridLayout(5,1));
+
+        setLayout(new BorderLayout());
         setBackground(Color.decode("#EBF0F2"));
 
-        add(new DummyLabel()); //dummy label
-        add(new DummyLabel());//dummy label
-        field.setPreferredSize(new Dimension(600,50));
-        add(field,BorderLayout.WEST);
-        add(new DummyLabel());//dummy label
-        add(new DummyLabel());//dummy label
+        JLabel topPad = new JLabel();
+        JLabel bottomPad = new JLabel();
+        topPad.setPreferredSize(new Dimension(100,30));
+        bottomPad.setPreferredSize(new Dimension(100,30));
+        add(topPad,BorderLayout.NORTH);//dummy label
+        field.setPreferredSize(new Dimension(70,50));
+        add(field, BorderLayout.CENTER);
+        add(bottomPad,BorderLayout.SOUTH);//dummy label
+
     }
 }
 
@@ -297,7 +312,7 @@ class ComboBoxLayout extends JPanel{
         layout_west.setLayout(new GridLayout(5,1));
         layout_west.add(new DummyLabel()); //dummy label
         layout_west.add(new DummyLabel());//dummy label
-        box.setPreferredSize(new Dimension(100,200));
+        box.setPreferredSize(new Dimension(100,300));
         layout_west.add(box);
         layout_west.add(new DummyLabel());//dummy label
         layout_west.add(new DummyLabel());//dummy label
