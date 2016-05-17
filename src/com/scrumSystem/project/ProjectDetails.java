@@ -5,11 +5,8 @@ import com.scrumSystem.interfaces.Entity;
 import com.scrumSystem.project.productBacklog.ProdBacklogEntity;
 import com.scrumSystem.project.sprintBacklog.SprintBacklogEntity;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Class for holding project details
@@ -27,6 +24,12 @@ public class ProjectDetails implements Entity
      * Database file path for the product owners of the project
      */
     private String POFile;
+
+    /**
+     *  Database file path for the user accounts
+     *  Used to return users not assigned to a active project
+     */
+    private String UAFile;
 
     /**
      * Database file path for the team members of the project
@@ -103,6 +106,7 @@ public class ProjectDetails implements Entity
         projectFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "project.csv";
         POFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "projectPOs.csv";
         TMFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "projectTMs.csv";
+        UAFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "userAccounts.csv";
 
         projectName = null;
     }
@@ -115,6 +119,7 @@ public class ProjectDetails implements Entity
         projectFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "project.csv";
         POFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "projectPOs.csv";
         TMFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "projectTMs.csv";
+        UAFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "userAccounts.csv";
 
         this.projectName = projectName;
         this.scrumMaster = scrumMaster;
@@ -167,7 +172,24 @@ public class ProjectDetails implements Entity
      */
     public ArrayList<String> getAvailableTMs()
     {
-        return null;
+        ArrayList<String> names = new ArrayList<>();
+        String lineInFile;
+        String none = "none";
+
+        try {
+            reader = new BufferedReader(new FileReader(UAFile));
+            lineInFile = reader.readLine();
+
+            while (lineInFile != null) {
+                String [] fields = lineInFile.split(",");
+                if (none.equals(fields[3])) {
+                    names.add(fields[0]);
+                }
+            }
+        } catch (Exception e) {e.printStackTrace();}
+
+        return names;
+        //return null;
     }
 
 
@@ -182,6 +204,21 @@ public class ProjectDetails implements Entity
     @Override
     public boolean loadFromDB(String id)
     {
+
+        String lineInFile;
+
+        try {
+            reader = new BufferedReader(new FileReader(projectFile));
+            lineInFile = reader.readLine();
+
+            while (lineInFile != null) {
+                String [] fields = lineInFile.split(",");
+                if (id.equals(fields[0])) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {e.printStackTrace();}
+
         return false;
     }
 }
