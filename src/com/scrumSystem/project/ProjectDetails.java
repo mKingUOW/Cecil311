@@ -147,6 +147,7 @@ public class ProjectDetails implements Entity
      */
     public boolean setupProject(ProjectDetailsHelper pdh)
     {
+
         return false;
     }
 
@@ -163,7 +164,7 @@ public class ProjectDetails implements Entity
      */
     public ArrayList<String> getAvailablePOs()
     {
-        ArrayList<String> names = new ArrayList<>();
+        productOwners = new ArrayList<>();
         String lineInFile;
         String none = "none";
         String userType = "PO";
@@ -174,12 +175,12 @@ public class ProjectDetails implements Entity
             while (lineInFile != null) {
                 String [] fields = lineInFile.split(",");
                 if (userType.equals(fields[2]) && none.equals(fields[3])) {
-                    names.add(fields[0]);
+                    productOwners.add(fields[0]);
                 }
             }
         } catch (Exception e) {e.printStackTrace();}
 
-        return names;
+        return productOwners;
     }
 
     /**
@@ -188,7 +189,7 @@ public class ProjectDetails implements Entity
      */
     public ArrayList<String> getAvailableTMs()
     {
-        ArrayList<String> names = new ArrayList<>();
+        teamMembers = new ArrayList<>();
         String lineInFile;
         String none = "none";
         String userType = "TM";
@@ -200,12 +201,12 @@ public class ProjectDetails implements Entity
             while (lineInFile != null) {
                 String [] fields = lineInFile.split(",");
                 if (userType.equals(fields[2]) && none.equals(fields[3])) {
-                    names.add(fields[0]);
+                    teamMembers.add(fields[0]);
                 }
             }
         } catch (Exception e) {e.printStackTrace();}
 
-        return names;
+        return teamMembers;
     }
 
 
