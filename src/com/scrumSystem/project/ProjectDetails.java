@@ -175,6 +175,7 @@ public class ProjectDetails implements Entity
         ArrayList<String> names = new ArrayList<>();
         String lineInFile;
         String none = "none";
+        String userType = "TM";
 
         try {
             reader = new BufferedReader(new FileReader(UAFile));
@@ -182,7 +183,7 @@ public class ProjectDetails implements Entity
 
             while (lineInFile != null) {
                 String [] fields = lineInFile.split(",");
-                if (none.equals(fields[3])) {
+                if (userType.equals(fields[2]) && none.equals(fields[3])) {
                     names.add(fields[0]);
                 }
             }
