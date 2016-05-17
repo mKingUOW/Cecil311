@@ -163,7 +163,23 @@ public class ProjectDetails implements Entity
      */
     public ArrayList<String> getAvailablePOs()
     {
-        return null;
+        ArrayList<String> names = new ArrayList<>();
+        String lineInFile;
+        String none = "none";
+        String userType = "PO";
+        try {
+            reader = new BufferedReader(new FileReader(UAFile));
+            lineInFile = reader.readLine();
+
+            while (lineInFile != null) {
+                String [] fields = lineInFile.split(",");
+                if (userType.equals(fields[2]) && none.equals(fields[3])) {
+                    names.add(fields[0]);
+                }
+            }
+        } catch (Exception e) {e.printStackTrace();}
+
+        return names;
     }
 
     /**
@@ -190,7 +206,6 @@ public class ProjectDetails implements Entity
         } catch (Exception e) {e.printStackTrace();}
 
         return names;
-        //return null;
     }
 
 
