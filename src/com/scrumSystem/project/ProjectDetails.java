@@ -149,11 +149,11 @@ public class ProjectDetails implements Entity
     public boolean setupProject(ProjectDetailsHelper pdh)
     {
         try {
-            this.projectName.equals(pdh.getProjectName());
-            this.startDate.equals(pdh.getStartDate());
-            this.endDate.equals(pdh.getEndDate());
-            this.storyPointValue.equals(pdh.getStoryPointValue());
-            this.scrumMaster.equals(pdh.getScrumMaster());
+            this.projectName = pdh.getProjectName();
+            this.startDate = pdh.getStartDate();
+            this.endDate = pdh.getEndDate();
+            this.storyPointValue = pdh.getStoryPointValue();
+            this.scrumMaster = pdh.getScrumMaster();
             this.currentSprint = pdh.getCurrentSprint();
             return true;
         }catch (Exception e) {
