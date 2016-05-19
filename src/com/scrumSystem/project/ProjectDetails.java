@@ -64,7 +64,8 @@ public class ProjectDetails implements Entity
     /**
      * Story point value in hours
      */
-    private int storyPointValue;
+    private String storyPointValue;
+    //private int storyPointValue;
 
     /**
      * Scrum Master for the project
@@ -147,8 +148,18 @@ public class ProjectDetails implements Entity
      */
     public boolean setupProject(ProjectDetailsHelper pdh)
     {
-
-        return false;
+        try {
+            this.projectName.equals(pdh.getProjectName());
+            this.startDate.equals(pdh.getStartDate());
+            this.endDate.equals(pdh.getEndDate());
+            this.storyPointValue.equals(pdh.getStoryPointValue());
+            this.scrumMaster.equals(pdh.getScrumMaster());
+            this.currentSprint = pdh.getCurrentSprint();
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     //---------------------------------------------GET/SET METHODS------------------------------------------//
@@ -213,11 +224,17 @@ public class ProjectDetails implements Entity
     //-------------------------------------ENTITY INTERFACE OVERRIDDEN METHODS------------------------------//
 
     @Override
-    public void saveToDB()
-    {
+    public void saveToDB() {
 
+        try {
+            writer = new PrintWriter(UAFile);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
+    
     @Override
     public boolean loadFromDB(String id)
     {
