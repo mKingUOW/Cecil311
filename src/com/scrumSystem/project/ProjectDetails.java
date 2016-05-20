@@ -89,6 +89,11 @@ public class ProjectDetails implements Entity
     private int currentSprint;
 
     /**
+     * Integer to hold the duration of the sprint
+     */
+    private int durationOfSprint;
+
+    /**
      * Product backlog object
      */
     private ProdBacklogEntity pb;
@@ -155,6 +160,7 @@ public class ProjectDetails implements Entity
             this.storyPointValue = pdh.getStoryPointValue();
             this.scrumMaster = pdh.getScrumMaster();
             this.currentSprint = pdh.getCurrentSprint();
+            this.durationOfSprint = pdh.getDurationOfSprint();
             return true;
         }catch (Exception e) {
             e.printStackTrace();
@@ -173,8 +179,7 @@ public class ProjectDetails implements Entity
      * Returns a list of product owner usernames available for project assignment
      * @return Array list of type String containing all product owner usernames available for project assignment
      */
-    public ArrayList<String> getAvailablePOs()
-    {
+    public ArrayList<String> getAvailablePOs() throws IOException {
         productOwners = new ArrayList<>();
         String lineInFile;
         String none = "none";
@@ -189,8 +194,10 @@ public class ProjectDetails implements Entity
                     productOwners.add(fields[0]);
                 }
             }
-        } catch (Exception e) {e.printStackTrace();}
-
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        reader.close();
         return productOwners;
     }
 
@@ -198,8 +205,7 @@ public class ProjectDetails implements Entity
      * Returns a list of team member usernames available for project assignment
      * @return Array list of type String containing all team members usernames available for project assignment
      */
-    public ArrayList<String> getAvailableTMs()
-    {
+    public ArrayList<String> getAvailableTMs() throws IOException {
         teamMembers = new ArrayList<>();
         String lineInFile;
         String none = "none";
@@ -215,8 +221,11 @@ public class ProjectDetails implements Entity
                     teamMembers.add(fields[0]);
                 }
             }
-        } catch (Exception e) {e.printStackTrace();}
-
+        } catch (Exception e) {
+            reader.close();
+            e.printStackTrace();
+        }
+        reader.close();
         return teamMembers;
     }
 
@@ -227,9 +236,13 @@ public class ProjectDetails implements Entity
     public void saveToDB() {
 
         try {
-            writer = new PrintWriter(UAFile);
+            writer = new PrintWriter(projectFile);
 
 
+            writer.append(projectName + "," + startDate + "," + endDate + "," + storyPointValue + "," + scrumMaster
+                            + "," + currentSprint + "," + durationOfSprint);
+
+            writer.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -248,6 +261,7 @@ public class ProjectDetails implements Entity
             while (lineInFile != null) {
                 String [] fields = lineInFile.split(",");
                 if (id.equals(fields[0])) {
+                    reader.close();
                     return true;
                 }
             }
