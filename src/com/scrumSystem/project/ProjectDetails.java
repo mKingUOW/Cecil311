@@ -179,7 +179,7 @@ public class ProjectDetails implements Entity
      * Returns a list of product owner usernames available for project assignment
      * @return Array list of type String containing all product owner usernames available for project assignment
      */
-    public ArrayList<String> getAvailablePOs() throws IOException {
+    public ArrayList<String> getAvailablePOs()  {
         productOwners = new ArrayList<>();
         String lineInFile;
         String none = "none";
@@ -197,7 +197,6 @@ public class ProjectDetails implements Entity
         } catch (Exception e) {
             e.printStackTrace();
         }
-        reader.close();
         return productOwners;
     }
 
@@ -205,7 +204,7 @@ public class ProjectDetails implements Entity
      * Returns a list of team member usernames available for project assignment
      * @return Array list of type String containing all team members usernames available for project assignment
      */
-    public ArrayList<String> getAvailableTMs() throws IOException {
+    public ArrayList<String> getAvailableTMs() {
         teamMembers = new ArrayList<>();
         String lineInFile;
         String none = "none";
@@ -222,10 +221,8 @@ public class ProjectDetails implements Entity
                 }
             }
         } catch (Exception e) {
-            reader.close();
             e.printStackTrace();
         }
-        reader.close();
         return teamMembers;
     }
 
