@@ -13,6 +13,7 @@ public class DetailedBacklogItemView extends JPanel {
     private JFrame parentFrame;
     private JPanel currentView;
     private JPanel returnView; //view to return to on close
+    private MemberView parentPanel;
 
     private DescPanel descPanel;
     private BacklogScrollPane descScrollPane;
@@ -20,10 +21,11 @@ public class DetailedBacklogItemView extends JPanel {
     private BacklogScrollPane commentsScrollPane;
 
 
-    public DetailedBacklogItemView(JFrame p, JPanel ret){
+    public DetailedBacklogItemView(JFrame p, JPanel ret, MemberView pp){
         parentFrame = p;
         currentView = this;
         returnView = ret;
+        parentPanel = pp;
         prepare();
     }
 
@@ -69,6 +71,7 @@ public class DetailedBacklogItemView extends JPanel {
                 parentFrame.add(returnView);
                 parentFrame.revalidate();
                 parentFrame.repaint();
+                parentPanel.setCurrentView(returnView);
             }
         });
         exitButton.setPreferredSize(new Dimension(100,35));

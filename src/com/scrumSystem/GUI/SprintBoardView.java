@@ -10,6 +10,7 @@ public class SprintBoardView extends JPanel{
 
     private JFrame parentFrame;
     private JPanel returnView;
+    private MemberView parentPanel;
 
     private SprintBacklogScrollPanel todoScrollPanel;
     private SprintBacklogScrollPanel inProgressScrollPanel;
@@ -23,9 +24,10 @@ public class SprintBoardView extends JPanel{
     private BacklogScrollPane testingBacklogScrollPane;
     private BacklogScrollPane completeBacklogScrollPane;
 
-    public SprintBoardView(JFrame p, JPanel ret){
+    public SprintBoardView(JFrame p, JPanel ret, MemberView pp){
         parentFrame = p;
         returnView = ret;
+        parentPanel = pp;
         prepare();
     }
 
@@ -48,7 +50,7 @@ public class SprintBoardView extends JPanel{
         todoPanel.setLayout(new BorderLayout());
         JLabel todoHeader = new JLabel("To-Do");
         //todoHeader.setPreferredSize(new Dimension(250,40));
-        todoScrollPanel = new SprintBacklogScrollPanel(null,returnView,parentFrame);
+        todoScrollPanel = new SprintBacklogScrollPanel(null,returnView,parentFrame,parentPanel);
         todoBacklogScrollPane = new BacklogScrollPane(100,100);
         todoBacklogScrollPane.setScrollPanel(todoScrollPanel);
         todoPanel.add(todoHeader,BorderLayout.NORTH);
@@ -59,7 +61,7 @@ public class SprintBoardView extends JPanel{
         JPanel inProgressPanel = new JPanel();
         inProgressPanel.setLayout(new BorderLayout());
         JLabel inProgressHeader = new JLabel("In Progress");
-        inProgressScrollPanel = new SprintBacklogScrollPanel(null,returnView,parentFrame);
+        inProgressScrollPanel = new SprintBacklogScrollPanel(null,returnView,parentFrame, parentPanel);
         inProgressBacklogScrollPane = new BacklogScrollPane(100,100);
         inProgressBacklogScrollPane.setScrollPanel(inProgressScrollPanel);
         inProgressPanel.add(inProgressHeader,BorderLayout.NORTH);
@@ -69,7 +71,7 @@ public class SprintBoardView extends JPanel{
         JPanel reviewPanel = new JPanel();
         reviewPanel.setLayout(new BorderLayout());
         JLabel reviewHeader = new JLabel("Ready for Review");
-        reviewScrollPanel = new SprintBacklogScrollPanel(null,returnView,parentFrame);
+        reviewScrollPanel = new SprintBacklogScrollPanel(null,returnView,parentFrame,parentPanel);
         reviewBacklogScrollPane = new BacklogScrollPane(100,100);
         reviewBacklogScrollPane.setScrollPanel(reviewScrollPanel);
         reviewPanel.add(reviewHeader,BorderLayout.NORTH);
@@ -79,7 +81,7 @@ public class SprintBoardView extends JPanel{
         JPanel testingPanel = new JPanel();
         testingPanel.setLayout(new BorderLayout());
         JLabel testingHeader = new JLabel("Ready for Testing");
-        testingScrollPanel = new SprintBacklogScrollPanel(null,returnView,parentFrame);
+        testingScrollPanel = new SprintBacklogScrollPanel(null,returnView,parentFrame,parentPanel);
         testingBacklogScrollPane = new BacklogScrollPane(100,100);
         testingBacklogScrollPane.setScrollPanel(testingScrollPanel);
         testingPanel.add(testingHeader,BorderLayout.NORTH);
@@ -89,7 +91,7 @@ public class SprintBoardView extends JPanel{
         JPanel completePanel = new JPanel();
         completePanel.setLayout(new BorderLayout());
         JLabel completeHeader = new JLabel("Complete");
-        completeScrollPanel = new SprintBacklogScrollPanel(null,returnView,parentFrame);
+        completeScrollPanel = new SprintBacklogScrollPanel(null,returnView,parentFrame,parentPanel);
         completeBacklogScrollPane = new BacklogScrollPane(100,100);
         completeBacklogScrollPane.setScrollPanel(completeScrollPanel);
         completePanel.add(completeHeader,BorderLayout.NORTH);

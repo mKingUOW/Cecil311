@@ -12,20 +12,21 @@ public class ProductOwnerView extends MemberView {
 
     private JFrame frame;
     private JPanel navigator;
-    private JPanel currentView;
 
     private ProductBacklogView productBacklogView;
+    private SprintManagementView sprintManagementView;
 
     private NavButton projectDetailsButton;
     private NavButton projectBacklogButton;
-    private NavButton sprintBacklogButton;
+    private NavButton sprintButton;
     private NavButton myDetailsButton;
 
 
     public ProductOwnerView(JFrame p){
         frame = p;
-        currentView = null;
         productBacklogView = new ProductBacklogView("ProductOwner",frame,this);
+        sprintManagementView = new SprintManagementView(frame,this);
+        setCurrentView(this);
         prepare();
     }
 
@@ -44,20 +45,31 @@ public class ProductOwnerView extends MemberView {
         {
             public void actionPerformed(ActionEvent e)
             {
-                frame.remove(currentView);
+                frame.remove(getCurrentView());
                 frame.add(productBacklogView,BorderLayout.CENTER);
                 frame.revalidate();
                 frame.repaint();
-                currentView = productBacklogView;
+                setCurrentView(productBacklogView);
             }
         });
-        sprintBacklogButton = new NavButton("Sprint Backlog",this);
+        sprintButton = new NavButton("Sprint Management",this);
+        sprintButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                frame.remove(getCurrentView());
+                frame.add(sprintManagementView,BorderLayout.CENTER);
+                frame.revalidate();
+                frame.repaint();
+                setCurrentView(sprintManagementView);
+            }
+        });
         myDetailsButton = new NavButton("My Details",this);
 
         //add buttons to navigator panel
         navigator.add(projectDetailsButton);
         navigator.add(projectBacklogButton);
-        navigator.add(sprintBacklogButton);
+        navigator.add(sprintButton);
         navigator.add(myDetailsButton);
 
          /*      HEADER PANEL (Primary header of window)      */
@@ -77,7 +89,7 @@ public class ProductOwnerView extends MemberView {
         frame.add(navigator,BorderLayout.WEST);
         frame.add(productBacklogView,BorderLayout.CENTER);
 
-        currentView = productBacklogView;
+        setCurrentView(productBacklogView);
         //frame.setVisible(true);
 
     }
@@ -89,7 +101,8 @@ public class ProductOwnerView extends MemberView {
     public void deselectAllNavigatorButtons(){
         projectDetailsButton.deSelect();
         projectBacklogButton.deSelect();
-        sprintBacklogButton.deSelect();
+        sprintButton.deSelect();
         myDetailsButton.deSelect();
     }
+
 }

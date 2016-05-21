@@ -131,9 +131,9 @@ public class TeamMemberView extends MemberView {
         /*  initialise various accessable views   */
         projectDetailsView = new JPanel();
         productBacklogView = new ProductBacklogView("TeamMember",frame,this);
-        sprintBacklogView = new SprintBacklogView(frame,currentView);
+        sprintBacklogView = new SprintBacklogView(frame,currentView,this);
         projectDetailsView = new JPanel();
-        sprintBoardView = new SprintBoardView(frame,currentView);
+        sprintBoardView = new SprintBoardView(frame,currentView,this);
         reportsView = new SprintReviewView(frame,currentView);
         myDetailsView = new JPanel();
 

@@ -19,6 +19,7 @@ public class SprintBacklogView extends JPanel{
 
     private JFrame parentFrame;
     private JPanel currentView;
+    private MemberView parentPanel;
 
     private JPanel leftLayoutPanel;
     private JPanel rightLayoutPanel;
@@ -28,9 +29,10 @@ public class SprintBacklogView extends JPanel{
     private BacklogScrollPane sprintBacklogScrollPane;
     private BacklogScrollPane userBacklogScrollPane;
 
-    public SprintBacklogView(JFrame f, JPanel curr){
+    public SprintBacklogView(JFrame f, JPanel curr, MemberView pp){
         parentFrame = f;
         currentView = this;
+        parentPanel = pp;
         prepare();
     }
 
@@ -48,7 +50,7 @@ public class SprintBacklogView extends JPanel{
 
         //add sprint backlog to leftLayoutPanel
         userBacklogScrollPanel = new UserBacklogScrollPanel();
-        sprintBacklogScrollPanel = new SprintBacklogScrollPanel(userBacklogScrollPanel,currentView,parentFrame);
+        sprintBacklogScrollPanel = new SprintBacklogScrollPanel(userBacklogScrollPanel,currentView,parentFrame,parentPanel);
         sprintBacklogScrollPane = new BacklogScrollPane(600,610);
         sprintBacklogScrollPane.setScrollPanel(sprintBacklogScrollPanel); //reference to user backlog
         leftLayoutPanel.add(sprintBacklogScrollPane,BorderLayout.CENTER);
@@ -160,14 +162,16 @@ class SprintBacklogScrollPanel extends JPanel{
     private UserBacklogScrollPanel userBacklogPanel;
     private JPanel currentView;
     private JFrame parentFrame;
+    private MemberView parentPanel;
 
     private Boolean wasDoubleClick = false;
     private Timer timer;
 
-    public SprintBacklogScrollPanel(UserBacklogScrollPanel ubl, JPanel curr, JFrame p){
+    public SprintBacklogScrollPanel(UserBacklogScrollPanel ubl, JPanel curr, JFrame p, MemberView pp){
         userBacklogPanel = ubl;
         currentView = curr;
         parentFrame = p;
+        parentPanel = pp;
         sprintBacklogUI = new ArrayList<JTextArea>();
         sprintBacklogData = new ArrayList<String>();
         loadSprintBacklog();
@@ -220,7 +224,7 @@ class SprintBacklogScrollPanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     System.out.println("double clicked");
-                    DetailedBacklogItemView detailedBacklogItemView = new DetailedBacklogItemView(parentFrame,currentView);
+                    DetailedBacklogItemView detailedBacklogItemView = new DetailedBacklogItemView(parentFrame,currentView,parentPanel);
                     parentFrame.remove(currentView);
                     parentFrame.add(detailedBacklogItemView);
                     parentFrame.revalidate();

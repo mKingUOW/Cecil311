@@ -91,8 +91,8 @@ public class ProductBacklogView extends JPanel {
                     commentsPanel.addComment();
                 }
                 else if(newCommentButton.getText().equals("Submit Comment")){
-
                     newCommentButton.setText("Create Comment");
+                    commentsPanel.submitComment();
                     //save comments section?
                 }
 
@@ -459,6 +459,15 @@ class CommentsPanel extends JPanel{
         add(temp);
         revalidate();
         repaint();
+    }
+
+    public void submitComment(){
+        //add
+
+        //set last element in elements to non editable
+        elements.get(elements.size()-1).setEditable(false);
+
+        //write to db
     }
 }
 
