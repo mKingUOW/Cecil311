@@ -188,8 +188,8 @@ public class ModifyProjectView extends JPanel{
         availPanel.setLayout(new GridBagLayout());
         JLabel tmAssignLabel = new JLabel("Available Team Members: ");
         Vector availTMs = new Vector();
-        DefaultComboBoxModel availTMsModel = new DefaultComboBoxModel(availTMs);
-        JComboBox<String> availTmsComboBox = new JComboBox<String>(availTMsModel);
+        final DefaultComboBoxModel availTMsModel = new DefaultComboBoxModel(availTMs);
+        final JComboBox<String> availTmsComboBox = new JComboBox<String>(availTMsModel);
         availTMsModel.addElement("one");
         availTMsModel.addElement("Two");
         availTmsComboBox.setPreferredSize(new Dimension(150,35));

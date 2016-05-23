@@ -40,7 +40,7 @@ public class ProductOwnerView extends MemberView {
         setLayout(new BorderLayout());
 
           /*      HEADER PANEL (Primary header of window)      */
-        JPanel header = new JPanel();
+        final JPanel header = new JPanel();
         header.setPreferredSize(new Dimension(getWidth()-16,30));
         header.setBorder(BorderFactory.createRaisedBevelBorder());
         header.setBackground(Color.decode("#EBF0F2"));
