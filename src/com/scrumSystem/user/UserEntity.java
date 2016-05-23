@@ -75,8 +75,8 @@ public class UserEntity implements Entity
      */
     public UserEntity ()
     {
-        usersFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "userAccounts.csv";
-        userDetailsFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "userDetails.csv";
+        usersFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "userAccounts.csv";
+        userDetailsFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "userDetails.csv";
     }
 
     /**
@@ -91,8 +91,8 @@ public class UserEntity implements Entity
      */
     public UserEntity(String username, String password, String firstName, String lastName, String email, String skills, String roleType)
     {
-        usersFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "userAccounts.csv";
-        userDetailsFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "userDetails.csv";
+        usersFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "userAccounts.csv";
+        userDetailsFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "userDetails.csv";
 
         this.username = username;
         this.password = password;

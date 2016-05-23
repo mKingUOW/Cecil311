@@ -109,10 +109,10 @@ public class ProjectDetails implements Entity
      */
     public ProjectDetails()
     {
-        projectFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "project.csv";
-        POFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "projectPOs.csv";
-        TMFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "projectTMs.csv";
-        UAFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "userAccounts.csv";
+        projectFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "project.csv";
+        POFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "projectPOs.csv";
+        TMFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "projectTMs.csv";
+        UAFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "userAccounts.csv";
 
         projectName = null;
     }
@@ -122,10 +122,10 @@ public class ProjectDetails implements Entity
      */
     public ProjectDetails(String projectName, String scrumMaster)
     {
-        projectFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "project.csv";
-        POFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "projectPOs.csv";
-        TMFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "projectTMs.csv";
-        UAFile = System.getProperty("user.dir") + File.separator + "database" + File.separator + "userAccounts.csv";
+        projectFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "project.csv";
+        POFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "projectPOs.csv";
+        TMFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "projectTMs.csv";
+        UAFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "userAccounts.csv";
 
         this.projectName = projectName;
         this.scrumMaster = scrumMaster;
