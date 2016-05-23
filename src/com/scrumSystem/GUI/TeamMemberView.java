@@ -15,13 +15,13 @@ public class TeamMemberView extends MemberView {
 
     private JFrame frame;
     private JPanel navigator;
-    private JPanel productBacklogView;
-    private JPanel sprintBacklogView;
-    private JPanel projectDetailsView;
-    private JPanel sprintBoardView;
+    private ProductBacklogView productBacklogView;
+    private SprintBacklogView sprintBacklogView;
+    private ActiveProjectDetailsView activeProjectDetailsView;
+    private SprintBoardView sprintBoardView;
     private JPanel reportsView;
-    private JPanel myDetailsView;
-    private JPanel currentView;
+    private MyDetailsView myDetailsView;
+
 
     private JPanel header;
     private JLabel headerContent;
@@ -32,10 +32,10 @@ public class TeamMemberView extends MemberView {
     private NavButton sprintBoardButton;
     private NavButton reportsButton;
     private NavButton myDetailsButton;
-    private NavButton seven;
-    private NavButton eight;
+    private NavButton logOutButton;
 
-    public TeamMemberView(JFrame  f){
+    public TeamMemberView(JFrame  f,String uname){
+        setUsername(uname);
         frame = f;
         prepare();
     }
@@ -56,16 +56,26 @@ public class TeamMemberView extends MemberView {
 
         //navigator buttons for changing views
         projectDetailsButton = new NavButton("Project Details",this);
+        projectDetailsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.remove(getCurrentView());
+                frame.add(activeProjectDetailsView,BorderLayout.CENTER);
+                frame.revalidate();
+                frame.repaint();
+                setCurrentView(activeProjectDetailsView);
+            }
+        });
         projectBacklogButton = new NavButton("Project Backlog",this);
         projectBacklogButton.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
-                frame.remove(currentView);
+                frame.remove(getCurrentView());
                 frame.add(productBacklogView,BorderLayout.CENTER);
                 frame.revalidate();
                 frame.repaint();
-                currentView = productBacklogView;
+                setCurrentView(productBacklogView);
             }
         });
 
@@ -74,11 +84,11 @@ public class TeamMemberView extends MemberView {
         {
             public void actionPerformed(ActionEvent e)
             {
-                frame.remove(currentView);
+                frame.remove(getCurrentView());
                 frame.add(sprintBacklogView,BorderLayout.CENTER);
                 frame.revalidate();
                 frame.repaint();
-                currentView = sprintBacklogView;
+                setCurrentView(sprintBacklogView);
             }
         });
         sprintBoardButton = new NavButton("Sprint Board",this);
@@ -86,11 +96,11 @@ public class TeamMemberView extends MemberView {
         {
             public void actionPerformed(ActionEvent e)
             {
-                frame.remove(currentView);
+                frame.remove(getCurrentView());
                 frame.add(sprintBoardView,BorderLayout.CENTER);
                 frame.revalidate();
                 frame.repaint();
-                currentView = sprintBoardView;
+                setCurrentView(sprintBoardView);
             }
         });
         reportsButton = new NavButton("Reports",this);
@@ -98,16 +108,40 @@ public class TeamMemberView extends MemberView {
         {
             public void actionPerformed(ActionEvent e)
             {
-                frame.remove(currentView);
+                frame.remove(getCurrentView());
                 frame.add(reportsView,BorderLayout.CENTER);
                 frame.revalidate();
                 frame.repaint();
-                currentView = reportsView;
+                setCurrentView(reportsView);
             }
         });
+
         myDetailsButton = new NavButton("My Details",this);
-        //seven = new NavButton("seven",this);
-        //eight = new NavButton("eight",this);
+        myDetailsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.remove(getCurrentView());
+                frame.add(myDetailsView,BorderLayout.CENTER);
+                frame.revalidate();
+                frame.repaint();
+                setCurrentView(myDetailsView);
+            }
+        });
+        logOutButton = new NavButton("Log Out", this);
+        logOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int res = JOptionPane.showConfirmDialog(frame,"Are you sure you wish to log out? ","Log Out",JOptionPane.OK_CANCEL_OPTION);
+                if(res == JOptionPane.YES_OPTION){
+                    frame.remove(getCurrentView());
+                    frame.remove(navigator);
+                    frame.remove(header);
+                    frame.add(new LoginView(frame));
+                    frame.revalidate();
+                    frame.repaint();
+                }
+            }
+        });
 
         //add buttons to navigator panel
         navigator.add(projectDetailsButton);
@@ -116,8 +150,7 @@ public class TeamMemberView extends MemberView {
         navigator.add(sprintBoardButton);
         navigator.add(reportsButton);
         navigator.add(myDetailsButton);
-        //navigator.add(seven);
-        //navigator.add(eight);
+        navigator.add(logOutButton);
 
           /*      HEADER PANEL (Primary header of window)      */
         header = new JPanel();
@@ -129,22 +162,21 @@ public class TeamMemberView extends MemberView {
         header.add(headerContent);
 
         /*  initialise various accessable views   */
-        projectDetailsView = new JPanel();
+        activeProjectDetailsView = new ActiveProjectDetailsView(frame,this);
         productBacklogView = new ProductBacklogView("TeamMember",frame,this);
-        sprintBacklogView = new SprintBacklogView(frame,currentView,this);
-        projectDetailsView = new JPanel();
-        sprintBoardView = new SprintBoardView(frame,currentView,this);
-        reportsView = new SprintReviewView(frame,currentView);
-        myDetailsView = new JPanel();
+        sprintBacklogView = new SprintBacklogView(frame,getCurrentView(),this);
+        sprintBoardView = new SprintBoardView(frame,getCurrentView(),this);
+        reportsView = new SprintReviewView(frame,getCurrentView());
+        myDetailsView = new MyDetailsView(frame,this);
 
         //set projectBacklogView as default landing page
-        currentView = productBacklogView;
+        setCurrentView(productBacklogView);
         projectBacklogButton.select();
 
         //add all panels to frame
         frame.add(header,BorderLayout.NORTH);
         frame.add(navigator,BorderLayout.WEST);
-        frame.add(currentView,BorderLayout.CENTER);
+        frame.add(getCurrentView(),BorderLayout.CENTER);
 
         //select product backlog view by default
 

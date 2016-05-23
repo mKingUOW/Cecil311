@@ -36,9 +36,29 @@ public class DetailedBacklogItemView extends JPanel {
         JPanel northLayout = new JPanel();
         northLayout.setLayout(new GridLayout(1,2));
         JLabel leftHeader = new JLabel("Description");
-        JLabel rightHeader = new JLabel("Comments");
+        JPanel rightHeaderLayout = new JPanel();
+        rightHeaderLayout.setLayout(new BorderLayout());
+        JLabel rightHeader = new JLabel("Comments",SwingConstants.CENTER);
+        rightHeaderLayout.add(rightHeader,BorderLayout.CENTER);
+        final NavButton newCommentButton = new NavButton("Create Comment",parentPanel);
+        newCommentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(newCommentButton.getText().equals("Create Comment")){
+                    newCommentButton.setText("Submit Comment");
+                    commentsPanel.addComment();
+                }
+                else if(newCommentButton.getText().equals("Submit Comment")){
+                    newCommentButton.setText("Create Comment");
+                    commentsPanel.submitComment();
+                    //save comments section?
+                }
+
+            }
+        });
+        rightHeaderLayout.add(newCommentButton,BorderLayout.EAST);
         northLayout.add(leftHeader);
-        northLayout.add(rightHeader);
+        northLayout.add(rightHeaderLayout);
 
         //setup center layout
         JPanel centerLayout = new JPanel();

@@ -22,8 +22,10 @@ public class SystemAdminView extends MemberView{
     private NavButton modifyProject;
     private NavButton createNewUser;
     private NavButton modifyUser;
+    private NavButton logOutButton;
 
-    public SystemAdminView(JFrame p){
+    public SystemAdminView(JFrame p,String uname){
+        setUsername(uname);
         parentFrame = p;
         sysAdminView = this;
         setCurrentView(this);
@@ -38,6 +40,15 @@ public class SystemAdminView extends MemberView{
     public void prepare(){
 
         setLayout(new BorderLayout());
+
+        /*      HEADER PANEL (Primary header of window)      */
+        JPanel header = new JPanel();
+        header.setPreferredSize(new Dimension(getWidth()-16,30));
+        header.setBorder(BorderFactory.createRaisedBevelBorder());
+        header.setBackground(Color.decode("#EBF0F2"));
+        JLabel headerContent = new JLabel("System Admin View");
+        headerContent.setFont(new Font(headerContent.getFont().getName(),Font.BOLD,15));
+        header.add(headerContent);
 
           /*      NAVIGATOR PANEL     */
         navigator = new JPanel();
@@ -92,19 +103,29 @@ public class SystemAdminView extends MemberView{
             }
         });
 
+        logOutButton = new NavButton("Log Out", this);
+        logOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int res = JOptionPane.showConfirmDialog(parentFrame,"Are you sure you wish to log out? ","Log Out",JOptionPane.OK_CANCEL_OPTION);
+                if(res == JOptionPane.YES_OPTION){
+                    parentFrame.remove(getCurrentView());
+                    parentFrame.remove(navigator);
+                    parentFrame.remove(header);
+                    parentFrame.add(new LoginView(parentFrame));
+                    parentFrame.revalidate();
+                    parentFrame.repaint();
+                }
+            }
+        });
+
+
+
         navigator.add(createNewProject);
         navigator.add(modifyProject);
         navigator.add(createNewUser);
         navigator.add(modifyUser);
-
-        /*      HEADER PANEL (Primary header of window)      */
-        JPanel header = new JPanel();
-        header.setPreferredSize(new Dimension(getWidth()-16,30));
-        header.setBorder(BorderFactory.createRaisedBevelBorder());
-        header.setBackground(Color.decode("#EBF0F2"));
-        JLabel headerContent = new JLabel("System Admin View");
-        headerContent.setFont(new Font(headerContent.getFont().getName(),Font.BOLD,15));
-        header.add(headerContent);
+        navigator.add(logOutButton);
 
 
         parentFrame.add(header,BorderLayout.NORTH);

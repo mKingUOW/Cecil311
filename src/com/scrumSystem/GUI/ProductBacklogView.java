@@ -82,7 +82,7 @@ public class ProductBacklogView extends JPanel {
         commentsLayoutPanel_north.setBackground(Color.decode("#EBF0F2"));
 
         JLabel commentslayoutPanel_header = new JLabel("Comments");
-        final NavButton newCommentButton = new NavButton("Create Comment",parentPanel); //error as param 2 is null
+        final NavButton newCommentButton = new NavButton("Create Comment",parentPanel);
         newCommentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -138,7 +138,9 @@ public class ProductBacklogView extends JPanel {
         panelHeader.add(new JLabel());//blank buffer label for alignment
         panelHeader.add(new JLabel());//blank buffer label for alignment
         panelHeader.add(new JLabel());//blank buffer label for alignment
-        panelHeader.add(createNewIssueButton); // add button
+        if(parentPanel instanceof ProductOwnerView || parentPanel instanceof ScrumMasterView){
+            panelHeader.add(createNewIssueButton); // add button
+        }
         panelHeader.add(new JLabel());//blank buffer label for alignment
         panelHeader.add(new JLabel());//blank buffer label for alignment
         panelHeader.add(new JLabel());//blank buffer label for alignment

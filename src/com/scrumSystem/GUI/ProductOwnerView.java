@@ -15,23 +15,38 @@ public class ProductOwnerView extends MemberView {
 
     private ProductBacklogView productBacklogView;
     private SprintManagementView sprintManagementView;
+    private ActiveProjectDetailsView activeProjectDetailsView;
+    private MyDetailsView myDetailsView;
 
     private NavButton projectDetailsButton;
     private NavButton projectBacklogButton;
     private NavButton sprintButton;
     private NavButton myDetailsButton;
+    private NavButton logOutButton;
 
 
-    public ProductOwnerView(JFrame p){
+    public ProductOwnerView(JFrame p, String uname){
+        setUsername(uname);
         frame = p;
         productBacklogView = new ProductBacklogView("ProductOwner",frame,this);
         sprintManagementView = new SprintManagementView(frame,this);
+        activeProjectDetailsView = new ActiveProjectDetailsView(frame,this);
+        myDetailsView = new MyDetailsView(frame,this);
         setCurrentView(this);
         prepare();
     }
 
     public void prepare(){
         setLayout(new BorderLayout());
+
+          /*      HEADER PANEL (Primary header of window)      */
+        JPanel header = new JPanel();
+        header.setPreferredSize(new Dimension(getWidth()-16,30));
+        header.setBorder(BorderFactory.createRaisedBevelBorder());
+        header.setBackground(Color.decode("#EBF0F2"));
+        JLabel headerContent = new JLabel("Product Owner View");
+        headerContent.setFont(new Font(headerContent.getFont().getName(),Font.BOLD,15));
+        header.add(headerContent);
 
           /*      NAVIGATOR PANEL     */
         navigator = new JPanel();
@@ -40,7 +55,18 @@ public class ProductOwnerView extends MemberView {
         navigator.setBorder(BorderFactory.createRaisedBevelBorder());
 
         projectDetailsButton = new NavButton("Project Details",this);
-        projectBacklogButton = new NavButton("Project Backlog",this);
+        projectDetailsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.remove(getCurrentView());
+                frame.add(activeProjectDetailsView,BorderLayout.CENTER);
+                frame.revalidate();
+                frame.repaint();
+                setCurrentView(activeProjectDetailsView);
+            }
+        });
+
+        projectBacklogButton = new NavButton("Product Backlog",this);
         projectBacklogButton.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
@@ -52,6 +78,7 @@ public class ProductOwnerView extends MemberView {
                 setCurrentView(productBacklogView);
             }
         });
+
         sprintButton = new NavButton("Sprint Management",this);
         sprintButton.addActionListener(new ActionListener()
         {
@@ -64,24 +91,44 @@ public class ProductOwnerView extends MemberView {
                 setCurrentView(sprintManagementView);
             }
         });
+
         myDetailsButton = new NavButton("My Details",this);
+        myDetailsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.remove(getCurrentView());
+                frame.add(myDetailsView,BorderLayout.CENTER);
+                frame.revalidate();
+                frame.repaint();
+                setCurrentView(myDetailsView);
+            }
+        });
+
+        logOutButton = new NavButton("Log Out", this);
+        logOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int res = JOptionPane.showConfirmDialog(frame,"Are you sure you wish to log out? ","Log Out",JOptionPane.OK_CANCEL_OPTION);
+                if(res == JOptionPane.YES_OPTION){
+                    frame.remove(getCurrentView());
+                    frame.remove(navigator);
+                    frame.remove(header);
+                    frame.add(new LoginView(frame));
+                    frame.revalidate();
+                    frame.repaint();
+                }
+            }
+        });
 
         //add buttons to navigator panel
         navigator.add(projectDetailsButton);
         navigator.add(projectBacklogButton);
         navigator.add(sprintButton);
         navigator.add(myDetailsButton);
+        navigator.add(logOutButton);
 
-         /*      HEADER PANEL (Primary header of window)      */
-        JPanel header = new JPanel();
-        header.setPreferredSize(new Dimension(getWidth()-16,30));
-        header.setBorder(BorderFactory.createRaisedBevelBorder());
-        header.setBackground(Color.decode("#EBF0F2"));
-        JLabel headerContent = new JLabel("Product Owner View");
-        headerContent.setFont(new Font(headerContent.getFont().getName(),Font.BOLD,15));
-        header.add(headerContent);
 
-        //set productbacklogveiw as landing page.
+
 
 
         //add all panels to frame

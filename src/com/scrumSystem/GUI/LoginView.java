@@ -52,11 +52,16 @@ public class LoginView extends JPanel {
 
                     if (sc.getUserRoleType().equals("SM")) {
                         //scrum master
+                        parentFrame.remove(currentView);
+                        ScrumMasterView scrumMasterView = new ScrumMasterView(parentFrame, usernameField.getText());
+                        scrumMasterView.showView();
+                        parentFrame.revalidate();
+                        parentFrame.repaint();
+
                     } else if (sc.getUserRoleType().equals("TM")) {
                         //team member
                         parentFrame.remove(currentView);
-                        TeamMemberView teamMemberView = new TeamMemberView(parentFrame);
-                        teamMemberView.setUsername(usernameField.getText());
+                        TeamMemberView teamMemberView = new TeamMemberView(parentFrame,usernameField.getText());
                         teamMemberView.showView();
                         parentFrame.revalidate();
                         parentFrame.repaint();
@@ -64,8 +69,7 @@ public class LoginView extends JPanel {
                     } else if (sc.getUserRoleType().equals("PO")) {
                         //product owner
                         parentFrame.remove(currentView);
-                        ProductOwnerView productOwnerView = new ProductOwnerView(parentFrame);
-                        productOwnerView.setUsername(usernameField.getText());
+                        ProductOwnerView productOwnerView = new ProductOwnerView(parentFrame,usernameField.getText());
                         productOwnerView.showView();
                         parentFrame.revalidate();
                         parentFrame.repaint();
@@ -74,8 +78,7 @@ public class LoginView extends JPanel {
                         //system admin
                         System.out.println("System admin logged in");
                         parentFrame.remove(currentView);
-                        SystemAdminView systemAdminView = new SystemAdminView(parentFrame);
-                        systemAdminView.setUsername(usernameField.getText());
+                        SystemAdminView systemAdminView = new SystemAdminView(parentFrame,usernameField.getText());
                         systemAdminView.showView();
                         parentFrame.revalidate();
                         parentFrame.repaint();

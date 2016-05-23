@@ -1,5 +1,7 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.role.SystemAdmin;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -25,6 +27,8 @@ public class ModifyUserView extends JPanel {
     private JPanel panelEight;
     private JPanel buttonPanel;
 
+    private JLabel usernameField;
+
     public ModifyUserView(JFrame p, MemberView pp){
         parentFrame = p;
         parentPanel = pp;
@@ -33,6 +37,8 @@ public class ModifyUserView extends JPanel {
 
     public void prepare(){
         setLayout(new GridLayout(10,1));
+
+        usernameField = new JLabel();
 
         //search for user panel
         searchPanel = new JPanel();
@@ -50,6 +56,7 @@ public class ModifyUserView extends JPanel {
                 //bypass for now
                 if(searchField.getText().equals("bypass")){
                     setPanelsVisible(true);
+                    usernameField.setText(searchField.getText());
                     errorLabel.setText("");
                 }
                 else{
@@ -68,6 +75,15 @@ public class ModifyUserView extends JPanel {
         panelOne = new JPanel();
         panelOne.setLayout(new GridBagLayout());
         JLabel usernameLabel = new JLabel("Username: ", SwingConstants.CENTER);
+
+        if(parentPanel instanceof SystemAdminView){
+            //usernameField = new JLabel(searchField.getText());
+        }
+        else{
+            usernameField = new JLabel(parentPanel.getUsername());
+        }
+
+
         final JTextField usernameField = new JTextField();
         usernameField.setPreferredSize(new Dimension(100,35));
         panelOne.add(usernameLabel);
@@ -186,32 +202,11 @@ public class ModifyUserView extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 //save user to db
 
-                //show alert
-                JOptionPane.showMessageDialog(null,"Changes Saved");
+                if (parentPanel instanceof SystemAdminView) {
+                    //show alert
+                    JOptionPane.showMessageDialog(null,"Changes Saved");
 
-                //reset fields
-                searchField.setText("");
-                errorLabel.setText("");
-                usernameField.setText("");
-                passwordField.setText("");
-                typeComboBox.setSelectedIndex(0);
-                projectsComboBox.setSelectedIndex(0);
-                fNameField.setText("");
-                lNameField.setText("");
-                emailField.setText("");
-                model.removeAllElements();
-                setPanelsVisible(false);
-            }
-        });
-        saveButton.setPreferredSize(new Dimension(150,35));
-        buttonPanel.add(saveButton);
-
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int res = JOptionPane.showConfirmDialog(parentFrame,"Changes will not be saved. Proceed? ","Cancel Modification of User",JOptionPane.OK_CANCEL_OPTION);
-                if(res == JOptionPane.YES_OPTION){
+                    //reset fields
                     searchField.setText("");
                     errorLabel.setText("");
                     usernameField.setText("");
@@ -223,13 +218,62 @@ public class ModifyUserView extends JPanel {
                     emailField.setText("");
                     model.removeAllElements();
                     setPanelsVisible(false);
+
                 }
+                else{
+                    parentFrame.remove(parentPanel.getCurrentView());
+                    MyDetailsView myDetailsView = new MyDetailsView(parentFrame,parentPanel);
+                    parentFrame.add(myDetailsView);
+                    parentFrame.validate();
+                    parentFrame.repaint();
+                    parentPanel.setCurrentView(myDetailsView);
+                }
+
+            }
+        });
+        saveButton.setPreferredSize(new Dimension(150,35));
+        buttonPanel.add(saveButton);
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                int res = JOptionPane.showConfirmDialog(parentFrame,"Changes will not be saved. Proceed? ","Cancel Modification of User",JOptionPane.OK_CANCEL_OPTION);
+
+                if(parentPanel instanceof SystemAdminView){
+                    if(res == JOptionPane.YES_OPTION){
+                        searchField.setText("");
+                        errorLabel.setText("");
+                        usernameField.setText("");
+                        passwordField.setText("");
+                        typeComboBox.setSelectedIndex(0);
+                        projectsComboBox.setSelectedIndex(0);
+                        fNameField.setText("");
+                        lNameField.setText("");
+                        emailField.setText("");
+                        model.removeAllElements();
+                        setPanelsVisible(false);
+                    }
+                }
+                else{
+                    parentFrame.remove(parentPanel.getCurrentView());
+                    MyDetailsView myDetailsView = new MyDetailsView(parentFrame,parentPanel);
+                    parentFrame.add(myDetailsView);
+                    parentFrame.validate();
+                    parentFrame.repaint();
+                    parentPanel.setCurrentView(myDetailsView);
+                }
+
             }
         });
         cancelButton.setPreferredSize(new Dimension(150,35));
         buttonPanel.add(cancelButton);
 
-        add(searchPanel);
+        if(parentPanel instanceof SystemAdminView){
+            add(searchPanel);
+        }
+
         add(panelOne);
         add(panelTwo);
         add(panelThree);
@@ -240,7 +284,10 @@ public class ModifyUserView extends JPanel {
         add(panelEight);
         add(buttonPanel);
 
-        setPanelsVisible(false);
+        if(parentPanel instanceof SystemAdminView){
+            setPanelsVisible(false);
+        }
+
 
     }
 
