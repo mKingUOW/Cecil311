@@ -28,7 +28,7 @@ public class CreateNewUserView extends JPanel {
         JPanel panelOne = new JPanel();
         panelOne.setLayout(new GridBagLayout());
         JLabel usernameLabel = new JLabel("Username: ", SwingConstants.CENTER);
-        JTextField usernameField = new JTextField();
+        final JTextField usernameField = new JTextField();
         usernameField.setPreferredSize(new Dimension(100,35));
         panelOne.add(usernameLabel);
         panelOne.add(usernameField);
@@ -37,7 +37,7 @@ public class CreateNewUserView extends JPanel {
         JPanel panelTwo = new JPanel();
         panelTwo.setLayout(new GridBagLayout());
         JLabel passwordLabel = new JLabel("Password: ", SwingConstants.CENTER);
-        JTextField passwordField = new JTextField();
+        final JTextField passwordField = new JTextField();
         passwordField.setPreferredSize(new Dimension(100,35));
         panelTwo.add(passwordLabel);
         panelTwo.add(passwordField);
@@ -47,7 +47,7 @@ public class CreateNewUserView extends JPanel {
         panelThree.setLayout(new GridBagLayout());
         JLabel typeLabel = new JLabel("User Type: ", SwingConstants.CENTER);
         String[] types = {"System Administrator","Scrum Master", "Product Owner", "Team Member" };
-        JComboBox<String> typeComboBox = new JComboBox<String>(types);
+        final JComboBox<String> typeComboBox = new JComboBox<String>(types);
         typeComboBox.setPreferredSize(new Dimension(150,35));
         panelThree.add(typeLabel);
         panelThree.add(typeComboBox);
@@ -57,7 +57,7 @@ public class CreateNewUserView extends JPanel {
         panelFour.setLayout(new GridBagLayout());
         JLabel projLabel = new JLabel("Active Project: ", SwingConstants.CENTER);
         String[] dummyPojects = {"None","Proj1","Proj2", "Proj3", "Proj4" };
-        JComboBox<String> projectsComboBox = new JComboBox<String>(dummyPojects);
+        final JComboBox<String> projectsComboBox = new JComboBox<String>(dummyPojects);
         projectsComboBox.setPreferredSize(new Dimension(150,35));
         panelFour.add(projLabel);
         panelFour.add(projectsComboBox);
@@ -66,7 +66,7 @@ public class CreateNewUserView extends JPanel {
         JPanel panelFive = new JPanel();
         panelFive.setLayout(new GridBagLayout());
         JLabel fNameLabel = new JLabel("First name: ", SwingConstants.CENTER);
-        JTextField fNameField = new JTextField();
+        final JTextField fNameField = new JTextField();
         fNameField.setPreferredSize(new Dimension(150,35));
         panelFive.add(fNameLabel);
         panelFive.add(fNameField);
@@ -75,7 +75,7 @@ public class CreateNewUserView extends JPanel {
         JPanel panelSix = new JPanel();
         panelSix.setLayout(new GridBagLayout());
         JLabel lNameLabel = new JLabel("Last name: ");
-        JTextField lNameField = new JTextField();
+        final JTextField lNameField = new JTextField();
         lNameField.setPreferredSize(new Dimension(150,35));
         panelSix.add(lNameLabel);
         panelSix.add(lNameField);
@@ -84,7 +84,7 @@ public class CreateNewUserView extends JPanel {
         JPanel panelSeven = new JPanel();
         panelSeven.setLayout(new GridBagLayout());
         JLabel emailLabel = new JLabel("Email: ");
-        JTextField emailField = new JTextField();
+        final JTextField emailField = new JTextField();
         emailField.setPreferredSize(new Dimension(150,35));
         panelSeven.add(emailLabel);
         panelSeven.add(emailField);
@@ -94,15 +94,15 @@ public class CreateNewUserView extends JPanel {
         panelEight.setLayout(new GridBagLayout());
         JLabel skillsLabel = new JLabel("Skills: ");
         Vector skillArray = new Vector();
-        DefaultComboBoxModel model = new DefaultComboBoxModel(skillArray);
+        final DefaultComboBoxModel model = new DefaultComboBoxModel(skillArray);
         JComboBox<String> skillsComboBox = new JComboBox<String>(model);
         skillsComboBox.setPreferredSize(new Dimension(150,35));
-        JButton newSkillButton = new JButton("Add Skill");
+        final JButton newSkillButton = new JButton("Add Skill");
         newSkillButton.setPreferredSize(new Dimension(100,35));
-        JTextField newSkillField = new JTextField();
+        final JTextField newSkillField = new JTextField();
         newSkillField.setPreferredSize(new Dimension(200,35));
         newSkillField.setVisible(false);
-        JButton addSkillButton = new JButton("Save Skill");
+        final JButton addSkillButton = new JButton("Save Skill");
         addSkillButton.setPreferredSize(new Dimension(100,35));
         addSkillButton.setVisible(false);
 

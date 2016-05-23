@@ -47,9 +47,9 @@ public class ModifyProjectView extends JPanel{
         searchPanel = new JPanel();
         searchPanel.setLayout(new GridBagLayout());
         JLabel searchLabel = new JLabel("Search for a project: ", SwingConstants.LEFT);
-        JTextField searchField = new JTextField();
+        final JTextField searchField = new JTextField();
         searchField.setPreferredSize(new Dimension(150,35));
-        JLabel errorLabel = new JLabel("",SwingConstants.RIGHT);
+        final JLabel errorLabel = new JLabel("",SwingConstants.RIGHT);
         JButton searchButton = new JButton("Search");
         searchButton.addActionListener(new ActionListener() {
             @Override

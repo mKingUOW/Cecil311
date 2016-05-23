@@ -35,9 +35,9 @@ public class LoginView extends JPanel {
         //center layout
         //JPanel centerLayout = new JPanel();
         //centerLayout.setLayout(new GridLayout(2,1));
-        JTextField usernameField = new JTextField();
+        final JTextField usernameField = new JTextField();
         usernameField.setPreferredSize(new Dimension(150,35));
-        JTextField pwdField = new JTextField();
+        final JTextField pwdField = new JTextField();
         pwdField.setPreferredSize(new Dimension(150,35));
         add(uname,BorderLayout.CENTER);
         add(usernameField,BorderLayout.CENTER);
