@@ -1,5 +1,7 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.project.SessionController;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,9 +23,12 @@ public class CreateNewProjectView extends JPanel {
     private DefaultComboBoxModel<String> model;
     private JTextField durField;
 
+    private SessionController sc;
+
     public CreateNewProjectView(JFrame p, MemberView pp){
         parentFrame = p;
         parentPanel = pp;
+        sc = new SessionController();
 
         prepare();
     }
