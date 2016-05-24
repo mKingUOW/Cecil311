@@ -142,4 +142,8 @@ public class SessionController
     {
         return uc.getAvailableTMs(pd);
     }
+
+    public boolean getUsersDetails(String username){
+        return uc.getUsersDetails(username);
+    }
 }

@@ -35,7 +35,7 @@ public class MyDetailsView extends JPanel {
         JPanel panelTwo = new JPanel();
         panelTwo.setLayout(new GridBagLayout());
         JLabel passwordLabel = new JLabel("Password: ", SwingConstants.CENTER);
-        JLabel passwordField = new JLabel(parentPanel.getPassword()); //get users password
+        JLabel passwordField = new JLabel(); //get users password
         panelTwo.add(passwordLabel);
         panelTwo.add(passwordField);
 
@@ -43,7 +43,7 @@ public class MyDetailsView extends JPanel {
         JPanel panelThree = new JPanel();
         panelThree.setLayout(new GridBagLayout());
         JLabel typeLabel = new JLabel("User Type: ", SwingConstants.CENTER);
-        JLabel typeField = new JLabel(parentPanel.getUserType()); //get users type
+        JLabel typeField = new JLabel(); //get users type
         panelThree.add(typeLabel);
         panelThree.add(typeField);
 
@@ -51,7 +51,7 @@ public class MyDetailsView extends JPanel {
         JPanel panelFour = new JPanel();
         panelFour.setLayout(new GridBagLayout());
         JLabel projLabel = new JLabel("Active Project: ", SwingConstants.CENTER);
-        JLabel projField = new JLabel(parentPanel.getActiveProject());//get users active project name
+        JLabel projField = new JLabel();//get users active project name
         panelFour.add(projLabel);
         panelFour.add(projField);
 
@@ -59,7 +59,7 @@ public class MyDetailsView extends JPanel {
         JPanel panelFive = new JPanel();
         panelFive.setLayout(new GridBagLayout());
         JLabel fNameLabel = new JLabel("First name: ", SwingConstants.CENTER);
-        JLabel fNameField = new JLabel(parentPanel.getFirstName()); //get users fName
+        JLabel fNameField = new JLabel(); //get users fName
         panelFive.add(fNameLabel);
         panelFive.add(fNameField);
 
@@ -67,7 +67,7 @@ public class MyDetailsView extends JPanel {
         JPanel panelSix = new JPanel();
         panelSix.setLayout(new GridBagLayout());
         JLabel lNameLabel = new JLabel("Last name: ");
-        JLabel lNameField = new JLabel(parentPanel.getLastName()); //get users lName
+        JLabel lNameField = new JLabel(); //get users lName
         panelSix.add(lNameLabel);
         panelSix.add(lNameField);
 
@@ -75,7 +75,7 @@ public class MyDetailsView extends JPanel {
         JPanel panelSeven = new JPanel();
         panelSeven.setLayout(new GridBagLayout());
         JLabel emailLabel = new JLabel("Email: ");
-        JLabel emailField = new JLabel(parentPanel.getEmail()); //get users email
+        JLabel emailField = new JLabel(); //get users email
         panelSeven.add(emailLabel);
         panelSeven.add(emailField);
 

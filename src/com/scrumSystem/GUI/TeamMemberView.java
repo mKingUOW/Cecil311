@@ -1,5 +1,7 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.user.UserEntity;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -36,7 +38,7 @@ public class TeamMemberView extends MemberView {
 
     public TeamMemberView(JFrame  f,String uname){
         setUsername(uname);
-        setAccountDetails();
+
         frame = f;
         prepare();
     }

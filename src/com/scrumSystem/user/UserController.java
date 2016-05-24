@@ -111,4 +111,10 @@ public class UserController
             return pd.getAvailableTMs();
         return null;
     }
+
+    public boolean getUsersDetails(String username){
+        return user.loadFromDB(username);
+    }
+
+
 }

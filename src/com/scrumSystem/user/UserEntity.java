@@ -227,6 +227,27 @@ public class UserEntity implements Entity
     @Override
     public boolean loadFromDB(String id)
     {
+        String lineInFile;
+        try {
+            reader = new BufferedReader(new FileReader(userDetailsFile));
+            lineInFile = reader.readLine();
+
+            while (lineInFile != null){
+                String [] fields = lineInFile.split(",");
+                if (id.equals(fields[0])){
+                    firstName = fields[1];
+                    lastName = fields[2];
+                    email = fields[3];
+                    skills = fields[4];
+                    reader.close();
+                    return true;
+                }
+                //read the next line in the file
+                lineInFile = reader.readLine();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return false;
     }
 }
