@@ -35,7 +35,7 @@ public class MyDetailsView extends JPanel {
         JPanel panelTwo = new JPanel();
         panelTwo.setLayout(new GridBagLayout());
         JLabel passwordLabel = new JLabel("Password: ", SwingConstants.CENTER);
-        JLabel passwordField = new JLabel(); //get users password
+        JLabel passwordField = new JLabel(parentPanel.getPassword()); //get users password
         panelTwo.add(passwordLabel);
         panelTwo.add(passwordField);
 
