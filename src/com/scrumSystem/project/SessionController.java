@@ -167,4 +167,61 @@ public class SessionController
     public void saveProject(ProjectDetails p){
         pc.saveProject(p);
     }
+
+    public UserEntity getUser(String id){
+        return uc.getUser(id);
+    }
+
+    public void modifyUser(UserEntity p){
+        uc.modifyUser(p);
+    }
+
+    public void assignPOtoProject(String proj, String uname){
+        pc.addPOtoProject(proj,uname);
+        //save changes to user
+        UserEntity user = getUser(uname);
+        user.setActiveProject(proj);
+        uc.modifyUser(user);
+    }
+
+    public void clearPOsFromProject(String proj){
+        //reset active project for cleared users
+        ArrayList<String> users = pc.getPOsByProject(proj).getPOs();
+        for(int i = 0; i<users.size(); i++){
+            UserEntity temp = uc.getUser(users.get(i));
+            temp.setActiveProject("none");
+            uc.modifyUser(temp);
+        }
+        //clear from project
+        pc.clearPOsFromProject(proj);
+
+    }
+
+    public void clearTMsFromProject(String proj){
+        //reset active project for cleared users
+        ArrayList<String> users = pc.getTMsByProject(proj).getTMs();
+        for(int i = 0; i<users.size(); i++){
+            UserEntity temp = uc.getUser(users.get(i));
+            temp.setActiveProject("none");
+            uc.modifyUser(temp);
+        }
+        //clear from project
+        pc.clearTMsFromProject(proj);
+    }
+
+    public void assignTMtoProject(String proj,String uname){
+        pc.addTMtoProject(proj,uname);
+        //save changes to user
+        UserEntity user = getUser(uname);
+        user.setActiveProject(proj);
+        uc.modifyUser(user);
+    }
+
+    public ProjectPOEntity getPOsByProject(String proj){
+        return pc.getPOsByProject(proj);
+    }
+
+    public ProjectTMEntity getTMsByProject(String proj){
+        return pc.getTMsByProject(proj);
+    }
 }

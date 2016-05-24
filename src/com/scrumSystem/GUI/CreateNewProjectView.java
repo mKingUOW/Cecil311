@@ -141,33 +141,46 @@ public class CreateNewProjectView extends JPanel {
                 //save user to db
                 //create new project
                 parentPanel.sc.createProject(projNameField.getText(),(String)smComboBox.getSelectedItem());
+                ProjectDetails pd = parentPanel.sc.getProjectDetails(projNameField.getText());
 
                 //setup other details of project (if set)
-                ProjectDetailsHelper pdh = new ProjectDetailsHelper();
-                if(!projNameField.getText().equals("")){
-                    pdh.setProjectName(projNameField.getText());
+                if(projNameField.getText().equals("")){
+                    //alert error
+                }
+                else{
+                    pd.setName(projNameField.getText());
                 }
 
-                if(!startDateField.getText().equals("")){
-                    pdh.setStartDate(startDateField.getText());
+                if(startDateField.getText().equals("")){
+                    pd.setStartDate("null");
+                }
+                else{
+                    pd.setStartDate(startDateField.getText());
                 }
 
-                if(!endDateField.getText().equals("")){
-                    pdh.setEndDate(endDateField.getText());
+                if(endDateField.getText().equals("")){
+                    pd.setEndDate("null");
+                }
+                else{
+                    pd.setEndDate(endDateField.getText());
                 }
 
-                pdh.setScrumMaster((String)smComboBox.getSelectedItem());
+                pd.setScrumMaster((String)smComboBox.getSelectedItem());
 
-                if(!pointField.getText().equals("")){
-                    pdh.setStoryPointValue(pointField.getText());
+                if(pointField.getText().equals("")){
+                    pd.setStoryPointValue("null");
+                }
+                else{
+                    pd.setStoryPointValue(pointField.getText());
                 }
 
-                if(!durField.getText().equals("")){
-                    pdh.setDurationOfSprint(Integer.parseInt(durField.getText()));
+                if(durField.getText().equals("")){
+                    pd.setDurationOfSprint(0);
+                }
+                else{
+                    pd.setDurationOfSprint(Integer.parseInt(durField.getText()));
                 }
 
-                ProjectDetails pd = parentPanel.sc.getProjectDetails(projNameField.getText());
-                pd.setupProject(pdh);
 
                 System.out.println(pd.toCSV());
                 parentPanel.sc.saveProject(pd);

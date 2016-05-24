@@ -1,6 +1,9 @@
 package com.scrumSystem.GUI;
 
 import com.scrumSystem.project.ProjectDetails;
+import com.scrumSystem.project.ProjectPOEntity;
+import com.scrumSystem.project.ProjectTMEntity;
+import com.scrumSystem.user.UserEntity;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -44,6 +47,9 @@ public class ModifyProjectView extends JPanel{
     private JTextField durField;
     private JPanel searchPanel;
 
+    private DefaultComboBoxModel poModel;
+    private DefaultComboBoxModel availTMsModel;
+
     private TeamMembersScrollPanel teamMembersScrollPanel;
 
     public ModifyProjectView(JFrame p, MemberView pp){
@@ -75,12 +81,32 @@ public class ModifyProjectView extends JPanel{
                     setPanelsVisible(true);
                     errorLabel.setText("");
 
+                    teamMembersScrollPanel.setCurrentProject(searchField.getText());
+                    teamMembersScrollPanel.load();
+
                     ProjectDetails temp = parentPanel.sc.getProjectDetails(searchField.getText());
                     projNameField.setText(temp.getName());
                     startDateField.setText(temp.getStartDate());
                     endDateField.setText(temp.getEndDate());
                     pointField.setText(temp.getStoryPointValue());
-                    //set scrum master somehow
+
+                    //set scrum mester combo box
+                    model.addElement(temp.getScrumMaster());
+                    model.setSelectedItem(temp.getScrumMaster());
+                    for(int i = 0; i<parentPanel.sc.getAvailableSMs().size(); i++){
+                        model.addElement(parentPanel.sc.getAvailableSMs().get(i));
+                    }
+
+                    //set available product owner combobox
+                    for(int i = 0; i<temp.getAvailablePOs().size(); i++){
+                        poModel.addElement(temp.getAvailablePOs().get(i));
+                    }
+
+                    //set available team member comboBox
+                    for(int i = 0; i<temp.getAvailableTMs().size(); i++){
+                        availTMsModel.addElement(temp.getAvailableTMs().get(i));
+                    }
+
                     durField.setText(Integer.toString(temp.getDurationOfSprint()));
                 }
                 else{
@@ -112,6 +138,7 @@ public class ModifyProjectView extends JPanel{
         JLabel projNameLabel = new JLabel("Project Name: ");
         projNameField = new JTextField();
         projNameField.setPreferredSize(new Dimension(150,35));
+        projNameField.setEditable(false);
         projNamePanel.add(projNameLabel);
         projNamePanel.add(projNameField);
         centerLeftLayout.add(projNamePanel);
@@ -152,14 +179,10 @@ public class ModifyProjectView extends JPanel{
         JLabel smLabel = new JLabel("Scrum Master: ");
         Vector smArray = new Vector();
         model = new DefaultComboBoxModel(smArray);
-        JComboBox<String> smComboBox = new JComboBox<>(model);
+        final JComboBox<String> smComboBox = new JComboBox<>(model);
         smPanel.add(smLabel);
         smPanel.add(smComboBox);
         centerLeftLayout.add(smPanel);
-
-        //add dummy data to scrum master model
-        model.addElement("sm1");
-        model.addElement("sm2");
 
         //sprint duration panel
         durPanel = new JPanel();
@@ -180,13 +203,20 @@ public class ModifyProjectView extends JPanel{
         poSelectPanel.setLayout(new GridBagLayout());
         JLabel poSelectLabel = new JLabel("Product Owner: ");
         Vector poArray = new Vector();
-        DefaultComboBoxModel poModel = new DefaultComboBoxModel(poArray);
-        JComboBox<String> poComboBox = new JComboBox<String>(poModel);
+        poModel = new DefaultComboBoxModel(poArray);
+        final JComboBox<String> poComboBox = new JComboBox<String>(poModel);
         poComboBox.setPreferredSize(new Dimension(150,35));
-        poModel.addElement("one");
-        poModel.addElement("two");
+        JButton assignPOButton = new JButton("Assign");
+        assignPOButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                teamMembersScrollPanel.addElement((String)poComboBox.getSelectedItem());
+                poModel.removeElement(poComboBox.getSelectedItem());
+            }
+        });
         poSelectPanel.add(poSelectLabel);
         poSelectPanel.add(poComboBox);
+        poSelectPanel.add(assignPOButton);
         centerRightLayout.add(poSelectPanel,BorderLayout.NORTH);
 
         //team member assign panel
@@ -196,10 +226,8 @@ public class ModifyProjectView extends JPanel{
         availPanel.setLayout(new GridBagLayout());
         JLabel tmAssignLabel = new JLabel("Available Team Members: ");
         Vector availTMs = new Vector();
-        final DefaultComboBoxModel availTMsModel = new DefaultComboBoxModel(availTMs);
+        availTMsModel = new DefaultComboBoxModel(availTMs);
         final JComboBox<String> availTmsComboBox = new JComboBox<String>(availTMsModel);
-        availTMsModel.addElement("one");
-        availTMsModel.addElement("Two");
         availTmsComboBox.setPreferredSize(new Dimension(150,35));
         JButton assignButton = new JButton("Assign");
         assignButton.addActionListener(new ActionListener() {
@@ -215,6 +243,8 @@ public class ModifyProjectView extends JPanel{
         tmAssignPanel.add(availPanel,BorderLayout.NORTH);
 
         teamMembersScrollPanel = new TeamMembersScrollPanel(parentFrame,parentPanel,this);
+        teamMembersScrollPanel.setPOModel(poModel);
+        teamMembersScrollPanel.setTmModel(availTMsModel);
         BacklogScrollPane backlogScrollPane = new BacklogScrollPane(1000,1000);
         backlogScrollPane.setScrollPanel(teamMembersScrollPanel);
         tmAssignPanel.add(backlogScrollPane,BorderLayout.CENTER);
@@ -246,6 +276,9 @@ public class ModifyProjectView extends JPanel{
                     pointField.setText("");
                     durField.setText("");
                     model.removeAllElements();
+                    poModel.removeAllElements();
+                    availTMsModel.removeAllElements();
+                    teamMembersScrollPanel.clear();
 
                     setPanelsVisible(false);
                 }
@@ -255,7 +288,60 @@ public class ModifyProjectView extends JPanel{
         create.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //save user to db
+                //save to db
+                ProjectDetails pd = parentPanel.sc.getProjectDetails(projNameField.getText());
+                if(projNameField.getText().equals("")){
+                    //alert error
+                }
+                else{
+                    //pd.setName(projNameField.getText());
+                }
+
+                if(startDateField.getText().equals("")){
+                    pd.setStartDate("null");
+                }
+                else{
+                    pd.setStartDate(startDateField.getText());
+                }
+
+                if(endDateField.getText().equals("")){
+                    pd.setEndDate("null");
+                }
+                else{
+                    pd.setEndDate(endDateField.getText());
+                }
+
+                //reset prev scrum master active proj
+                UserEntity prev = parentPanel.sc.getUser(pd.getScrumMaster());
+                prev.setActiveProject("none");
+                parentPanel.sc.modifyUser(prev);
+
+                //set new scrum master active proj
+                pd.setScrumMaster((String)smComboBox.getSelectedItem());
+                UserEntity next = parentPanel.sc.getUser(pd.getScrumMaster());
+                next.setActiveProject(pd.getName());
+                parentPanel.sc.modifyUser(next);
+
+                if(pointField.getText().equals("")){
+                    pd.setStoryPointValue("null");
+                }
+                else{
+                    pd.setStoryPointValue(pointField.getText());
+                }
+
+                if(durField.getText().equals("")){
+                    pd.setDurationOfSprint(0);
+                }
+                else{
+                    pd.setDurationOfSprint(Integer.parseInt(durField.getText()));
+                }
+
+                System.out.println(pd.toCSV());
+
+
+                teamMembersScrollPanel.setCurrentProject(searchField.getText());
+                teamMembersScrollPanel.saveAssignedMembers();
+                parentPanel.sc.saveProject(pd);
 
                 //show alert
                 JOptionPane.showMessageDialog(null,"Project Saved");
@@ -265,6 +351,9 @@ public class ModifyProjectView extends JPanel{
                 pointField.setText("");
                 durField.setText("");
                 model.removeAllElements();
+                poModel.removeAllElements();
+                availTMsModel.removeAllElements();
+                teamMembersScrollPanel.clear();
 
                 setPanelsVisible(false);
             }
@@ -295,8 +384,11 @@ public class ModifyProjectView extends JPanel{
 
 
 class TeamMembersScrollPanel extends JPanel{
-    private ArrayList<JTextArea> sprintListUI;
-    private ArrayList<String> sprintData;
+    private ArrayList<TeamMemberTextArea> tmUI;
+    private ArrayList<UserEntity> tmData;
+
+    private DefaultComboBoxModel poModel;
+    private DefaultComboBoxModel tmModel;
 
     private JPanel currentView;
     private JFrame parentFrame;
@@ -305,52 +397,82 @@ class TeamMembersScrollPanel extends JPanel{
     private Boolean wasDoubleClick = false;
     private Timer timer;
 
+    private String currentProject;
+
 
     public TeamMembersScrollPanel(JFrame pf, MemberView pp, JPanel curr){
         currentView = curr;
         parentFrame = pf;
         parentPanel = pp;
-        sprintListUI = new ArrayList<JTextArea>();
-        sprintData = new ArrayList<String>();
-        loadSprints();
+        tmUI = new ArrayList<TeamMemberTextArea>();
+        tmData = new ArrayList<UserEntity>();
     }
 
-    public void loadSprints(){
-        //load sprint data from DB into sprintData array
+    public void setPOModel(DefaultComboBoxModel p){
+        poModel = p;
+    }
 
-        //add all elements from array into ui
-        for(int i = 0; i<sprintData.size(); i++){
-           // addElement();
+    public void setTmModel(DefaultComboBoxModel t){
+        tmModel = t;
+    }
+
+    public void setCurrentProject(String c){
+        currentProject = c;
+    }
+
+    public void load(){
+        //load all POs and TMs into ui
+
+        ProjectPOEntity POs = parentPanel.sc.getPOsByProject(currentProject);
+        ProjectTMEntity TMs = parentPanel.sc.getTMsByProject(currentProject);
+
+        //add all po from array into ui
+        for(int i = 0; i<POs.getPOs().size(); i++){
+            addElement(POs.getPOs().get(i));
         }
+
+        for(int i = 0; i<TMs.getTMs().size(); i++){
+            addElement(TMs.getTMs().get(i));
+        }
+
 
         //dummy data
         for(int i = 0; i<5; i++){
           //  addElement();
         }
         update();
+        System.out.println("MPV431: tmUI size is "+ tmUI.size());
+
+    }
+
+    public void clear(){
+        tmUI.clear();
+        removeAll();
+        revalidate();
+        repaint();
     }
 
 
-    public void addElement(String data){
-        final JTextArea temp = new JTextArea(3,50);
-        temp.setText(data);
-        temp.setEditable(false);
-        temp.setLineWrap(true);
-        temp.setBackground(Color.white);
-        temp.setOpaque(true);
-        Border margin = new EmptyBorder(0,10,0,10);
-        temp.setBorder(new CompoundBorder(LineBorder.createGrayLineBorder(),margin));
+    public void addElement(String userID){
 
-        sprintListUI.add(temp);
+        //add users data to data array
+        UserEntity user = parentPanel.sc.getUser(userID);
+        tmData.add(user);
+
+
+        //add users info to ui
+        final TeamMemberTextArea temp = new TeamMemberTextArea(user);
+
+        tmUI.add(temp);
 
         //use buffer to add additional dummy elements while list is small
         //keeps element sizes consistent and removes excess space at end of list.
-        int buffer = 8 - sprintListUI.size();
+        int buffer = 8 - tmUI.size();
         if(buffer > -1){
-            setLayout(new GridLayout(buffer + sprintListUI.size(),1));
+            setLayout(new GridLayout(buffer + tmUI.size(),1));
         }
         else{
-            setLayout(new GridLayout(sprintListUI.size(),1));
+            setLayout(new GridLayout(tmUI.size(),1));
         }
 
 
@@ -360,7 +482,21 @@ class TeamMembersScrollPanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     //once removed, need to add to available tm array
-                    remove(temp);
+                    if(temp.getUserEntity().getUserType().equals("PO")){
+                        poModel.addElement(temp.getUserEntity().getUsername());
+                    }
+                    else if(temp.getUserEntity().getUserType().equals("TM")){
+                        tmModel.addElement(temp.getUserEntity().getUsername());
+                    }
+
+                    //remove from tmUI array
+                    for(int i = 0; i<tmUI.size(); i++){
+                        if(tmUI.get(i).getUserEntity().getUsername().equals(temp.getUserEntity().getUsername())){
+                            tmUI.remove(i);
+                        }
+                    }
+
+                    remove(temp); //remove from ui
                     parentFrame.revalidate();
                     parentFrame.repaint();
 
@@ -393,4 +529,74 @@ class TeamMembersScrollPanel extends JPanel{
         revalidate();
         repaint();
     }
+
+    public void saveAssignedMembers(){
+
+        parentPanel.sc.clearPOsFromProject(currentProject);
+        parentPanel.sc.clearTMsFromProject(currentProject);
+
+        for(int i = 0; i<tmUI.size(); i++){
+            UserEntity temp = tmUI.get(i).getUserEntity();
+
+            if(temp.getUserType().equals("PO")){
+                //check if already in db
+                ArrayList<String> POs = parentPanel.sc.getPOsByProject(currentProject).getPOs();
+                Boolean found = false;
+                for(int a = 0 ; a < POs.size(); a++){
+                    if(temp.getUsername().equals(POs.get(a))){
+                        found = true;
+                    }
+                }
+
+                if(found == false){
+                    parentPanel.sc.assignPOtoProject(currentProject,temp.getUsername());
+                }
+
+            }
+            else if(temp.getUserType().equals("TM")){
+
+                ArrayList<String> TMs = parentPanel.sc.getTMsByProject(currentProject).getTMs();
+                Boolean found = false;
+                for(int a = 0 ; a < TMs.size(); a++){
+                    if(temp.getUsername().equals(TMs.get(a))){
+                        found = true;
+                    }
+                }
+
+                if(found == false){
+                    parentPanel.sc.assignTMtoProject(currentProject,temp.getUsername());
+                }
+
+            }
+        }
+    }
+}
+
+class TeamMemberTextArea extends JTextArea{
+
+    private UserEntity ue;
+
+    public TeamMemberTextArea(UserEntity e){
+        super(3,50);
+        ue = e;
+        prepare();
+    }
+
+    public void prepare(){
+        setEditable(false);
+        setLineWrap(true);
+        setBackground(Color.white);
+        setOpaque(true);
+        Border margin = new EmptyBorder(0,10,0,10);
+        setBorder(new CompoundBorder(LineBorder.createGrayLineBorder(),margin));
+
+        String text = "Role: " + ue.getUserType() + "\n" + "Username: " + ue.getUsername() + "\n" + "Name: " + ue.getFirstName() + " " + ue.getLastName();
+        setText(text);
+    }
+
+    public UserEntity getUserEntity(){
+        return ue;
+    }
+
+
 }

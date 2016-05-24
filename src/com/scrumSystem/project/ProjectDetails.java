@@ -82,7 +82,8 @@ public class ProjectDetails implements Entity
      */
     private ArrayList<String> teamMembers;
 
-    private ArrayList<String> scrumMasters;
+
+    private ArrayList<String> scrumMasters; //only for use of admin while creating project
 
     /**
      * Integer to hold the current sprint number
@@ -234,6 +235,22 @@ public class ProjectDetails implements Entity
 
     public void setCurrentSprint(int c){
         currentSprint = c;
+    }
+
+    public ArrayList<String> getProductOwners(){
+        return productOwners;
+    }
+
+    public void addProductOwner(String p){
+        productOwners.add(p);
+    }
+
+    public void removeProductOwner(String p){
+        for(int i = 0; i<productOwners.size(); i++){
+            if(productOwners.get(i).equals(p)){
+                productOwners.remove(i);
+            }
+        }
     }
 
     /**

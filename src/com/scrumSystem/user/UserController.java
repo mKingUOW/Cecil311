@@ -140,6 +140,7 @@ public class UserController
         return null;
     }
 
+    //returns this sessions user details
     public UserEntity getUsersDetails(){
         return user;
     }
@@ -160,6 +161,7 @@ public class UserController
                 temp.setPassword(fields[1]);
                 temp.setUserType(fields[2]);
                 temp.setActiveProject(fields[3]);
+                temp.getUserDetails(fields[0]);
                 allUsers.add(temp);
                 //read the next line in the file
                 lineInFile = reader.readLine();
@@ -176,9 +178,7 @@ public class UserController
         users.clear();
         users = getAllUsers();
         for(int i = 0; i<users.size(); i++){
-            System.out.println(i + ": " + users.get(i).getUsername());
             if(users.get(i).getUsername().equals(username)){
-                System.out.println("found " + username);
                 UserEntity temp = users.get(i);
                 temp.setActiveProject(projName);
             }
@@ -197,6 +197,34 @@ public class UserController
             System.out.println(err);
         }
 
+    }
+
+    public UserEntity getUser(String id){
+        users = getAllUsers();
+        for(int i = 0; i<users.size(); i++){
+            if(users.get(i).getUsername().equals(id)){
+                return users.get(i);
+            }
+        }
+        return null;
+    }
+
+    public void modifyUser(UserEntity p){
+        users = getAllUsers();
+        for(int i = 0; i<users.size(); i++){
+            UserEntity temp = users.get(i);
+            if(temp.getUsername().equals(p.getUsername())){
+                temp.setPassword(p.getPassword());
+                temp.setUserType(p.getUserType());
+                temp.setActiveProject(p.getActiveProject());
+                temp.setFName(p.getFirstName());
+                temp.setLastName(p.getLastName());
+                temp.setEmail(p.getEmail());
+                temp.setSkills(p.getSkills());
+                saveUsers();
+                return;
+            }
+        }
     }
 
 

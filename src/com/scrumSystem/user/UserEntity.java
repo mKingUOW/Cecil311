@@ -1,6 +1,7 @@
 package com.scrumSystem.user;
 
 import com.scrumSystem.interfaces.Entity;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -313,6 +314,32 @@ public class UserEntity implements Entity
                     password = fields[1];
                     userType = fields[2];
                     activeProject = fields[3];
+                    reader.close();
+                    return true;
+                }
+                //read the next line in the file
+                lineInFile = reader.readLine();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean getUserDetails(String id){
+        String lineInFile;
+        try {
+            reader = new BufferedReader(new FileReader(userDetailsFile));
+            lineInFile = reader.readLine();
+
+            while (lineInFile != null){
+                String [] fields = lineInFile.split(",");
+                if (id.equals(fields[0])){
+                    username = fields[0];
+                    firstName = fields[1];
+                    lastName = fields[2];
+                    email = fields[3];
+                    skills = fields[4];
                     reader.close();
                     return true;
                 }
