@@ -50,29 +50,113 @@ public class LoginView extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if(sc.attemptUserLogin(usernameField.getText(),pwdField.getText()) == true) {
 
+                    System.out.println(sc.getStartingState());
+
                     if (sc.getUserRoleType().equals("SM")) {
                         //scrum master
-                        parentFrame.remove(currentView);
-                        ScrumMasterView scrumMasterView = new ScrumMasterView(parentFrame, usernameField.getText());
-                        scrumMasterView.showView();
-                        parentFrame.revalidate();
-                        parentFrame.repaint();
+                        if(sc.getStartingState().equals("project")){
+                            //proj already setup
+                            parentFrame.remove(currentView);
+                            ScrumMasterView scrumMasterView = new ScrumMasterView(parentFrame, usernameField.getText());
+                            scrumMasterView.showView();
+                            parentFrame.revalidate();
+                            parentFrame.repaint();
+                        }
+                        else if(sc.getStartingState().equals("noProject")){
+                            //user not assigned to a project
+                            /*
+                            parentFrame.remove(currentView);
+                            NoProjectView noProjectView = new NoProjectView(parentFrame);
+                            noProjectView.showView();
+                            parentFrame.revalidate();
+                            parentFrame.repaint();
+                            */
+                            //skip this atm
+                            parentFrame.remove(currentView);
+                            ScrumMasterView scrumMasterView = new ScrumMasterView(parentFrame, usernameField.getText());
+                            scrumMasterView.showView();
+                            parentFrame.revalidate();
+                            parentFrame.repaint();
+                        }
+                        else if(sc.getStartingState().equals("setup")){
+                            parentFrame.remove(currentView);
+                            ScrumMasterView scrumMasterView = new ScrumMasterView(parentFrame, usernameField.getText());
+                            scrumMasterView.showView();
+                            parentFrame.revalidate();
+                            parentFrame.repaint();
+                        }
+                        else{
+                            //error
+                            System.out.println("error in starting state");
+
+                        }
+
 
                     } else if (sc.getUserRoleType().equals("TM")) {
                         //team member
-                        parentFrame.remove(currentView);
-                        TeamMemberView teamMemberView = new TeamMemberView(parentFrame,usernameField.getText());
-                        teamMemberView.showView();
-                        parentFrame.revalidate();
-                        parentFrame.repaint();
+                        if(sc.getStartingState().equals("project")){
+                            parentFrame.remove(currentView);
+                            TeamMemberView teamMemberView = new TeamMemberView(parentFrame,usernameField.getText());
+                            teamMemberView.showView();
+                            parentFrame.revalidate();
+                            parentFrame.repaint();
+                        }
+                        else if(sc.getStartingState().equals("noProject")){
+                            //user not assigned to a project
+                            /*
+                            parentFrame.remove(currentView);
+                            NoProjectView noProjectView = new NoProjectView(parentFrame);
+                            noProjectView.showView();
+                            parentFrame.revalidate();
+                            parentFrame.repaint();
+                            */
+
+                            //skip this atm
+                            parentFrame.remove(currentView);
+                            TeamMemberView teamMemberView = new TeamMemberView(parentFrame,usernameField.getText());
+                            teamMemberView.showView();
+                            parentFrame.revalidate();
+                            parentFrame.repaint();
+                        }
+                        else{
+                            System.out.println("error in starting state");
+                        }
+
+
+
 
                     } else if (sc.getUserRoleType().equals("PO")) {
                         //product owner
-                        parentFrame.remove(currentView);
-                        ProductOwnerView productOwnerView = new ProductOwnerView(parentFrame,usernameField.getText());
-                        productOwnerView.showView();
-                        parentFrame.revalidate();
-                        parentFrame.repaint();
+                        if(sc.getStartingState().equals("project")){
+                            parentFrame.remove(currentView);
+                            ProductOwnerView productOwnerView = new ProductOwnerView(parentFrame,usernameField.getText());
+                            productOwnerView.showView();
+                            parentFrame.revalidate();
+                            parentFrame.repaint();
+                        }
+                        else if(sc.getStartingState().equals("noProject")){
+                            //user not assigned to a project
+                            /*
+                            parentFrame.remove(currentView);
+                            NoProjectView noProjectView = new NoProjectView(parentFrame);
+                            noProjectView.showView();
+                            parentFrame.revalidate();
+                            parentFrame.repaint();
+                            */
+
+                            //skip this atm
+                            parentFrame.remove(currentView);
+                            ProductOwnerView productOwnerView = new ProductOwnerView(parentFrame,usernameField.getText());
+                            productOwnerView.showView();
+                            parentFrame.revalidate();
+                            parentFrame.repaint();
+                        }
+                        else{
+                            System.out.println("error in starting state");
+                        }
+
+
+
 
                     } else if (sc.getUserRoleType().equals("SA")) {
                         //system admin
