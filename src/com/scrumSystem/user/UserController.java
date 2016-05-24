@@ -52,6 +52,7 @@ public class UserController
 
         //pass the role type string to the role factory to create the role
         role = RoleFactory.createRole(userRoleType);
+        user.loadFromDB(username);
         return true;
     }
 
@@ -112,8 +113,8 @@ public class UserController
         return null;
     }
 
-    public boolean getUsersDetails(String username){
-        return user.loadFromDB(username);
+    public UserEntity getUsersDetails(){
+        return user;
     }
 
 

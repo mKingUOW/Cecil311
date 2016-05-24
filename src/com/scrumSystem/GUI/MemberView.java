@@ -13,7 +13,7 @@ public class MemberView extends JPanel {
 
     private JPanel currentView;
     private String username;
-
+    private UserEntity ue;
     public MemberView(){
 
         currentView = this;
@@ -38,6 +38,11 @@ public class MemberView extends JPanel {
 
     public String getUsername(){
         return username;
+    }
+
+    public String getPassword()
+    {
+       return ue.getPassword();
     }
 
 }

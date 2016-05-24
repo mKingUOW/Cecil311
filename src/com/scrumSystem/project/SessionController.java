@@ -2,6 +2,7 @@ package com.scrumSystem.project;
 
 import com.scrumSystem.Helpers.ProjectDetailsHelper;
 import com.scrumSystem.user.UserController;
+import com.scrumSystem.user.UserEntity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -143,7 +144,7 @@ public class SessionController
         return uc.getAvailableTMs(pd);
     }
 
-    public boolean getUsersDetails(String username){
-        return uc.getUsersDetails(username);
+    public UserEntity getUsersDetails(){
+        return uc.getUsersDetails();
     }
 }
