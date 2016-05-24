@@ -36,6 +36,7 @@ public class TeamMemberView extends MemberView {
 
     public TeamMemberView(JFrame  f,String uname){
         setUsername(uname);
+        setAccountDetails();
         frame = f;
         prepare();
     }

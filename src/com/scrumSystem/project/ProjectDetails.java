@@ -219,6 +219,8 @@ public class ProjectDetails implements Entity
                 if (userType.equals(fields[2]) && none.equals(fields[3])) {
                     teamMembers.add(fields[0]);
                 }
+                //read the next line in the file
+                lineInFile = reader.readLine();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -259,6 +261,8 @@ public class ProjectDetails implements Entity
                     reader.close();
                     return true;
                 }
+                //read the next line in the file
+                lineInFile = reader.readLine();
             }
         } catch (Exception e) {e.printStackTrace();}
 

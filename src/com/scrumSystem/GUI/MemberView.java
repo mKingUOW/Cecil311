@@ -19,6 +19,7 @@ public class MemberView extends JPanel {
     private String lastName;
     private String email;
     private String UAFile;
+    private String userDetails;
 
     /**
      * Buffered reader object to read from files
@@ -37,6 +38,7 @@ public class MemberView extends JPanel {
         lastName = "";
         email = "";
         UAFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "userAccounts.csv";
+        userDetails = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "userDetails.csv";
     }
 
     public void setCurrentView(JPanel next){
@@ -59,25 +61,67 @@ public class MemberView extends JPanel {
     }
 
     public String getPassword() {
+        return this.password;
+    }
+
+    public String getUserType(){
+        return userType;
+    }
+
+    public String getActiveProject(){
+        return activeProject;
+    }
+
+
+    public String getFirstName(){
+        return this.firstName;
+    }
+
+    public String getLastName(){
+        return this.lastName;
+    }
+
+    public String getEmail(){
+        return this.email;
+    }
+    public void setAccountDetails(){
         String lineInFile;
-        String none = "No password found";
         try {
             reader = new BufferedReader(new FileReader(UAFile));
             lineInFile = reader.readLine();
 
             while (lineInFile != null) {
                 String [] fields = lineInFile.split(",");
-                System.out.print(fields[1]);
-                if (this.getUsername().equals(fields[0])) {
-                    System.out.print(password);
-                    password = fields[1];
-                    System.out.print("Am i here");
-                    return password;
+                if (this.username.equals(fields[0])) {
+                    this.password = fields[1];
+                    this.userType = fields[2];
+                    this.activeProject = fields[3];
+                    reader.close();
                 }
+                //read the next line in the file
+                lineInFile = reader.readLine();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return none;
+
+        try {
+            reader = new BufferedReader(new FileReader(userDetails));
+            lineInFile = reader.readLine();
+
+            while (lineInFile != null){
+                String [] fields = lineInFile.split(",");
+                if (this.username.equals(fields[0])){
+                    this.firstName = fields[1];
+                    this.lastName = fields[2];
+                    this.email = fields[3];
+                    reader.close();
+                }
+                //read the next line in the file
+                lineInFile = reader.readLine();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
