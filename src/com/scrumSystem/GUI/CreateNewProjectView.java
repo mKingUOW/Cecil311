@@ -20,7 +20,6 @@ public class CreateNewProjectView extends JPanel {
     private JTextField startDateField;
     private JTextField endDateField;
     private JTextField pointField;
-    private DefaultComboBoxModel<String> model;
     private JTextField durField;
 
     public CreateNewProjectView(JFrame p, MemberView pp){
@@ -87,8 +86,8 @@ public class CreateNewProjectView extends JPanel {
         smPanel.setLayout(new GridBagLayout());
         JLabel smLabel = new JLabel("Scrum Master: ");
 
-        Vector smArray = new Vector(parentPanel.sc.getAvailableSMs());
-        model = new DefaultComboBoxModel(smArray);
+        final Vector smArray = new Vector(parentPanel.sc.getAvailableSMs());
+        final DefaultComboBoxModel<String> model = new DefaultComboBoxModel(smArray);
         final JComboBox<String> smComboBox = new JComboBox<>(model);
         smPanel.add(smLabel);
         smPanel.add(smComboBox);
@@ -126,7 +125,10 @@ public class CreateNewProjectView extends JPanel {
                     endDateField.setText("");
                     pointField.setText("");
                     durField.setText("");
-                    model.removeAllElements();
+
+                    for(int i = 0; i<parentPanel.sc.getAvailableSMs().size(); i++){
+                        model.addElement(parentPanel.sc.getAvailableSMs().get(i));
+                    }
                 }
             }
         });
@@ -145,6 +147,10 @@ public class CreateNewProjectView extends JPanel {
                 pointField.setText("");
                 durField.setText("");
                 model.removeAllElements();
+
+                for(int i = 0; i<parentPanel.sc.getAvailableSMs().size(); i++){
+                    model.addElement(parentPanel.sc.getAvailableSMs().get(i));
+                }
             }
         });
 

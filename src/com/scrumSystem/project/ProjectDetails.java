@@ -298,6 +298,11 @@ public class ProjectDetails implements Entity
             e.printStackTrace();
         }
     }
+
+    public String toCSV(){
+        return projectName + "," + startDate + "," + endDate + "," + storyPointValue + "," + scrumMaster
+                + "," + currentSprint + "," + durationOfSprint;
+    }
     
     @Override
     public boolean loadFromDB(String id)

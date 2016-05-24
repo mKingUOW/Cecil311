@@ -3,7 +3,9 @@ package com.scrumSystem.project;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Darryl on 24/05/2016.
@@ -27,6 +29,25 @@ public class ProjectController {
             }
         }
         return null;
+    }
+
+    public void createProject(String name, String sm ){
+        ProjectDetails temp = new ProjectDetails(name,sm);
+        allProjects.add(temp);
+        saveProjects();
+    }
+
+    public void saveProjects(){
+        try{
+            PrintWriter writer = new PrintWriter(projectFile);
+            for(int i = 0; i<allProjects.size(); i++){
+                writer.println(allProjects.get(i).toCSV());
+            }
+            writer.close();
+        }catch(Exception err){
+            System.out.println(err);
+        }
+
     }
 
     public void loadProjects(){

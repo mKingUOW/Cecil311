@@ -96,6 +96,7 @@ public class SessionController
 
     public boolean createProject(String projectName, String scrumMaster)
     {
+        /*
         pd = uc.createProject(projectName, scrumMaster);
 
         //after the project has been created by the system admin, is should be saved to the database
@@ -105,6 +106,9 @@ public class SessionController
             return true;
         }
          return false;
+         */
+        pc.createProject(projectName,scrumMaster);
+        return true;
     }
 
     /**
