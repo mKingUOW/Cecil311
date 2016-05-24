@@ -53,4 +53,23 @@ public class MemberView extends JPanel {
         return ue.getFirstName();
     }
 
+    public String getLName(){
+        return ue.getLastName();
+    }
+
+    public String getEmail(){
+        return ue.getEmail();
+    }
+
+    public String getSkills(){
+        return ue.getSkills();
+    }
+
+    public String getUserType(){
+        return ue.getUserType();
+    }
+
+    public String getActiveProj(){
+        return ue.getActiveProject();
+    }
 }

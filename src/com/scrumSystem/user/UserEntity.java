@@ -69,6 +69,11 @@ public class UserEntity implements Entity
      */
     private String skills;
 
+    /**
+     * Usertype of the user.
+     */
+    private String userType;
+
 
     /**
      * Default constructor
@@ -100,6 +105,7 @@ public class UserEntity implements Entity
         this.lastName = lastName;
         this.email = email;
         this.skills = skills;
+        this.userType = roleType;
     }
 
     /**
@@ -161,6 +167,12 @@ public class UserEntity implements Entity
      * @return The current active project name
      */
     public String getActiveProject() { return activeProject; }
+
+    /**
+     * Returns the user type of the user
+     * @return A string holding the user type
+     */
+    public String getUserType() {return userType;};
 
     /**
      * Login method for system access
@@ -235,10 +247,36 @@ public class UserEntity implements Entity
             while (lineInFile != null){
                 String [] fields = lineInFile.split(",");
                 if (id.equals(fields[0])){
+                    username = fields[0];
                     firstName = fields[1];
                     lastName = fields[2];
                     email = fields[3];
                     skills = fields[4];
+                    reader.close();
+                    getUserAccount(id);
+                    return true;
+                }
+                //read the next line in the file
+                lineInFile = reader.readLine();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean getUserAccount(String id){
+        String lineInFile;
+        try {
+            reader = new BufferedReader(new FileReader(usersFile));
+            lineInFile = reader.readLine();
+
+            while (lineInFile != null){
+                String [] fields = lineInFile.split(",");
+                if (id.equals(fields[0])){
+                    password = fields[1];
+                    userType = fields[2];
+                    activeProject = fields[3];
                     reader.close();
                     return true;
                 }
