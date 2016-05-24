@@ -234,8 +234,6 @@ public class ProjectDetails implements Entity
 
         try {
             writer = new PrintWriter(projectFile);
-
-
             writer.append(projectName + "," + startDate + "," + endDate + "," + storyPointValue + "," + scrumMaster
                             + "," + currentSprint + "," + durationOfSprint);
 
