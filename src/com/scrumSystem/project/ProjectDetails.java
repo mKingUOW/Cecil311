@@ -82,6 +82,8 @@ public class ProjectDetails implements Entity
      */
     private ArrayList<String> teamMembers;
 
+    private ArrayList<String> scrumMasters;
+
     /**
      * Integer to hold the current sprint number
      */
@@ -170,6 +172,30 @@ public class ProjectDetails implements Entity
 
     //---------------------------------------------GET/SET METHODS------------------------------------------//
 
+    public String getName(){
+        return projectName;
+    }
+
+    public String getStartDate(){
+        return startDate;
+    }
+
+    public String getEndDate(){
+        return endDate;
+    }
+
+    public String getStoryPointValue(){
+        return storyPointValue;
+    }
+
+    public String getScrumMaster(){
+        return scrumMaster;
+    }
+
+    public int getDurationOfSprint(){
+        return durationOfSprint;
+    }
+
     public int getCurrentSprint()
     {
         return currentSprint;
@@ -230,6 +256,32 @@ public class ProjectDetails implements Entity
         return teamMembers;
     }
 
+    public ArrayList<String> getAvailableSMs() {
+        System.out.println("in here");
+        scrumMasters = new ArrayList<>();
+        String lineInFile;
+        String none = "none";
+        String userType = "SM";
+
+        try {
+            reader = new BufferedReader(new FileReader(UAFile));
+            lineInFile = reader.readLine();
+
+            while (lineInFile != null) {
+                String [] fields = lineInFile.split(",");
+                if (userType.equals(fields[2]) && none.equals(fields[3])) {
+                    scrumMasters.add(fields[0]);
+                }
+                //read the next line in the file
+                lineInFile = reader.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return scrumMasters;
+    }
+
+
 
     //-------------------------------------ENTITY INTERFACE OVERRIDDEN METHODS------------------------------//
 
@@ -260,6 +312,14 @@ public class ProjectDetails implements Entity
             while (lineInFile != null) {
                 String [] fields = lineInFile.split(",");
                 if (id.equals(fields[0])) {
+                    projectName = fields[0];
+                    startDate = fields[1];
+                    endDate = fields[2];
+                    storyPointValue = fields[3];
+                    scrumMaster = fields[4];
+                    currentSprint = Integer.parseInt(fields[5]);
+                    durationOfSprint = Integer.parseInt(fields[6]);
+
                     reader.close();
                     return true;
                 }

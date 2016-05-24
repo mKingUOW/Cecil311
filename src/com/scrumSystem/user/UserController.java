@@ -113,6 +113,23 @@ public class UserController
         return null;
     }
 
+    public ArrayList<String> getAvailableSMs(ProjectDetails pd)
+    {
+        //only scrum master and system admin will ever need this functionality
+        if (role instanceof ScrumMaster || role instanceof SystemAdmin){
+            if(pd == null){
+                System.out.println("pd null");
+            }
+            else{
+                return pd.getAvailableSMs();
+            }
+
+        }
+
+
+        return null;
+    }
+
     public UserEntity getUsersDetails(){
         return user;
     }

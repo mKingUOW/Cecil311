@@ -181,6 +181,7 @@ public class LoginView extends JPanel {
 
                     } else if (sc.getUserRoleType().equals("SA")) {
                         //system admin
+
                         System.out.println("System admin logged in");
                         parentFrame.remove(currentView);
                         SystemAdminView systemAdminView = new SystemAdminView(parentFrame,usernameField.getText());

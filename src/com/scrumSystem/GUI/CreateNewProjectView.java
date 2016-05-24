@@ -23,12 +23,9 @@ public class CreateNewProjectView extends JPanel {
     private DefaultComboBoxModel<String> model;
     private JTextField durField;
 
-    private SessionController sc;
-
     public CreateNewProjectView(JFrame p, MemberView pp){
         parentFrame = p;
         parentPanel = pp;
-        sc = new SessionController();
 
         prepare();
     }
@@ -89,16 +86,13 @@ public class CreateNewProjectView extends JPanel {
         JPanel smPanel = new JPanel();
         smPanel.setLayout(new GridBagLayout());
         JLabel smLabel = new JLabel("Scrum Master: ");
-        Vector smArray = new Vector();
+
+        Vector smArray = new Vector(parentPanel.sc.getAvailableSMs());
         model = new DefaultComboBoxModel(smArray);
-        JComboBox<String> smComboBox = new JComboBox<>(model);
+        final JComboBox<String> smComboBox = new JComboBox<>(model);
         smPanel.add(smLabel);
         smPanel.add(smComboBox);
         centerLayout.add(smPanel);
-
-        //add dummy data to scrum master model
-        model.addElement("sm1");
-        model.addElement("sm2");
 
         //sprint duration panel
         JPanel durPanel = new JPanel();
@@ -141,6 +135,7 @@ public class CreateNewProjectView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //save user to db
+                parentPanel.sc.createProject(projNameField.getText(),(String)smComboBox.getSelectedItem());
 
                 //show alert
                 JOptionPane.showMessageDialog(null,"Project Saved");

@@ -23,6 +23,7 @@ public class SessionController
      * Project details object holding all details of the project
      */
     private ProjectDetails pd;
+    private ProjectController pc;
 
     /**
      * Default constructor
@@ -30,6 +31,7 @@ public class SessionController
     public SessionController()
     {
         uc = new UserController();
+        pc = new ProjectController();
         pd = null;
     }
 
@@ -144,9 +146,17 @@ public class SessionController
         return uc.getAvailableTMs(pd);
     }
 
+    public ArrayList<String> getAvailableSMs(){
+        return uc.getAvailableSMs(new ProjectDetails());
+    }
+
     public UserEntity getUsersDetails(){
 
         return uc.getUsersDetails();
 
+    }
+
+    public ProjectDetails getProjectDetails(String id){
+       return pc.getProject(id);
     }
 }

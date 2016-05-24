@@ -1,5 +1,7 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.project.ProjectDetails;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -69,11 +71,17 @@ public class ModifyProjectView extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //if found set details and display
-
-                //bypass for now
-                if(searchField.getText().equals("bypass")){
+                if(parentPanel.sc.getProjectDetails(searchField.getText()) != null){
                     setPanelsVisible(true);
                     errorLabel.setText("");
+
+                    ProjectDetails temp = parentPanel.sc.getProjectDetails(searchField.getText());
+                    projNameField.setText(temp.getName());
+                    startDateField.setText(temp.getStartDate());
+                    endDateField.setText(temp.getEndDate());
+                    pointField.setText(temp.getStoryPointValue());
+                    //set scrum master somehow
+                    durField.setText(Integer.toString(temp.getDurationOfSprint()));
                 }
                 else{
                     //if not found display error
