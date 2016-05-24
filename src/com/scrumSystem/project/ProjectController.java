@@ -1,5 +1,7 @@
 package com.scrumSystem.project;
 
+import com.scrumSystem.user.UserController;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -16,7 +18,6 @@ public class ProjectController {
     private String projectFile;
 
     public ProjectController(){
-       // System.out.println("new pc");
         allProjects = new ArrayList<ProjectDetails>();
         projectFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "project.csv";
         this.loadProjects();
@@ -31,13 +32,33 @@ public class ProjectController {
         return null;
     }
 
-    public void createProject(String name, String sm ){
-        ProjectDetails temp = new ProjectDetails(name,sm);
-        allProjects.add(temp);
-        saveProjects();
+    public void saveProject(ProjectDetails p){
+        for(int i = 0; i<allProjects.size(); i++){
+            if(allProjects.get(i).getName().equals(p.getName())){
+                System.out.println("saving project " + allProjects.get(i).getName());
+                allProjects.get(i).setName(p.getName());
+                allProjects.get(i).setStartDate(p.getStartDate());
+                allProjects.get(i).setEndDate(p.getEndDate());
+                allProjects.get(i).setStoryPointValue(p.getStoryPointValue());
+                allProjects.get(i).setScrumMaster(p.getScrumMaster());
+                allProjects.get(i).setDurationOfSprint(p.getDurationOfSprint());
+                allProjects.get(i).setCurrentSprint(p.getCurrentSprint());
+            }
+        }
+        saveAllProjects();
     }
 
-    public void saveProjects(){
+    public void createProject(String name, String sm ){
+        ProjectDetails temp = new ProjectDetails(name,sm);
+
+        UserController uc = new UserController();
+        uc.assignUserToProject(sm,name);
+
+        allProjects.add(temp);
+        saveAllProjects();
+    }
+
+    public void saveAllProjects(){
         try{
             PrintWriter writer = new PrintWriter(projectFile);
             for(int i = 0; i<allProjects.size(); i++){

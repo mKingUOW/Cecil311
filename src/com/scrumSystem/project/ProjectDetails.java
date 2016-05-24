@@ -176,29 +176,57 @@ public class ProjectDetails implements Entity
         return projectName;
     }
 
+    public void setName(String n){
+        projectName = n;
+    }
+
     public String getStartDate(){
         return startDate;
+    }
+
+    public void setStartDate(String s){
+        startDate = s;
     }
 
     public String getEndDate(){
         return endDate;
     }
 
+    public void setEndDate(String s){
+        endDate = s;
+    }
+
     public String getStoryPointValue(){
         return storyPointValue;
+    }
+
+    public void setStoryPointValue(String s){
+        storyPointValue = s;
     }
 
     public String getScrumMaster(){
         return scrumMaster;
     }
 
+    public void setScrumMaster(String s){
+        scrumMaster = s;
+    }
+
     public int getDurationOfSprint(){
         return durationOfSprint;
+    }
+
+    public void setDurationOfSprint(int d){
+        durationOfSprint = d;
     }
 
     public int getCurrentSprint()
     {
         return currentSprint;
+    }
+
+    public void setCurrentSprint(int c){
+        currentSprint = c;
     }
 
     /**
@@ -257,7 +285,6 @@ public class ProjectDetails implements Entity
     }
 
     public ArrayList<String> getAvailableSMs() {
-        System.out.println("in here");
         scrumMasters = new ArrayList<>();
         String lineInFile;
         String none = "none";
@@ -287,7 +314,7 @@ public class ProjectDetails implements Entity
 
     @Override
     public void saveToDB() {
-
+        //not actually used - see projectController.saveProjects()
         try {
             writer = new PrintWriter(projectFile);
             writer.append(projectName + "," + startDate + "," + endDate + "," + storyPointValue + "," + scrumMaster

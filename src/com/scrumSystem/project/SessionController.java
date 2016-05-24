@@ -163,4 +163,8 @@ public class SessionController
     public ProjectDetails getProjectDetails(String id){
        return pc.getProject(id);
     }
+
+    public void saveProject(ProjectDetails p){
+        pc.saveProject(p);
+    }
 }

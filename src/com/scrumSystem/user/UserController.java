@@ -4,6 +4,10 @@ import com.scrumSystem.project.ProjectDetails;
 import com.scrumSystem.role.*;
 import com.scrumSystem.role.RoleFactory;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
@@ -28,12 +32,18 @@ public class UserController
      */
     private String userRoleType;
 
+    private String usersFile;
+    private ArrayList<UserEntity> users;
+
     /**
      * Default constructor
      */
     public UserController()
     {
+
         user = new UserEntity();
+        usersFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "userAccounts.csv";
+        users = getAllUsers();
     }
 
     /**
@@ -132,6 +142,61 @@ public class UserController
 
     public UserEntity getUsersDetails(){
         return user;
+    }
+
+    public ArrayList<UserEntity> getAllUsers(){
+        ArrayList<UserEntity> allUsers = new ArrayList<UserEntity>();
+        String lineInFile;
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(usersFile));
+            lineInFile = reader.readLine();
+
+            while (lineInFile != null) {
+                String [] fields = lineInFile.split(",");
+                UserEntity temp = new UserEntity();
+                //System.out.println(fields[0]);
+                temp.setUsername(fields[0]);
+                temp.setPassword(fields[1]);
+                temp.setUserType(fields[2]);
+                temp.setActiveProject(fields[3]);
+                allUsers.add(temp);
+                //read the next line in the file
+                lineInFile = reader.readLine();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        System.out.println(allUsers.size() + " users in system");
+        return allUsers;
+    }
+
+    public void assignUserToProject(String username,String projName){
+        users.clear();
+        users = getAllUsers();
+        for(int i = 0; i<users.size(); i++){
+            System.out.println(i + ": " + users.get(i).getUsername());
+            if(users.get(i).getUsername().equals(username)){
+                System.out.println("found " + username);
+                UserEntity temp = users.get(i);
+                temp.setActiveProject(projName);
+            }
+        }
+        saveUsers();
+    }
+
+    public void saveUsers(){
+        try{
+            PrintWriter writer = new PrintWriter(usersFile);
+            for(int i = 0; i<users.size(); i++){
+                writer.println(users.get(i).accountToCSV());
+            }
+            writer.close();
+        }catch(Exception err){
+            System.out.println(err);
+        }
+
     }
 
 

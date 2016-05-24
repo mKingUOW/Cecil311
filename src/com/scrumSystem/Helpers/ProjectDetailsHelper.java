@@ -32,6 +32,14 @@ public class ProjectDetailsHelper
 
     public ProjectDetailsHelper()
     {
+        projectName = "null";
+        startDate = "null";
+        endDate = "null";
+        storyPointValue = "null";
+        scrumMaster = "null";
+        currentSprint = 0;
+        durationOfSprint = 0;
+
         POs = new ArrayList<String>();
         TMs = new ArrayList<String>();
     }

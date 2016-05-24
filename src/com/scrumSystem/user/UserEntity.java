@@ -117,6 +117,10 @@ public class UserEntity implements Entity
         return username;
     }
 
+    public void setUsername(String u){
+        username = u;
+    }
+
     /**
      * Returns the password of the user
      * @return A string holding the password
@@ -124,6 +128,10 @@ public class UserEntity implements Entity
     public String getPassword()
     {
         return password;
+    }
+
+    public void setPassword(String pwd){
+        password = pwd;
     }
 
     /**
@@ -135,6 +143,10 @@ public class UserEntity implements Entity
         return firstName;
     }
 
+    public void setFName(String f){
+        firstName = f;
+    }
+
     /**
      * Returns the last name of the user
      * @return A string holding the last name
@@ -142,6 +154,10 @@ public class UserEntity implements Entity
     public String getLastName()
     {
         return lastName;
+    }
+
+    public void setLastName(String l){
+        lastName = l;
     }
 
     /**
@@ -153,6 +169,10 @@ public class UserEntity implements Entity
         return email;
     }
 
+    public void setEmail(String e){
+        email = e;
+    }
+
     /**
      * Returns the skills the user possesses
      * @return A string holding the skills
@@ -162,17 +182,29 @@ public class UserEntity implements Entity
         return skills;
     }
 
+    public void setSkills(String s){
+        skills = s;
+    }
+
     /**
      * Returns the active project for the user
      * @return The current active project name
      */
     public String getActiveProject() { return activeProject; }
 
+    public void setActiveProject(String a){
+        activeProject = a;
+    }
+
     /**
      * Returns the user type of the user
      * @return A string holding the user type
      */
     public String getUserType() {return userType;};
+
+    public void setUserType(String u){
+        userType = u;
+    }
 
     /**
      * Login method for system access
@@ -228,6 +260,10 @@ public class UserEntity implements Entity
         //if the username does not exist, create the account
         //return true;
 
+    }
+
+    public String accountToCSV(){
+        return username + "," + password + "," + userType + "," + activeProject;
     }
 
     @Override

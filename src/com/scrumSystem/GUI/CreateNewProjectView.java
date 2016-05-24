@@ -1,5 +1,7 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.Helpers.ProjectDetailsHelper;
+import com.scrumSystem.project.ProjectDetails;
 import com.scrumSystem.project.SessionController;
 
 import javax.swing.*;
@@ -137,7 +139,41 @@ public class CreateNewProjectView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //save user to db
+                //create new project
                 parentPanel.sc.createProject(projNameField.getText(),(String)smComboBox.getSelectedItem());
+
+                //setup other details of project (if set)
+                ProjectDetailsHelper pdh = new ProjectDetailsHelper();
+                if(!projNameField.getText().equals("")){
+                    pdh.setProjectName(projNameField.getText());
+                }
+
+                if(!startDateField.getText().equals("")){
+                    pdh.setStartDate(startDateField.getText());
+                }
+
+                if(!endDateField.getText().equals("")){
+                    pdh.setEndDate(endDateField.getText());
+                }
+
+                pdh.setScrumMaster((String)smComboBox.getSelectedItem());
+
+                if(!pointField.getText().equals("")){
+                    pdh.setStoryPointValue(pointField.getText());
+                }
+
+                if(!durField.getText().equals("")){
+                    pdh.setDurationOfSprint(Integer.parseInt(durField.getText()));
+                }
+
+                ProjectDetails pd = parentPanel.sc.getProjectDetails(projNameField.getText());
+                pd.setupProject(pdh);
+
+                System.out.println(pd.toCSV());
+                parentPanel.sc.saveProject(pd);
+
+
+
 
                 //show alert
                 JOptionPane.showMessageDialog(null,"Project Saved");
