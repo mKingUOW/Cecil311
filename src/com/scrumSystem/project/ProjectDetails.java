@@ -156,13 +156,20 @@ public class ProjectDetails implements Entity
     public boolean setupProject(ProjectDetailsHelper pdh)
     {
         try {
-            this.projectName = pdh.getProjectName();
-            this.startDate = pdh.getStartDate();
-            this.endDate = pdh.getEndDate();
-            this.storyPointValue = pdh.getStoryPointValue();
-            this.scrumMaster = pdh.getScrumMaster();
-            this.currentSprint = pdh.getCurrentSprint();
-            this.durationOfSprint = pdh.getDurationOfSprint();
+            pdh.setProjectName(this.projectName);
+            pdh.setStartDate(this.startDate);
+            pdh.setEndDate(this.endDate);
+            pdh.setStoryPointValue(this.storyPointValue);
+            pdh.setScrumMaster(this.scrumMaster);
+            pdh.setCurrentSprint(this.currentSprint);
+            pdh.setDurationOfSprint(this.durationOfSprint);
+//            this.projectName = pdh.getProjectName();
+//            this.startDate = pdh.getStartDate();
+//            this.endDate = pdh.getEndDate();
+//            this.storyPointValue = pdh.getStoryPointValue();
+//            this.scrumMaster = pdh.getScrumMaster();
+//            this.currentSprint = pdh.getCurrentSprint();
+//            this.durationOfSprint = pdh.getDurationOfSprint();
             return true;
         }catch (Exception e) {
             e.printStackTrace();
@@ -317,9 +324,7 @@ public class ProjectDetails implements Entity
         //not actually used - see projectController.saveProjects()
         try {
             writer = new PrintWriter(projectFile);
-            writer.append(projectName + "," + startDate + "," + endDate + "," + storyPointValue + "," + scrumMaster
-                            + "," + currentSprint + "," + durationOfSprint);
-
+            writer.append(projectName + "," + startDate + "," + endDate + "," + storyPointValue + "," + scrumMaster + "," + durationOfSprint);
             writer.close();
         } catch (Exception e) {
             e.printStackTrace();
