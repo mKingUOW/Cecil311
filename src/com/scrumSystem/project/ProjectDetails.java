@@ -193,6 +193,8 @@ public class ProjectDetails implements Entity
                 if (userType.equals(fields[2]) && none.equals(fields[3])) {
                     productOwners.add(fields[0]);
                 }
+                //read the next line in the file
+                lineInFile = reader.readLine();
             }
         } catch (Exception e) {
             e.printStackTrace();
