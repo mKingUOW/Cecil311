@@ -50,7 +50,6 @@ public class LoginView extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if(sc.attemptUserLogin(usernameField.getText(),pwdField.getText()) == true) {
 
-                    System.out.println(sc.getStartingState());
 
                     if (sc.getUserRoleType().equals("SM")) {
                         //scrum master
@@ -95,14 +94,17 @@ public class LoginView extends JPanel {
                     } else if (sc.getUserRoleType().equals("TM")) {
                         //team member
                         if(sc.getStartingState().equals("project")){
+                            System.out.println("proj");
                             parentFrame.remove(currentView);
                             TeamMemberView teamMemberView = new TeamMemberView(parentFrame,usernameField.getText());
+                            teamMemberView.setUserEntity(sc.getUsersDetails());
                             teamMemberView.showView();
                             parentFrame.revalidate();
                             parentFrame.repaint();
                         }
                         else if(sc.getStartingState().equals("noProject")){
                             //user not assigned to a project
+                            System.out.println("no proj");
                             /*
                             parentFrame.remove(currentView);
                             NoProjectView noProjectView = new NoProjectView(parentFrame);
@@ -113,7 +115,15 @@ public class LoginView extends JPanel {
 
                             //skip this atm
                             parentFrame.remove(currentView);
+                            if(sc.getUsersDetails() == null){
+                                System.out.println("its null");
+                            }
+                            else{
+                                System.out.println("not null");
+                            }
                             TeamMemberView teamMemberView = new TeamMemberView(parentFrame,usernameField.getText());
+                            teamMemberView.setUserEntity(sc.getUsersDetails());
+                            teamMemberView.prepare();
                             teamMemberView.showView();
                             parentFrame.revalidate();
                             parentFrame.repaint();

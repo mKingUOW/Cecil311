@@ -40,10 +40,10 @@ public class TeamMemberView extends MemberView {
         setUsername(uname);
 
         frame = f;
-        prepare();
+       // prepare();
     }
 
-    private void prepare(){
+    public void prepare(){
         /*
         frame = new JFrame("Team Member View");
         //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);

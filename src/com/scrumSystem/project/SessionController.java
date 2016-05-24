@@ -145,6 +145,8 @@ public class SessionController
     }
 
     public UserEntity getUsersDetails(){
+
         return uc.getUsersDetails();
+
     }
 }

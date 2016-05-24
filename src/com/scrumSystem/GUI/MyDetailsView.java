@@ -59,7 +59,7 @@ public class MyDetailsView extends JPanel {
         JPanel panelFive = new JPanel();
         panelFive.setLayout(new GridBagLayout());
         JLabel fNameLabel = new JLabel("First name: ", SwingConstants.CENTER);
-        JLabel fNameField = new JLabel(); //get users fName
+        JLabel fNameField = new JLabel(parentPanel.getFName()); //get users fName
         panelFive.add(fNameLabel);
         panelFive.add(fNameField);
 

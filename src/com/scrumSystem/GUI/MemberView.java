@@ -32,6 +32,10 @@ public class MemberView extends JPanel {
         //overriden by sub-class
     }
 
+    public void setUserEntity(UserEntity u){
+        ue = u;
+    }
+
     public void setUsername(String u){
         username = u;
     }
@@ -43,6 +47,10 @@ public class MemberView extends JPanel {
     public String getPassword()
     {
        return ue.getPassword();
+    }
+
+    public String getFName(){
+        return ue.getFirstName();
     }
 
 }
