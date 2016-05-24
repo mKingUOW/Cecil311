@@ -57,6 +57,9 @@ public class LoginView extends JPanel {
                             //proj already setup
                             parentFrame.remove(currentView);
                             ScrumMasterView scrumMasterView = new ScrumMasterView(parentFrame, usernameField.getText());
+                            scrumMasterView.setUserEntity(sc.getUsersDetails());
+                            scrumMasterView.setSessionController(sc);
+                            scrumMasterView.prepare();
                             scrumMasterView.showView();
                             parentFrame.revalidate();
                             parentFrame.repaint();
@@ -73,6 +76,9 @@ public class LoginView extends JPanel {
                             //skip this atm
                             parentFrame.remove(currentView);
                             ScrumMasterView scrumMasterView = new ScrumMasterView(parentFrame, usernameField.getText());
+                            scrumMasterView.setUserEntity(sc.getUsersDetails());
+                            scrumMasterView.setSessionController(sc);
+                            scrumMasterView.prepare();
                             scrumMasterView.showView();
                             parentFrame.revalidate();
                             parentFrame.repaint();
@@ -80,6 +86,9 @@ public class LoginView extends JPanel {
                         else if(sc.getStartingState().equals("setup")){
                             parentFrame.remove(currentView);
                             ScrumMasterView scrumMasterView = new ScrumMasterView(parentFrame, usernameField.getText());
+                            scrumMasterView.setUserEntity(sc.getUsersDetails());
+                            scrumMasterView.setSessionController(sc);
+                            scrumMasterView.prepare();
                             scrumMasterView.showView();
                             parentFrame.revalidate();
                             parentFrame.repaint();
@@ -94,10 +103,11 @@ public class LoginView extends JPanel {
                     } else if (sc.getUserRoleType().equals("TM")) {
                         //team member
                         if(sc.getStartingState().equals("project")){
-                            System.out.println("proj");
                             parentFrame.remove(currentView);
                             TeamMemberView teamMemberView = new TeamMemberView(parentFrame,usernameField.getText());
                             teamMemberView.setUserEntity(sc.getUsersDetails());
+                            teamMemberView.setSessionController(sc);
+                            teamMemberView.prepare();
                             teamMemberView.showView();
                             parentFrame.revalidate();
                             parentFrame.repaint();
@@ -115,14 +125,9 @@ public class LoginView extends JPanel {
 
                             //skip this atm
                             parentFrame.remove(currentView);
-                            if(sc.getUsersDetails() == null){
-                                System.out.println("its null");
-                            }
-                            else{
-                                System.out.println("not null");
-                            }
                             TeamMemberView teamMemberView = new TeamMemberView(parentFrame,usernameField.getText());
                             teamMemberView.setUserEntity(sc.getUsersDetails());
+                            teamMemberView.setSessionController(sc);
                             teamMemberView.prepare();
                             teamMemberView.showView();
                             parentFrame.revalidate();
@@ -140,6 +145,9 @@ public class LoginView extends JPanel {
                         if(sc.getStartingState().equals("project")){
                             parentFrame.remove(currentView);
                             ProductOwnerView productOwnerView = new ProductOwnerView(parentFrame,usernameField.getText());
+                            productOwnerView.setUserEntity(sc.getUsersDetails());
+                            productOwnerView.setSessionController(sc);
+                            productOwnerView.prepare();
                             productOwnerView.showView();
                             parentFrame.revalidate();
                             parentFrame.repaint();
@@ -157,6 +165,9 @@ public class LoginView extends JPanel {
                             //skip this atm
                             parentFrame.remove(currentView);
                             ProductOwnerView productOwnerView = new ProductOwnerView(parentFrame,usernameField.getText());
+                            productOwnerView.setUserEntity(sc.getUsersDetails());
+                            productOwnerView.setSessionController(sc);
+                            productOwnerView.prepare();
                             productOwnerView.showView();
                             parentFrame.revalidate();
                             parentFrame.repaint();
@@ -173,6 +184,9 @@ public class LoginView extends JPanel {
                         System.out.println("System admin logged in");
                         parentFrame.remove(currentView);
                         SystemAdminView systemAdminView = new SystemAdminView(parentFrame,usernameField.getText());
+                        systemAdminView.setUserEntity(sc.getUsersDetails());
+                        systemAdminView.setSessionController(sc);
+                        systemAdminView.prepare();
                         systemAdminView.showView();
                         parentFrame.revalidate();
                         parentFrame.repaint();

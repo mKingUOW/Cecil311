@@ -27,17 +27,18 @@ public class SystemAdminView extends MemberView{
     public SystemAdminView(JFrame p,String uname){
         setUsername(uname);
         parentFrame = p;
+
+       // prepare();
+    }
+
+    public void prepare(){
+
         sysAdminView = this;
         setCurrentView(this);
         createNewUserView = new CreateNewUserView(parentFrame,sysAdminView);
         modifyUserView = new ModifyUserView(parentFrame,sysAdminView);
         createNewProjectView = new CreateNewProjectView(parentFrame,sysAdminView);
         modifyProjectView = new ModifyProjectView(parentFrame,sysAdminView);
-
-        prepare();
-    }
-
-    public void prepare(){
 
         setLayout(new BorderLayout());
 

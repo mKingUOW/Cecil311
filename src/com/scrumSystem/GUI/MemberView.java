@@ -14,6 +14,9 @@ public class MemberView extends JPanel {
     private JPanel currentView;
     private String username;
     private UserEntity ue;
+    public SessionController sc;
+
+
     public MemberView(){
 
         currentView = this;
@@ -27,6 +30,10 @@ public class MemberView extends JPanel {
      public JPanel getCurrentView(){
          return currentView;
      }
+
+    public void setSessionController(SessionController s){
+        sc = s;
+    }
 
     public void deselectAllNavigatorButtons(){
         //overriden by sub-class

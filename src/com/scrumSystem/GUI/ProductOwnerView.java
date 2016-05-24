@@ -28,15 +28,18 @@ public class ProductOwnerView extends MemberView {
     public ProductOwnerView(JFrame p, String uname){
         setUsername(uname);
         frame = p;
+
+        //prepare();
+    }
+
+    public void prepare(){
+
         productBacklogView = new ProductBacklogView("ProductOwner",frame,this);
         sprintManagementView = new SprintManagementView(frame,this);
         activeProjectDetailsView = new ActiveProjectDetailsView(frame,this);
         myDetailsView = new MyDetailsView(frame,this);
         setCurrentView(this);
-        prepare();
-    }
 
-    public void prepare(){
         setLayout(new BorderLayout());
 
           /*      HEADER PANEL (Primary header of window)      */

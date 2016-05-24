@@ -51,6 +51,12 @@ public class ScrumMasterView extends MemberView{
     public ScrumMasterView(JFrame p,String uname){
         setUsername(uname);
         parentFrame = p;
+
+        //prepare();
+    }
+
+    public void prepare(){
+
         sysAdminView = this;
         setCurrentView(this);
         createNewUserView = new CreateNewUserView(parentFrame,sysAdminView);
@@ -65,10 +71,6 @@ public class ScrumMasterView extends MemberView{
         sprintBoardView = new SprintBoardView(parentFrame,getCurrentView(),this);
         reportsView = new SprintReviewView(parentFrame,getCurrentView());
 
-        prepare();
-    }
-
-    public void prepare(){
         setLayout(new BorderLayout());
 
         /*      HEADER PANEL (Primary header of window)      */
