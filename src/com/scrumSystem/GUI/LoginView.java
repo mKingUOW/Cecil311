@@ -67,13 +67,14 @@ public class LoginView extends JPanel {
                         }
                         else if(sc.getStartingState().equals("noProject")){
                             //user not assigned to a project
-                            /*
+
                             parentFrame.remove(currentView);
                             NoProjectView noProjectView = new NoProjectView(parentFrame);
                             noProjectView.showView();
                             parentFrame.revalidate();
                             parentFrame.repaint();
-                            */
+
+                            /*
                             //skip this atm
                             parentFrame.remove(currentView);
                             ScrumMasterView scrumMasterView = new ScrumMasterView(parentFrame, usernameField.getText());
@@ -83,6 +84,7 @@ public class LoginView extends JPanel {
                             scrumMasterView.showView();
                             parentFrame.revalidate();
                             parentFrame.repaint();
+                            */
                         }
                         else if(sc.getStartingState().equals("setup")){
                             parentFrame.remove(currentView);
@@ -116,14 +118,15 @@ public class LoginView extends JPanel {
                         else if(sc.getStartingState().equals("noProject")){
                             //user not assigned to a project
                             System.out.println("no proj");
-                            /*
+
                             parentFrame.remove(currentView);
                             NoProjectView noProjectView = new NoProjectView(parentFrame);
                             noProjectView.showView();
                             parentFrame.revalidate();
                             parentFrame.repaint();
-                            */
 
+
+                            /*
                             //skip this atm
                             parentFrame.remove(currentView);
                             TeamMemberView teamMemberView = new TeamMemberView(parentFrame,usernameField.getText());
@@ -133,6 +136,7 @@ public class LoginView extends JPanel {
                             teamMemberView.showView();
                             parentFrame.revalidate();
                             parentFrame.repaint();
+                            */
                         }
                         else{
                             System.out.println("error in starting state");
@@ -155,14 +159,14 @@ public class LoginView extends JPanel {
                         }
                         else if(sc.getStartingState().equals("noProject")){
                             //user not assigned to a project
-                            /*
+
                             parentFrame.remove(currentView);
                             NoProjectView noProjectView = new NoProjectView(parentFrame);
                             noProjectView.showView();
                             parentFrame.revalidate();
                             parentFrame.repaint();
-                            */
 
+                            /*
                             //skip this atm
                             parentFrame.remove(currentView);
                             ProductOwnerView productOwnerView = new ProductOwnerView(parentFrame,usernameField.getText());
@@ -172,6 +176,7 @@ public class LoginView extends JPanel {
                             productOwnerView.showView();
                             parentFrame.revalidate();
                             parentFrame.repaint();
+                            */
                         }
                         else{
                             System.out.println("error in starting state");
