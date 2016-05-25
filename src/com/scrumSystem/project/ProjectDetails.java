@@ -332,6 +332,29 @@ public class ProjectDetails implements Entity
         return scrumMasters;
     }
 
+    public String getProductOwner(String projectName){
+        String lineInFile;
+        String none = "none";
+        String productOwner;
+        try {
+            reader = new BufferedReader(new FileReader(POFile));
+            lineInFile = reader.readLine();
+
+            while (lineInFile != null) {
+                String [] fields = lineInFile.split(",");
+                if (projectName.equals(fields[0])) {
+                    productOwner = fields[1];
+
+                    reader.close();
+                    return productOwner;
+                }
+                //read the next line in the file
+                lineInFile = reader.readLine();
+            }
+        } catch (Exception e) {e.printStackTrace();}
+
+        return none;
+    }
 
 
     //-------------------------------------ENTITY INTERFACE OVERRIDDEN METHODS------------------------------//

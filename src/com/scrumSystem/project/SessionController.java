@@ -168,16 +168,6 @@ public class SessionController
         uc.addUser(u);
     }
 
-    public UserEntity getUser(String id){
-        return uc.getUser(id);
-    }
-
-    public void modifyUser(UserEntity p){
-        uc.modifyUser(p);
-    }
-
-                            /* ---------- PROJECT FUNCTIONS -------------- */
-
     public  ArrayList<String> getAllPorjectNames(){
         return pc.getAllPorjectNames();
     }
@@ -188,6 +178,14 @@ public class SessionController
 
     public void saveProject(ProjectDetails p){
         pc.saveProject(p);
+    }
+
+    public UserEntity getUser(String id){
+        return uc.getUser(id);
+    }
+
+    public void modifyUser(UserEntity p){
+        uc.modifyUser(p);
     }
 
     public void assignPOtoProject(String proj, String uname){
@@ -239,7 +237,35 @@ public class SessionController
         return pc.getTMsByProject(proj);
     }
 
-                                /* ---------- PRODUCT BACKLOG FUNCTIONS -------------- */
+    public String getStartDate() {
+        return pd.getStartDate();
+    }
+
+    public String getEndDate() {
+        return pd.getEndDate();
+    }
+
+    public String getStoryPoint(){
+        return pd.getStoryPointValue();
+    }
+
+    public String getScrumMaster() {
+        return pd.getScrumMaster();
+    }
+
+    public int getSprintDuration(){
+        return pd.getDurationOfSprint();
+    }
+
+    public String getProdOwner(){
+        return pd.getProductOwner(uc.getUserActiveProject());
+    }
+
+    public ArrayList<String> getTMs(){
+        return pd.getAvailableTMs();
+    }
+	
+	                             /* ---------- PRODUCT BACKLOG FUNCTIONS -------------- */
 
     public void addBacklog(ProdBacklogEntity p){
         p.setStoryNumber(pbc.getNextStoryNum());
@@ -261,8 +287,4 @@ public class SessionController
     public ArrayList<Integer> getProductBacklogIDs(){
         return pbc.getProductBacklogIDs();
     }
-
-
-
-
 }
