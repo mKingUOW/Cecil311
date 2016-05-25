@@ -169,7 +169,7 @@ public class TeamMemberView extends MemberView {
         productBacklogView = new ProductBacklogView("TeamMember",frame,this);
         sprintBacklogView = new SprintBacklogView(frame,getCurrentView(),this);
         sprintBoardView = new SprintBoardView(frame,getCurrentView(),this);
-        reportsView = new SprintReviewView(frame,getCurrentView());
+        reportsView = new SprintReviewView(frame,getCurrentView(),this);
         myDetailsView = new MyDetailsView(frame,this);
 
         //set projectBacklogView as default landing page

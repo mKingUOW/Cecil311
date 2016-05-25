@@ -1,8 +1,10 @@
 package com.scrumSystem.project;
 
 import com.scrumSystem.Helpers.ProjectDetailsHelper;
+import com.scrumSystem.interfaces.Entity;
 import com.scrumSystem.project.productBacklog.ProdBacklogEntity;
 import com.scrumSystem.project.productBacklog.ProductBacklogController;
+import com.scrumSystem.project.sprintBacklog.CommentEntity;
 import com.scrumSystem.user.UserController;
 import com.scrumSystem.user.UserEntity;
 
@@ -27,6 +29,7 @@ public class SessionController
     private ProjectDetails pd;
     private ProjectController pc;
     private ProductBacklogController pbc;
+    private CommentController cc;
 
     /**
      * Default constructor
@@ -36,6 +39,7 @@ public class SessionController
         uc = new UserController();
         pc = new ProjectController();
         pbc = new ProductBacklogController();
+        cc = new CommentController();
         pd = null;
     }
 
@@ -286,5 +290,15 @@ public class SessionController
 
     public ArrayList<Integer> getProductBacklogIDs(){
         return pbc.getProductBacklogIDs();
+    }
+
+
+                            /* ---------- Comment FUNCTIONS -------------- */
+    public void createComment(CommentEntity c){
+        cc.createComment(c);
+    }
+
+    public ArrayList<CommentEntity> getCommentsByIssue(int i){
+        return cc.getCommentsByIssue(i);
     }
 }

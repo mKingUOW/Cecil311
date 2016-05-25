@@ -9,10 +9,12 @@ import java.awt.*;
 public class SprintReviewView extends JPanel {
 
     private JFrame parentFrame;
+    private MemberView parentPanel;
     private JPanel returnView;
 
-    public SprintReviewView(JFrame f, JPanel r){
+    public SprintReviewView(JFrame f, JPanel r,MemberView pp){
         parentFrame = f;
+        parentPanel = pp;
         returnView = r;
         prepare();
     }
@@ -66,7 +68,7 @@ public class SprintReviewView extends JPanel {
         JLabel commentsHeader = new JLabel("Sprint Review Comments");
         commentsLayoutPanel.add(commentsHeader,BorderLayout.NORTH);
 
-        CommentsPanel commentsPanel = new CommentsPanel();
+        CommentsPanel commentsPanel = new CommentsPanel(parentPanel);
         BacklogScrollPane commentsBacklogScrollPane = new BacklogScrollPane(1210,640);
         commentsBacklogScrollPane.setScrollPanel(commentsPanel);
         commentsLayoutPanel.add(commentsBacklogScrollPane,BorderLayout.CENTER);

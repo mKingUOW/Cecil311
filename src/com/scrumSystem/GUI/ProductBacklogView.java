@@ -1,6 +1,7 @@
 package com.scrumSystem.GUI;
 
 import com.scrumSystem.project.productBacklog.ProdBacklogEntity;
+import com.scrumSystem.project.sprintBacklog.CommentEntity;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -12,7 +13,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Darryl on 7/05/2016.
@@ -35,11 +39,14 @@ public class ProductBacklogView extends JPanel {
     private CommentsPanel commentsPanel;
     private BacklogScrollPane commentsScrollPane;
 
+    private int currIssueNum;
+
     public ProductBacklogView(String m, JFrame p, MemberView parent){
         parentFrame = p;
         parentPanel = parent;
         currentView = this;
         memberType = m;
+        currIssueNum = -1;
         prepare();
     }
 
@@ -94,7 +101,7 @@ public class ProductBacklogView extends JPanel {
                 }
                 else if(newCommentButton.getText().equals("Submit Comment")){
                     newCommentButton.setText("Create Comment");
-                    commentsPanel.submitComment();
+                    commentsPanel.submitComment(productBacklogScrollPanel.getSelectedIssue());
                     //save comments section?
                 }
 
@@ -108,7 +115,7 @@ public class ProductBacklogView extends JPanel {
         commentslayoutPanel.add(commentsLayoutPanel_north,BorderLayout.NORTH);
 
         /*      PRODUCT BACKLOG PANEL  - COMMENTS PANEL     */
-        commentsPanel = new CommentsPanel();
+        commentsPanel = new CommentsPanel(parentPanel);
         commentsPanel.setBackground(Color.decode("#EBF0F2"));
         commentsScrollPane = new BacklogScrollPane(100,100);
         commentsScrollPane.setScrollPanel(commentsPanel);
@@ -129,6 +136,7 @@ public class ProductBacklogView extends JPanel {
         */
 
         productBacklogScrollPanel = new ProductBacklogScrollPanel(memberType,descPanel,this,parentFrame,parentPanel);
+        productBacklogScrollPanel.setCommentsPanel(commentsPanel);
         BLScrollPane.setScrollPanel(productBacklogScrollPanel); // add scrollPanel to BacklogScrollPane BLScrollPane
 
 
@@ -291,10 +299,13 @@ class ProductBacklogScrollPanel extends JPanel{
     private ArrayList<JTextArea> productBacklogUI;
     private ArrayList<String> productBacklogData;
 
+    private int selectedIssue;
+
     private DescPanel descPanel;
     private ProductBacklogView returnView;
     private JFrame parentFrame;
     private MemberView parentPanel;
+    private CommentsPanel commentsPanel;
 
     private String memberType;
 
@@ -339,9 +350,6 @@ class ProductBacklogScrollPanel extends JPanel{
         temp.setBorder(new CompoundBorder(LineBorder.createGrayLineBorder(),margin));
         */
         ProdBacklogEntity bl = parentPanel.sc.getBacklog(id);
-        if(bl == null){
-            System.out.println("PBV331: null");
-        }
         final ProductBacklogTextArea temp = new ProductBacklogTextArea(bl);
 
         productBacklogUI.add(temp);
@@ -370,6 +378,7 @@ class ProductBacklogScrollPanel extends JPanel{
                         parentFrame.add(createNewIssueView);
                         parentFrame.revalidate();
                         parentFrame.repaint();
+                        selectedIssue = temp.getBacklogEntity().getStoryNumber();
                     }
 
                     wasDoubleClick = true;
@@ -381,6 +390,8 @@ class ProductBacklogScrollPanel extends JPanel{
                                 wasDoubleClick = false; // reset flag
                             } else {
                                 descPanel.displayIssue(temp.getBacklogEntity());
+                                selectedIssue = temp.getBacklogEntity().getStoryNumber();
+                                commentsPanel.load(selectedIssue);
                                 //remove(temp);
                                 update();
                             }
@@ -399,6 +410,14 @@ class ProductBacklogScrollPanel extends JPanel{
     public void update(){
         revalidate();
         repaint();
+    }
+
+    public int getSelectedIssue(){
+        return selectedIssue;
+    }
+
+    public void setCommentsPanel(CommentsPanel p){
+        commentsPanel = p;
     }
 
 }
@@ -482,14 +501,27 @@ class ScrollPanel extends JPanel{
 
 class CommentsPanel extends JPanel{
     private ArrayList<JTextArea> elements;
+    private MemberView parentPanel;
 
-    public CommentsPanel(){
+    public CommentsPanel(MemberView pp){
+        parentPanel = pp;
         elements = new ArrayList<JTextArea>();
     }
 
-    public void addComment(){
+    public void load(int id){
+        removeAll();
+        ArrayList<CommentEntity> CEs = parentPanel.sc.getCommentsByIssue(id);
+        for(int i = 0; i<CEs.size(); i++){
+            JTextArea temp = addComment();
+            temp.setText(CEs.get(i).getComment());
+        }
+        revalidate();
+        repaint();
+    }
+
+    public JTextArea addComment(){
         final JTextArea temp = new JTextArea(3,50);
-        temp.setText("<user number>: ");
+        temp.setText(parentPanel.getUsername() + ": ");
         temp.setEditable(true);
         temp.setLineWrap(true);
         temp.setBackground(Color.white);
@@ -512,15 +544,26 @@ class CommentsPanel extends JPanel{
         add(temp);
         revalidate();
         repaint();
+        return temp;
     }
 
-    public void submitComment(){
+    public void submitComment(int issNum){
         //add
 
         //set last element in elements to non editable
         elements.get(elements.size()-1).setEditable(false);
 
         //write to db
+        CommentEntity ce = new CommentEntity();
+        ce.setProjectName(parentPanel.getActiveProj());
+        ce.setIssueNumber(issNum);
+        ce.setComment(elements.get(elements.size()-1).getText());
+        ce.setUsername(parentPanel.getUsername());
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        ce.setDate(dateFormat.format(date));
+        parentPanel.sc.createComment(ce);
+
     }
 }
 

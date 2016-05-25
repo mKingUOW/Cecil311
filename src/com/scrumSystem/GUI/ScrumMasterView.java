@@ -69,7 +69,7 @@ public class ScrumMasterView extends MemberView{
         myDetailsView = new MyDetailsView(parentFrame,this);
         sprintBacklogView = new SprintBacklogView(parentFrame,getCurrentView(),this);
         sprintBoardView = new SprintBoardView(parentFrame,getCurrentView(),this);
-        reportsView = new SprintReviewView(parentFrame,getCurrentView());
+        reportsView = new SprintReviewView(parentFrame,getCurrentView(),this);
 
         setLayout(new BorderLayout());
 

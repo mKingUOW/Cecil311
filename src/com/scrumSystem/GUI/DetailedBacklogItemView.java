@@ -50,7 +50,7 @@ public class DetailedBacklogItemView extends JPanel {
                 }
                 else if(newCommentButton.getText().equals("Submit Comment")){
                     newCommentButton.setText("Create Comment");
-                    commentsPanel.submitComment();
+                    commentsPanel.submitComment(-1);
                     //save comments section?
                 }
 
@@ -72,7 +72,7 @@ public class DetailedBacklogItemView extends JPanel {
         centerLayout.add(descScrollPane);
 
         //setup comments panel
-        commentsPanel = new CommentsPanel();
+        commentsPanel = new CommentsPanel(parentPanel);
         commentsPanel.setBackground(Color.decode("#EBF0F2"));
         commentsScrollPane = new BacklogScrollPane(100,100);
         commentsScrollPane.setScrollPanel(commentsPanel);
