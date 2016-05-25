@@ -30,7 +30,6 @@ public class SessionController
     private ProjectController pc;
     private ProductBacklogController pbc;
     private CommentController cc;
-
     /**
      * Default constructor
      */
@@ -265,18 +264,11 @@ public class SessionController
         return pd.getProductOwner(uc.getUserActiveProject());
     }
 
-    public String getTMs(){
+    public ArrayList<String> getTMs(){
+        return pd.getAvailableTMs();
 
-        ArrayList<String> temp;
-        temp = pd.getAssignedTMs(uc.getUserActiveProject());
-        StringBuilder sb = new StringBuilder();
-        for (String s : temp){
-            sb.append(s);
-            sb.append("\t");
-        }
-        return sb.toString();
     }
-	
+
 	                             /* ---------- PRODUCT BACKLOG FUNCTIONS -------------- */
 
     public void addBacklog(ProdBacklogEntity p){
@@ -300,8 +292,7 @@ public class SessionController
         return pbc.getProductBacklogIDs();
     }
 
-
-                            /* ---------- Comment FUNCTIONS -------------- */
+    /* ---------- Comment FUNCTIONS -------------- */
     public void createComment(CommentEntity c){
         cc.createComment(c);
     }

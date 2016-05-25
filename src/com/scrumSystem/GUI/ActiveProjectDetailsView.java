@@ -142,7 +142,9 @@ public class ActiveProjectDetailsView extends JPanel{
         JLabel tmHeader = new JLabel("Assigned Team members: ");
         tmAssignPanel.add(tmHeader,BorderLayout.NORTH);
 
+
         teamMembersScrollPanel = new TeamMembersScrollPanel(parentFrame,parentPanel,this);
+        teamMembersScrollPanel.addElement(parentPanel.getUsername());
         BacklogScrollPane backlogScrollPane = new BacklogScrollPane(1000,1000);
         backlogScrollPane.setScrollPanel(teamMembersScrollPanel);
         tmAssignPanel.add(backlogScrollPane,BorderLayout.CENTER);

@@ -106,7 +106,7 @@ public class MemberView extends JPanel {
         return sc.getProdOwner();
     }
 
-    public String getTM(){
+    public ArrayList<String> getTM(){
         return sc.getTMs();
     }
 }
