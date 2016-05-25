@@ -267,6 +267,10 @@ public class UserEntity implements Entity
         return username + "," + password + "," + userType + "," + activeProject;
     }
 
+    public String detailsToCSV(){
+        return username + "," + firstName + "," + lastName + "," + email + "," + skills;
+    }
+
     @Override
     public void saveToDB()
     {

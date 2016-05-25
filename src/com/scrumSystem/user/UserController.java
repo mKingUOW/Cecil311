@@ -33,6 +33,7 @@ public class UserController
     private String userRoleType;
 
     private String usersFile;
+    private  String usersDetailsFile;
     private ArrayList<UserEntity> users;
 
     /**
@@ -43,6 +44,8 @@ public class UserController
 
         user = new UserEntity();
         usersFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "userAccounts.csv";
+        usersDetailsFile = System.getProperty("user.dir") + File.separator + "src" + File.separator + "database" + File.separator + "userDetails.csv";
+
         users = getAllUsers();
     }
 
@@ -188,15 +191,31 @@ public class UserController
 
     public void saveUsers(){
         try{
+            //accounts
             PrintWriter writer = new PrintWriter(usersFile);
             for(int i = 0; i<users.size(); i++){
                 writer.println(users.get(i).accountToCSV());
+            }
+            writer.close();
+
+            //details
+            writer = new PrintWriter(usersDetailsFile);
+            for(int i = 0; i<users.size(); i++){
+                writer.println(users.get(i).detailsToCSV());
             }
             writer.close();
         }catch(Exception err){
             System.out.println(err);
         }
 
+    }
+
+    public void addUser(UserEntity u){
+        users.clear();
+        users = getAllUsers();
+        users.add(u);
+        saveUsers();
+        users = getAllUsers();
     }
 
     public UserEntity getUser(String id){

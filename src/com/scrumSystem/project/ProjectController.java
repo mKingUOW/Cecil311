@@ -34,6 +34,14 @@ public class ProjectController {
         loadProjectTMs();
     }
 
+    public  ArrayList<String> getAllPorjectNames(){
+        ArrayList<String> ret = new ArrayList<String>();
+        for(int i = 0; i<allProjects.size(); i++){
+            ret.add(allProjects.get(i).getName());
+        }
+        return ret;
+    }
+
     public ProjectDetails getProject(String id){
         for(int i = 0; i<allProjects.size(); i++){
             if(id.equals(allProjects.get(i).getName())){

@@ -1,6 +1,7 @@
 package com.scrumSystem.GUI;
 
 import com.scrumSystem.role.SystemAdmin;
+import com.scrumSystem.user.UserEntity;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +29,12 @@ public class ModifyUserView extends JPanel {
     private JPanel buttonPanel;
 
     private JLabel usernameField;
+    private JTextField passwordField;
+    private JComboBox<String> typeComboBox;
+    private DefaultComboBoxModel projModel;
+    private JTextField fNameField;
+    private JTextField lNameField;
+    private JTextField emailField;
 
     public ModifyUserView(JFrame p, MemberView pp){
         parentFrame = p;
@@ -53,10 +60,18 @@ public class ModifyUserView extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 //if found set details and display
 
-                //bypass for now
-                if(searchField.getText().equals("bypass")){
+                UserEntity user = parentPanel.sc.getUser(searchField.getText());
+                if(user != null){
                     setPanelsVisible(true);
-                    usernameField.setText(searchField.getText());
+                    usernameField.setText(user.getUsername());
+                    passwordField.setText(user.getPassword());
+                    typeComboBox.setSelectedItem(user.getUserType());
+                    projModel.setSelectedItem(user.getActiveProject());
+                    fNameField.setText(user.getFirstName());
+                    lNameField.setText(user.getLastName());
+                    emailField.setText(user.getEmail());
+                    //set skills field
+
                     errorLabel.setText("");
                 }
                 else{
@@ -64,6 +79,7 @@ public class ModifyUserView extends JPanel {
                     errorLabel.setText("User not found.");
                     setPanelsVisible(false);
                 }
+
             }
         });
         searchPanel.add(searchLabel);
@@ -84,7 +100,7 @@ public class ModifyUserView extends JPanel {
         }
 
 
-        final JTextField usernameField = new JTextField();
+        //final JTextField usernameField = new JTextField();
         usernameField.setPreferredSize(new Dimension(100,35));
         panelOne.add(usernameLabel);
         panelOne.add(usernameField);
@@ -93,7 +109,7 @@ public class ModifyUserView extends JPanel {
         panelTwo = new JPanel();
         panelTwo.setLayout(new GridBagLayout());
         JLabel passwordLabel = new JLabel("Password: ", SwingConstants.CENTER);
-        final JTextField passwordField = new JTextField();
+        passwordField = new JTextField();
         passwordField.setPreferredSize(new Dimension(100,35));
         panelTwo.add(passwordLabel);
         panelTwo.add(passwordField);
@@ -103,7 +119,7 @@ public class ModifyUserView extends JPanel {
         panelThree.setLayout(new GridBagLayout());
         JLabel typeLabel = new JLabel("User Type: ", SwingConstants.CENTER);
         String[] types = {"System Administrator","Scrum Master", "Product Owner", "Team Member" };
-        final JComboBox<String> typeComboBox = new JComboBox<String>(types);
+        typeComboBox = new JComboBox<String>(types);
         typeComboBox.setPreferredSize(new Dimension(150,35));
         panelThree.add(typeLabel);
         panelThree.add(typeComboBox);
@@ -112,8 +128,10 @@ public class ModifyUserView extends JPanel {
         panelFour = new JPanel();
         panelFour.setLayout(new GridBagLayout());
         JLabel projLabel = new JLabel("Active Project: ", SwingConstants.CENTER);
-        String[] dummyPojects = {"None","Proj1","Proj2", "Proj3", "Proj4" };
-        final JComboBox<String> projectsComboBox = new JComboBox<String>(dummyPojects);
+        Vector projArray = new Vector(parentPanel.sc.getAllPorjectNames());
+        projArray.insertElementAt("none",0);
+        projModel = new DefaultComboBoxModel(projArray);
+        final JComboBox<String> projectsComboBox = new JComboBox<String>(projModel);
         projectsComboBox.setPreferredSize(new Dimension(150,35));
         panelFour.add(projLabel);
         panelFour.add(projectsComboBox);
@@ -125,7 +143,7 @@ public class ModifyUserView extends JPanel {
         panelFive = new JPanel();
         panelFive.setLayout(new GridBagLayout());
         JLabel fNameLabel = new JLabel("First name: ", SwingConstants.CENTER);
-        final JTextField fNameField = new JTextField();
+        fNameField = new JTextField();
         fNameField.setPreferredSize(new Dimension(150,35));
         panelFive.add(fNameLabel);
         panelFive.add(fNameField);
@@ -134,7 +152,7 @@ public class ModifyUserView extends JPanel {
         panelSix = new JPanel();
         panelSix.setLayout(new GridBagLayout());
         JLabel lNameLabel = new JLabel("Last name: ");
-        final JTextField lNameField = new JTextField();
+        lNameField = new JTextField();
         lNameField.setPreferredSize(new Dimension(150,35));
         panelSix.add(lNameLabel);
         panelSix.add(lNameField);
@@ -143,7 +161,7 @@ public class ModifyUserView extends JPanel {
         panelSeven = new JPanel();
         panelSeven.setLayout(new GridBagLayout());
         JLabel emailLabel = new JLabel("Email: ");
-        final JTextField emailField = new JTextField();
+        emailField = new JTextField();
         emailField.setPreferredSize(new Dimension(150,35));
         panelSeven.add(emailLabel);
         panelSeven.add(emailField);
@@ -200,9 +218,38 @@ public class ModifyUserView extends JPanel {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //save user to db
+
 
                 if (parentPanel instanceof SystemAdminView) {
+                    //save user to db
+                    UserEntity newUser = new UserEntity();
+                    newUser.setUsername(usernameField.getText());
+                    newUser.setPassword(passwordField.getText());
+
+                    //set user type
+                    String t = (String)typeComboBox.getSelectedItem();
+                    if(t.equals("Team Member")){
+                        newUser.setUserType("TM");
+                    }
+                    else if(t.equals("System Administrator")){
+                        newUser.setUserType("SA");
+                    }
+                    else if(t.equals("Scrum Master")){
+                        newUser.setUserType("SM");
+                    }
+                    else if(t.equals("Product Owner")){
+                        newUser.setUserType("PO");
+                    }
+
+                    newUser.setActiveProject((String)projectsComboBox.getSelectedItem());
+                    newUser.setFName(fNameField.getText());
+                    newUser.setLastName(lNameField.getText());
+                    newUser.setEmail(emailField.getText());
+                    //set skills
+
+                    parentPanel.sc.addUser(newUser);
+
+
                     //show alert
                     JOptionPane.showMessageDialog(null,"Changes Saved");
 

@@ -160,6 +160,14 @@ public class SessionController
 
     }
 
+    public void addUser(UserEntity u){
+        uc.addUser(u);
+    }
+
+    public  ArrayList<String> getAllPorjectNames(){
+        return pc.getAllPorjectNames();
+    }
+
     public ProjectDetails getProjectDetails(String id){
        return pc.getProject(id);
     }

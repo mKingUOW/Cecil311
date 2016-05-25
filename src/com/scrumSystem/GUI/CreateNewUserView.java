@@ -1,5 +1,7 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.user.UserEntity;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -56,8 +58,10 @@ public class CreateNewUserView extends JPanel {
         JPanel panelFour = new JPanel();
         panelFour.setLayout(new GridBagLayout());
         JLabel projLabel = new JLabel("Active Project: ", SwingConstants.CENTER);
-        String[] dummyPojects = {"None","Proj1","Proj2", "Proj3", "Proj4" };
-        final JComboBox<String> projectsComboBox = new JComboBox<String>(dummyPojects);
+        Vector projArray = new Vector(parentPanel.sc.getAllPorjectNames());
+        projArray.insertElementAt("none",0);
+        DefaultComboBoxModel projModel = new DefaultComboBoxModel(projArray);
+        final JComboBox<String> projectsComboBox = new JComboBox<String>(projModel);
         projectsComboBox.setPreferredSize(new Dimension(150,35));
         panelFour.add(projLabel);
         panelFour.add(projectsComboBox);
@@ -144,6 +148,32 @@ public class CreateNewUserView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //save user to db
+                UserEntity newUser = new UserEntity();
+                newUser.setUsername(usernameField.getText());
+                newUser.setPassword(passwordField.getText());
+
+                //set user type
+                String t = (String)typeComboBox.getSelectedItem();
+                if(t.equals("Team Member")){
+                    newUser.setUserType("TM");
+                }
+                else if(t.equals("System Administrator")){
+                    newUser.setUserType("SA");
+                }
+                else if(t.equals("Scrum Master")){
+                    newUser.setUserType("SM");
+                }
+                else if(t.equals("Product Owner")){
+                    newUser.setUserType("PO");
+                }
+
+                newUser.setActiveProject((String)projectsComboBox.getSelectedItem());
+                newUser.setFName(fNameField.getText());
+                newUser.setLastName(lNameField.getText());
+                newUser.setEmail(emailField.getText());
+                //set skills
+
+                parentPanel.sc.addUser(newUser);
 
                 //show alert
                 JOptionPane.showMessageDialog(null,"Changes Saved");
