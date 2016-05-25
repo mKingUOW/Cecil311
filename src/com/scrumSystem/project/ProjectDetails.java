@@ -356,6 +356,26 @@ public class ProjectDetails implements Entity
         return none;
     }
 
+    public ArrayList<String> getAssignedTMs(String projectName){
+        String lineInFile;
+        ArrayList<String> temp = new ArrayList<>();
+        try {
+            reader = new BufferedReader(new FileReader(TMFile));
+            lineInFile = reader.readLine();
+
+            while (lineInFile != null) {
+                String [] fields = lineInFile.split(",");
+                if (projectName.equals(fields[0])) {
+                     temp.add(fields[1]);
+
+                }
+                //read the next line in the file
+                lineInFile = reader.readLine();
+            }
+            reader.close();
+        } catch (Exception e) {e.printStackTrace();}
+        return temp;
+    }
 
     //-------------------------------------ENTITY INTERFACE OVERRIDDEN METHODS------------------------------//
 

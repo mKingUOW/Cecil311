@@ -17,7 +17,6 @@ public class MemberView extends JPanel {
     private String username;
     private UserEntity ue;
     public SessionController sc;
-    public ProjectDetails pd;
 
 
     public MemberView(){
@@ -107,7 +106,7 @@ public class MemberView extends JPanel {
         return sc.getProdOwner();
     }
 
-    public ArrayList<String> getTM(){
+    public String getTM(){
         return sc.getTMs();
     }
 }

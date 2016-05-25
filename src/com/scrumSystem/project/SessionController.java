@@ -265,8 +265,16 @@ public class SessionController
         return pd.getProductOwner(uc.getUserActiveProject());
     }
 
-    public ArrayList<String> getTMs(){
-        return pd.getAvailableTMs();
+    public String getTMs(){
+
+        ArrayList<String> temp;
+        temp = pd.getAssignedTMs(uc.getUserActiveProject());
+        StringBuilder sb = new StringBuilder();
+        for (String s : temp){
+            sb.append(s);
+            sb.append("\t");
+        }
+        return sb.toString();
     }
 	
 	                             /* ---------- PRODUCT BACKLOG FUNCTIONS -------------- */

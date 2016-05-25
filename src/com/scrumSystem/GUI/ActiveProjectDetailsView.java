@@ -131,7 +131,7 @@ public class ActiveProjectDetailsView extends JPanel{
         poSelectPanel = new JPanel();
         poSelectPanel.setLayout(new GridBagLayout());
         JLabel poSelectLabel = new JLabel("Product Owner: ");
-        JLabel poField = new JLabel(String.valueOf(parentPanel.getProdOwner()));
+        JLabel poField = new JLabel(parentPanel.getProdOwner());
         poSelectPanel.add(poSelectLabel);
         poSelectPanel.add(poField);
         centerRightLayout.add(poSelectPanel,BorderLayout.NORTH);
