@@ -119,6 +119,7 @@ public class CreateNewIssueView extends JPanel{
 
                 if(mode.equals("CREATE")){
                     parentPanel.sc.addBacklog(temp);
+                    returnView.addElement(parentPanel.sc.getNewestStoryId()-1);
                 }
                 else if(mode.equals("MODIFY")){
                     parentPanel.sc.modifyBacklog(temp);
@@ -127,7 +128,7 @@ public class CreateNewIssueView extends JPanel{
 
 
                 //reset view
-                returnView.addElement(parentPanel.sc.getNewestStoryId()-1);
+
                 parentFrame.remove(exit.getParentPanel());
                 parentFrame.add(returnView);
                 parentFrame.revalidate();
