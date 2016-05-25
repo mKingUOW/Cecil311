@@ -1,6 +1,8 @@
 package com.scrumSystem.project;
 
 import com.scrumSystem.Helpers.ProjectDetailsHelper;
+import com.scrumSystem.project.productBacklog.ProdBacklogEntity;
+import com.scrumSystem.project.productBacklog.ProductBacklogController;
 import com.scrumSystem.user.UserController;
 import com.scrumSystem.user.UserEntity;
 
@@ -24,6 +26,7 @@ public class SessionController
      */
     private ProjectDetails pd;
     private ProjectController pc;
+    private ProductBacklogController pbc;
 
     /**
      * Default constructor
@@ -32,6 +35,7 @@ public class SessionController
     {
         uc = new UserController();
         pc = new ProjectController();
+        pbc = new ProductBacklogController();
         pd = null;
     }
 
@@ -164,6 +168,16 @@ public class SessionController
         uc.addUser(u);
     }
 
+    public UserEntity getUser(String id){
+        return uc.getUser(id);
+    }
+
+    public void modifyUser(UserEntity p){
+        uc.modifyUser(p);
+    }
+
+                            /* ---------- PROJECT FUNCTIONS -------------- */
+
     public  ArrayList<String> getAllPorjectNames(){
         return pc.getAllPorjectNames();
     }
@@ -174,14 +188,6 @@ public class SessionController
 
     public void saveProject(ProjectDetails p){
         pc.saveProject(p);
-    }
-
-    public UserEntity getUser(String id){
-        return uc.getUser(id);
-    }
-
-    public void modifyUser(UserEntity p){
-        uc.modifyUser(p);
     }
 
     public void assignPOtoProject(String proj, String uname){
@@ -232,4 +238,31 @@ public class SessionController
     public ProjectTMEntity getTMsByProject(String proj){
         return pc.getTMsByProject(proj);
     }
+
+                                /* ---------- PRODUCT BACKLOG FUNCTIONS -------------- */
+
+    public void addBacklog(ProdBacklogEntity p){
+        p.setStoryNumber(pbc.getNextStoryNum());
+        pbc.addBacklog(p);
+    }
+
+    public void modifyBacklog(ProdBacklogEntity p){
+        pbc.modifyBacklog(p);
+    }
+
+    public ProdBacklogEntity getBacklog(int id){
+        return pbc.getBacklog(id);
+    }
+
+    public int getNewestStoryId(){
+        return pbc.getNextStoryNum();
+    }
+
+    public ArrayList<Integer> getProductBacklogIDs(){
+        return pbc.getProductBacklogIDs();
+    }
+
+
+
+
 }

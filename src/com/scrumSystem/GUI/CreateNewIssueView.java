@@ -1,5 +1,7 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.project.productBacklog.ProdBacklogEntity;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -14,6 +16,7 @@ import java.awt.event.ItemEvent;
  */
 public class CreateNewIssueView extends JPanel{
     private JFrame parentFrame;
+    private MemberView parentPanel;
     //private JPanel productBacklogView;
     private ProductBacklogView returnView;
     private JPanel currentView;
@@ -27,12 +30,20 @@ public class CreateNewIssueView extends JPanel{
     IssueButton create;
     String mode;
 
+    private JTextField titleField;
+    private JComboBox<String> typeOptions;
+    private JComboBox<String> subTypeOptions;
+    private JTextField storyPointsField;
+    private JComboBox<String> priorityOptions;
+    private int modifiyStoryID;
+
     private String selectedBacklogItem; //will eventually be backlog object
 
     private JTextArea descArea;
 
-    public CreateNewIssueView(String m,JFrame f, ProductBacklogView ret){
+    public CreateNewIssueView(String m,JFrame f, ProductBacklogView ret, MemberView pp){
         parentFrame = f;
+        parentPanel = pp;
         //productBacklogView = pbv;
         returnView = ret;
         currentView = this;
@@ -61,7 +72,13 @@ public class CreateNewIssueView extends JPanel{
         southLayoutPanel.setLayout(new GridLayout(1,4));
 
         exit = new IssueButton("Exit",parentFrame,this);
-        create = new IssueButton("Create",parentFrame,this);
+        if(mode.equals("CREATE")){
+            create = new IssueButton("Create",parentFrame,this);
+        }
+        else if(mode.equals("MODIFY")){
+            create = new IssueButton("Modify",parentFrame,this);
+        }
+
 
         //NEED TO UPDATE TEAMMEMBERVIEW.SETCURRENTVIEW()
         //EXIT BUTTON - add onclick listener to newIssue button
@@ -86,7 +103,31 @@ public class CreateNewIssueView extends JPanel{
         {
             public void actionPerformed(ActionEvent e)
             {
-                returnView.addElement(descArea.getText());
+                //save issue
+                ProdBacklogEntity temp = new ProdBacklogEntity();
+                temp.setProjectName(parentPanel.getActiveProj());
+                temp.setTitle(titleField.getText());
+                temp.setStoryType((String)typeOptions.getSelectedItem());
+                temp.setDescription(descArea.getText());
+                temp.setPriority((String)priorityOptions.getSelectedItem());
+                temp.setEffortEstimation(Integer.parseInt(storyPointsField.getText()));
+                temp.setSubType((String)subTypeOptions.getSelectedItem());
+                temp.setStoryNumber(modifiyStoryID);
+
+                //get selected epic
+                //temp.setEpicRef(Integer.parseInt(fields[8]));
+
+                if(mode.equals("CREATE")){
+                    parentPanel.sc.addBacklog(temp);
+                }
+                else if(mode.equals("MODIFY")){
+                    parentPanel.sc.modifyBacklog(temp);
+                    returnView.updatePBList();
+                }
+
+
+                //reset view
+                returnView.addElement(parentPanel.sc.getNewestStoryId()-1);
                 parentFrame.remove(exit.getParentPanel());
                 parentFrame.add(returnView);
                 parentFrame.revalidate();
@@ -128,15 +169,15 @@ public class CreateNewIssueView extends JPanel{
         centerLeftLayoutPanel.setLayout(new GridLayout(7,1));
 
         //elements in center left panel
-        JTextField titleField = new JTextField();
+        titleField = new JTextField();
         descArea = new JTextArea(4,52);
         String[] optionsArray = new String[]{"Core","Non-Core","Stretch"};
-        JComboBox<String> priorityOptions = new JComboBox<String>(optionsArray);
+        priorityOptions = new JComboBox<String>(optionsArray);
         String[] typeArray = new String[]{"Story","Epic"};
-        JComboBox<String> typeOptions = new JComboBox<String>(typeArray);
+        typeOptions = new JComboBox<String>(typeArray);
         String[] subTypeArray = new String[]{"Bug", "Extension", "Feature"};
-        JComboBox<String> subTypeOptions = new JComboBox<String>(subTypeArray);
-        JTextField storyPointsField = new JTextField();
+        subTypeOptions = new JComboBox<String>(subTypeArray);
+        storyPointsField = new JTextField();
         JRadioButton yes = new JRadioButton("Yes");
         JRadioButton no = new JRadioButton("No");
 
@@ -195,8 +236,15 @@ public class CreateNewIssueView extends JPanel{
         add(southLayoutPanel,BorderLayout.SOUTH);
     }
 
-    public void setSelectedBacklogItem(String data){
-        descArea.setText(data);
+    public void setupModifyBacklogItem(ProdBacklogEntity p){
+       // ProdBacklogEntity temp = new ProdBacklogEntity();
+        titleField.setText(p.getTitle());
+        typeOptions.setSelectedItem(p.getStoryType());
+        descArea.setText(p.getDescription());
+        priorityOptions.setSelectedItem(p.getPriority());
+        storyPointsField.setText(Integer.toString(p.getEffortEstimation()));
+        subTypeOptions.setSelectedItem(p.getSubType());
+        modifiyStoryID = p.getStoryNumber();
     }
 
 }

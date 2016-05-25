@@ -1,5 +1,7 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.project.productBacklog.ProdBacklogEntity;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -126,7 +128,7 @@ public class ProductBacklogView extends JPanel {
         BLScrollPane.setScrollPanel(scrollPanel); // add scrollPanel to BacklogScrollPane BLScrollPane
         */
 
-        productBacklogScrollPanel = new ProductBacklogScrollPanel(memberType,descPanel,this,parentFrame);
+        productBacklogScrollPanel = new ProductBacklogScrollPanel(memberType,descPanel,this,parentFrame,parentPanel);
         BLScrollPane.setScrollPanel(productBacklogScrollPanel); // add scrollPanel to BacklogScrollPane BLScrollPane
 
 
@@ -162,8 +164,13 @@ public class ProductBacklogView extends JPanel {
         add(centerPanel,BorderLayout.CENTER); //add centerPanel to productBacklogPanel
     }
 
-    public void addElement(String data){
-        productBacklogScrollPanel.addElement(data);
+    public void addElement(int id){
+        productBacklogScrollPanel.addElement(id);
+    }
+
+    public void updatePBList(){
+        productBacklogScrollPanel.removeAll();
+        productBacklogScrollPanel.loadProductBacklog();
     }
 
 }
@@ -174,14 +181,14 @@ class CreateIssueButton extends JButton{
 
     private JFrame parentFrame = null; //needed to swap out views
     private ProductBacklogView currentView; //needed to give to createIssueView as return panel
-    private MemberView teamMemberView; //needed to update current view
+    private MemberView parentPanel; //needed to update current view
     private CreateNewIssueView createNewIssueView; //view to transition to
     //private ScrollPanel scrollPanel; //needed to update description panel
 
     //need to add descPanel to constructor
     public CreateIssueButton(String text, JFrame f,ProductBacklogView curr, MemberView t){
         parentFrame = f;
-        teamMemberView = t;
+        parentPanel = t;
         currentView = curr;
         //scrollPanel = s;
         this.setText(text);
@@ -206,11 +213,11 @@ class CreateIssueButton extends JButton{
             public void actionPerformed(ActionEvent e)
             {
                 parentFrame.remove(currentView);
-                createNewIssueView = new CreateNewIssueView("CREATE",parentFrame,currentView);
+                createNewIssueView = new CreateNewIssueView("CREATE",parentFrame,currentView,parentPanel);
                 parentFrame.add(createNewIssueView);
                 parentFrame.revalidate();
                 parentFrame.repaint();
-                teamMemberView.setCurrentView(createNewIssueView);
+                parentPanel.setCurrentView(createNewIssueView);
 
 
                 /*
@@ -261,8 +268,18 @@ class DescPanel extends JPanel{
         add(area);
     }
 
-    public void displayIssue(String data){
-        area.setText(data);
+    public void displayIssue(ProdBacklogEntity pbe){
+
+        String text = "Title: \t\t" + pbe.getTitle() + "\n"
+                + "Story#: \t\t" + pbe.getStoryNumber() + "\n"
+                + "Description: \t\t" + pbe.getDescription() + "\n"
+                + "Priority: \t\t" +pbe.getPriority() + "\n"
+                + "Story Type: \t\t" + pbe.getStoryType() + "\n"
+                + "Effort Estimation: \t" + pbe.getEffortEstimation() + "\n"
+                + "Sub Type: \t\t" + pbe.getSubType() + "\n"
+                + "Epic reference: \t\t" + pbe.getEpicRef() + "\n"
+                + "Completion Status: \t" + pbe.getCompleteionStatus() + "\n";
+        area.setText(text);
     }
 }
 
@@ -277,31 +294,30 @@ class ProductBacklogScrollPanel extends JPanel{
     private DescPanel descPanel;
     private ProductBacklogView returnView;
     private JFrame parentFrame;
+    private MemberView parentPanel;
 
     private String memberType;
 
     private Boolean wasDoubleClick = false;
     private Timer timer;
 
-    public ProductBacklogScrollPanel(String m,DescPanel d, ProductBacklogView ret, JFrame p){
+    public ProductBacklogScrollPanel(String m,DescPanel d, ProductBacklogView ret, JFrame p, MemberView pp){
+        parentPanel = pp;
         productBacklogUI = new ArrayList<JTextArea>();
         productBacklogData = new ArrayList<String>();
         descPanel = d;
         returnView = ret;
         parentFrame = p;
         memberType = m;
+        loadProductBacklog();
     }
 
     public void loadProductBacklog(){
-        //load sprint backlog data from DB into array
-        productBacklogData.add("One");
-        productBacklogData.add("Two");
-        productBacklogData.add("Three");
-        productBacklogData.add("Four");
 
-        //add all elements from array into ui
-        for(int i = 0; i<productBacklogData.size(); i++){
-            addElement(productBacklogData.get(i));
+        ArrayList<Integer> pb = parentPanel.sc.getProductBacklogIDs();
+        //add all elements from product backlog into ui
+        for(int i = 0; i<pb.size(); i++){
+            addElement(pb.get(i));
         }
 
         //repaint
@@ -310,7 +326,9 @@ class ProductBacklogScrollPanel extends JPanel{
 
     }
 
-    public void addElement(String data){
+    public void addElement(int id){
+
+        /*
         final JTextArea temp = new JTextArea(3,50);
         temp.setText(data);
         temp.setEditable(false);
@@ -319,6 +337,12 @@ class ProductBacklogScrollPanel extends JPanel{
         temp.setOpaque(true);
         Border margin = new EmptyBorder(0,10,0,10);
         temp.setBorder(new CompoundBorder(LineBorder.createGrayLineBorder(),margin));
+        */
+        ProdBacklogEntity bl = parentPanel.sc.getBacklog(id);
+        if(bl == null){
+            System.out.println("PBV331: null");
+        }
+        final ProductBacklogTextArea temp = new ProductBacklogTextArea(bl);
 
         productBacklogUI.add(temp);
 
@@ -340,8 +364,8 @@ class ProductBacklogScrollPanel extends JPanel{
                 if (e.getClickCount() == 2) {
                     System.out.println("double clicked");
                     if(memberType.equals("ProductOwner")){
-                        CreateNewIssueView createNewIssueView = new CreateNewIssueView("MODIFY",parentFrame,returnView);
-                        createNewIssueView.setSelectedBacklogItem(temp.getText());
+                        CreateNewIssueView createNewIssueView = new CreateNewIssueView("MODIFY",parentFrame,returnView,parentPanel);
+                        createNewIssueView.setupModifyBacklogItem(temp.getBacklogEntity());
                         parentFrame.remove(returnView);
                         parentFrame.add(createNewIssueView);
                         parentFrame.revalidate();
@@ -356,7 +380,7 @@ class ProductBacklogScrollPanel extends JPanel{
                             if (wasDoubleClick) {
                                 wasDoubleClick = false; // reset flag
                             } else {
-                                descPanel.displayIssue(temp.getText());
+                                descPanel.displayIssue(temp.getBacklogEntity());
                                 //remove(temp);
                                 update();
                             }
@@ -377,6 +401,33 @@ class ProductBacklogScrollPanel extends JPanel{
         repaint();
     }
 
+}
+
+class ProductBacklogTextArea extends JTextArea{
+
+    ProdBacklogEntity pbe;
+
+    public ProductBacklogTextArea(ProdBacklogEntity p){
+        super(3,50);
+        pbe = p;
+        prepare();
+    }
+
+    public void prepare(){
+
+        String text = "Title: " + pbe.getTitle() + "\t" + "Story#: " + pbe.getStoryNumber() + "\n Description: " + pbe.getDescription();
+        setText(text);
+        setEditable(false);
+        setLineWrap(true);
+        setBackground(Color.white);
+        setOpaque(true);
+        Border margin = new EmptyBorder(0,10,0,10);
+        setBorder(new CompoundBorder(LineBorder.createGrayLineBorder(),margin));
+    }
+
+    public ProdBacklogEntity getBacklogEntity(){
+        return pbe;
+    }
 }
 
 
@@ -417,7 +468,7 @@ class ScrollPanel extends JPanel{
         temp.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                descPanel.displayIssue(temp.getText());
+                //descPanel.displayIssue(temp.get);
             }
         });
 

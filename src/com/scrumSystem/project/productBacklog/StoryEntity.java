@@ -9,6 +9,13 @@ import com.scrumSystem.interfaces.Entity;
 public class StoryEntity implements Entity
 {
 
+
+
+
+
+
+
+
     @Override
     public void saveToDB()
     {
