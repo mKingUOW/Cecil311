@@ -1,5 +1,7 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.project.ProjectDetails;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -20,6 +22,7 @@ public class ActiveProjectDetailsView extends JPanel{
 
     private JFrame parentFrame;
     private MemberView parentPanel;
+
 
 
     private JPanel projNamePanel;
@@ -70,7 +73,7 @@ public class ActiveProjectDetailsView extends JPanel{
         projNamePanel = new JPanel();
         projNamePanel.setLayout(new GridBagLayout());
         JLabel projNameLabel = new JLabel("Project Name: ");
-        projNameField = new JLabel("get proj name");
+        projNameField = new JLabel(parentPanel.getActiveProj());
         projNamePanel.add(projNameLabel);
         projNamePanel.add(projNameField);
         centerLeftLayout.add(projNamePanel);
@@ -79,7 +82,7 @@ public class ActiveProjectDetailsView extends JPanel{
         startDatePanel = new JPanel();
         startDatePanel.setLayout(new GridBagLayout());
         JLabel startDateLabel = new JLabel("Start Date: ");
-        startDateField = new JLabel("get start date");
+        startDateField = new JLabel(parentPanel.getStartingDate());
         startDatePanel.add(startDateLabel);
         startDatePanel.add(startDateField);
         centerLeftLayout.add(startDatePanel);
@@ -88,7 +91,7 @@ public class ActiveProjectDetailsView extends JPanel{
         endDatePanel = new JPanel();
         endDatePanel.setLayout(new GridBagLayout());
         JLabel endDateLabel = new JLabel("End Date: ");
-        endDateField = new JLabel("get end date");
+        endDateField = new JLabel(parentPanel.getEndDate());
         endDatePanel.add(endDateLabel);
         endDatePanel.add(endDateField);
         centerLeftLayout.add(endDatePanel);
@@ -97,7 +100,7 @@ public class ActiveProjectDetailsView extends JPanel{
         pointPanel = new JPanel();
         pointPanel.setLayout(new GridBagLayout());
         JLabel pointLabel = new JLabel("Story Point Value: ");
-        pointField = new JLabel("get story point value");
+        pointField = new JLabel(parentPanel.getStoryPoint());
         pointPanel.add(pointLabel);
         pointPanel.add(pointField);
         centerLeftLayout.add(pointPanel);
@@ -106,7 +109,7 @@ public class ActiveProjectDetailsView extends JPanel{
         smPanel = new JPanel();
         smPanel.setLayout(new GridBagLayout());
         JLabel smLabel = new JLabel("Scrum Master: ");
-        JLabel smField = new JLabel("get sm");
+        JLabel smField = new JLabel(parentPanel.getScrumMaster());
         smPanel.add(smLabel);
         smPanel.add(smField);
         centerLeftLayout.add(smPanel);
@@ -115,7 +118,7 @@ public class ActiveProjectDetailsView extends JPanel{
         durPanel = new JPanel();
         durPanel.setLayout(new GridBagLayout());
         JLabel durLabel = new JLabel("Sprint Duration (weeks): ");
-        durField = new JLabel("get sprint duration");
+        durField = new JLabel(String.valueOf(parentPanel.getSprintDuration()));
         durPanel.add(durLabel);
         durPanel.add(durField);
         centerLeftLayout.add(durPanel);
@@ -128,7 +131,7 @@ public class ActiveProjectDetailsView extends JPanel{
         poSelectPanel = new JPanel();
         poSelectPanel.setLayout(new GridBagLayout());
         JLabel poSelectLabel = new JLabel("Product Owner: ");
-        JLabel poField = new JLabel("get po");
+        JLabel poField = new JLabel(String.valueOf(parentPanel.getProdOwner()));
         poSelectPanel.add(poSelectLabel);
         poSelectPanel.add(poField);
         centerRightLayout.add(poSelectPanel,BorderLayout.NORTH);

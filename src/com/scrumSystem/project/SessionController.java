@@ -232,4 +232,32 @@ public class SessionController
     public ProjectTMEntity getTMsByProject(String proj){
         return pc.getTMsByProject(proj);
     }
+
+    public String getStartDate() {
+        return pd.getStartDate();
+    }
+
+    public String getEndDate() {
+        return pd.getEndDate();
+    }
+
+    public String getStoryPoint(){
+        return pd.getStoryPointValue();
+    }
+
+    public String getScrumMaster() {
+        return pd.getScrumMaster();
+    }
+
+    public int getSprintDuration(){
+        return pd.getDurationOfSprint();
+    }
+
+    public String getProdOwner(){
+        return pd.getProductOwner(uc.getUserActiveProject());
+    }
+
+    public ArrayList<String> getTMs(){
+        return pd.getAvailableTMs();
+    }
 }

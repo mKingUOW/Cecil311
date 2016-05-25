@@ -1,5 +1,6 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.project.ProjectDetails;
 import com.scrumSystem.project.SessionController;
 
 import javax.swing.*;
