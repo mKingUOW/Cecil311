@@ -113,12 +113,11 @@ class UserBacklogScrollPanel extends JPanel{
     public void load(){
         //load sprint backlog data from DB into array
         removeAll();
-        ArrayList<SprintBacklogEntity> bls = parentPanel.sc.getSprinBLsFromSprint(parentPanel.sc.getCurrentSprint());
+        ArrayList<SprintBacklogEntity> bls = parentPanel.sc.getSprintBLsFromSprint(parentPanel.sc.getCurrentSprint());
         for(int i = 0; i<bls.size(); i++){
             if(bls.get(i).getAssignedUser().equals(parentPanel.getUsername())){
                 addElement(bls.get(i));
             }
-
         }
         update();
     }
@@ -194,7 +193,7 @@ class SprintBacklogScrollPanel extends MyScollPanel{
     public void load(){
         //load sprint backlog data from DB into array
         removeAll();
-        ArrayList<SprintBacklogEntity> bls = parentPanel.sc.getSprinBLsFromSprint(parentPanel.sc.getCurrentSprint());
+        ArrayList<SprintBacklogEntity> bls = parentPanel.sc.getSprintBLsFromSprint(parentPanel.sc.getCurrentSprint());
         for(int i = 0; i<bls.size(); i++){
             if(bls.get(i).getAssignedUser().equals("none")){
                 addElement(bls.get(i));
@@ -282,7 +281,7 @@ class SprintBLTextArea extends JTextArea{
 
     public void prepare(){
         //temp.setText(data);
-        String text = "ID: " + sbe.getIssueID() + "\tType: "+ sbe.getIssueType() + "\tStory Points: " + sbe.getStoryPoints() + "\t      Priority: " + sbe.getPriority()
+        String text = "ID: " + sbe.getIssueID() + "\tStoryRef: " + sbe.getStoryLink() + "\tType: "+ sbe.getIssueType() + "\tStory Points: " + sbe.getStoryPoints() + "\t      Priority: " + sbe.getPriority()
                 +"\n\n" + "Description: " + sbe.getDescription();
         setText(text);
         setEditable(false);

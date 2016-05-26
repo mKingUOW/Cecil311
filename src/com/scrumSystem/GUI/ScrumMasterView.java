@@ -224,6 +224,7 @@ public class ScrumMasterView extends MemberView{
             public void actionPerformed(ActionEvent e)
             {
                 parentFrame.remove(getCurrentView());
+                sprintBoardView.loadUserBacklog();
                 parentFrame.add(sprintBoardView,BorderLayout.CENTER);
                 parentFrame.revalidate();
                 parentFrame.repaint();

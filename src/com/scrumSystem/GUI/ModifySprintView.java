@@ -1,5 +1,8 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.project.productBacklog.ProdBacklogEntity;
+import com.scrumSystem.project.sprintBacklog.SprintBacklogEntity;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -22,13 +25,15 @@ public class ModifySprintView extends JPanel {
     private JPanel currentView;
     private MemberView parentPanel;
 
+    private int sprintID;
+
     public ModifySprintView(JFrame p, JPanel ret, MemberView pp){
         parentFrame = p;
         returnView = ret;
         currentView = this;
         parentPanel = pp;
 
-        prepare();
+       // prepare();
     }
 
     public void prepare(){
@@ -66,8 +71,8 @@ public class ModifySprintView extends JPanel {
         centerLeftLayout.add(centerLeftHeader,BorderLayout.NORTH);
 
         BacklogScrollPane pbScrollPane = new BacklogScrollPane(1000,1000);
-        ModifySprintScrollPanel prodBacklogPanel = new ModifySprintScrollPanel(currentView,parentFrame,parentPanel);
-        prodBacklogPanel.loadSprintBacklog();
+        ModifySprintScrollPanel prodBacklogPanel = new ModifySprintScrollPanel("PRODUCTBACKLOG",sprintID,currentView,parentFrame,parentPanel);
+        prodBacklogPanel.loadProductBacklog();
         pbScrollPane.setScrollPanel(prodBacklogPanel);
         centerLeftLayout.add(pbScrollPane,BorderLayout.CENTER);
         centerLayoutPanel.add(centerLeftLayout);
@@ -79,7 +84,8 @@ public class ModifySprintView extends JPanel {
         JLabel centerRightHeader = new JLabel("Sprint Backlog", SwingConstants.CENTER);
         centerRightLayout.add(centerRightHeader,BorderLayout.NORTH);
         BacklogScrollPane sbScrollPane = new BacklogScrollPane(1000,1000);
-        ModifySprintScrollPanel sprintBacklogPanel = new ModifySprintScrollPanel(currentView,parentFrame,parentPanel);
+        ModifySprintScrollPanel sprintBacklogPanel = new ModifySprintScrollPanel("SPRINTBACKLOG",sprintID,currentView,parentFrame,parentPanel);
+        sprintBacklogPanel.loadSprintBacklog(sprintID);
         sbScrollPane.setScrollPanel(sprintBacklogPanel);
         centerRightLayout.add(sbScrollPane,BorderLayout.CENTER);
         centerLayoutPanel.add(centerRightLayout);
@@ -96,10 +102,14 @@ public class ModifySprintView extends JPanel {
         add(southLayout,BorderLayout.SOUTH);
 
     }
+
+    public void setSprintID(int i){
+        sprintID = i;
+    }
 }
 
 class ModifySprintScrollPanel extends JPanel{
-    private ArrayList<JTextArea> sprintBacklogUI;
+    private ArrayList<JTextArea> UIarray;
     private ArrayList<String> sprintBacklogData;
 
     private ModifySprintScrollPanel partnerPanel;
@@ -107,15 +117,20 @@ class ModifySprintScrollPanel extends JPanel{
     private JFrame parentFrame;
     private MemberView parentPanel;
 
+    private String mode;
+    private int sprintID;
+
     private Boolean wasDoubleClick = false;
     private Timer timer;
 
-    public ModifySprintScrollPanel(JPanel curr, JFrame p, MemberView pp){
+    public ModifySprintScrollPanel(String m,int id, JPanel curr, JFrame p, MemberView pp){
         partnerPanel = null;
         parentPanel = pp;
         currentView = curr;
         parentFrame = p;
-        sprintBacklogUI = new ArrayList<JTextArea>();
+        mode = m;
+        sprintID = id;
+        UIarray = new ArrayList<JTextArea>();
         sprintBacklogData = new ArrayList<String>();
     }
 
@@ -123,23 +138,43 @@ class ModifySprintScrollPanel extends JPanel{
         partnerPanel = p;
     }
 
-    public void loadSprintBacklog(){
-        //load sprint backlog data from DB into array
-        System.out.println("Loading");
-        sprintBacklogData.add("One");
-        sprintBacklogData.add("Two");
-        sprintBacklogData.add("Three");
-        sprintBacklogData.add("Four");
+    public void loadProductBacklog(){
 
-        //add all elements from array into ui
-        for(int i = 0; i<sprintBacklogData.size(); i++){
-            addElement(sprintBacklogData.get(i));
+        ArrayList<Integer> pb = parentPanel.sc.getProductBacklogIDs();
+        //add all elements from product backlog into ui
+        for(int i = 0; i<pb.size(); i++){
+            ProdBacklogEntity pbe = parentPanel.sc.getBacklog(pb.get(i));
+            //check if pb item has already been assigned to a sprint
+            if(pbe.getAssignedToSprint() == -1){
+                addPBElement(pb.get(i));
+            }
+
         }
 
-        updateView();
+        //repaint
+        revalidate();
+        repaint();
     }
 
-    public void addElement(String data){
+    public void loadSprintBacklog(int sprintID){
+        //load sprint backlog data from DB into array
+        removeAll();
+        ArrayList<SprintBacklogEntity> bls = parentPanel.sc.getSprintBLsFromSprint(sprintID);
+        System.out.println("MSV163: load sprint backlog for sprint " + sprintID + "size: " + bls.size() );
+        for(int i = 0; i<bls.size(); i++){
+            //if(bls.get(i).getAssignedUser().equals("none")){
+                addSBElement(bls.get(i));
+            //}
+
+        }
+        updateView();
+
+    }
+
+
+    public void addPBElement(int id){
+
+        /*
         final JTextArea temp = new JTextArea(3,50);
         temp.setText(data);
         temp.setEditable(false);
@@ -148,17 +183,22 @@ class ModifySprintScrollPanel extends JPanel{
         temp.setOpaque(true);
         Border margin = new EmptyBorder(0,10,0,10);
         temp.setBorder(new CompoundBorder(LineBorder.createGrayLineBorder(),margin));
+        */
+        ProdBacklogEntity bl = parentPanel.sc.getBacklog(id);
+        bl.setAssignedToSprint(-1);
+        parentPanel.sc.modifyBacklog(bl);
+        final ProductBacklogTextArea temp = new ProductBacklogTextArea(bl);
 
-        sprintBacklogUI.add(temp);
+        UIarray.add(temp);
 
         //use buffer to add additional dummy elements while list is small
         //keeps element sizes consistent and removes excess space at end of list.
-        int buffer = 8 - sprintBacklogUI.size();
+        int buffer = 8 - UIarray.size();
         if(buffer > -1){
-            setLayout(new GridLayout(buffer + sprintBacklogUI.size(),1));
+            setLayout(new GridLayout(buffer + UIarray.size(),1));
         }
         else{
-            setLayout(new GridLayout(sprintBacklogUI.size(),1));
+            setLayout(new GridLayout(UIarray.size(),1));
         }
 
 
@@ -168,12 +208,105 @@ class ModifySprintScrollPanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     System.out.println("double clicked");
-                    DetailedBacklogItemView detailedBacklogItemView = new DetailedBacklogItemView(parentFrame,parentPanel.getCurrentView(),parentPanel);
-                    parentFrame.remove(parentPanel.getCurrentView());
+                    /*
+                    if(memberType.equals("ProductOwner")){
+                        CreateNewIssueView createNewIssueView = new CreateNewIssueView("MODIFY",parentFrame,returnView,parentPanel);
+                        createNewIssueView.setupModifyBacklogItem(temp.getBacklogEntity());
+                        parentFrame.remove(returnView);
+                        parentFrame.add(createNewIssueView);
+                        parentFrame.revalidate();
+                        parentFrame.repaint();
+                        selectedIssue = temp.getBacklogEntity().getStoryNumber();
+                    }
+                    */
+                    wasDoubleClick = true;
+                }else{
+                    Integer timerinterval = (Integer) Toolkit.getDefaultToolkit().getDesktopProperty( "awt.multiClickInterval");
+                    timer = new Timer(timerinterval.intValue(), new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            if (wasDoubleClick) {
+                                wasDoubleClick = false; // reset flag
+                            } else {
+
+                                if(mode.equals("PRODUCTBACKLOG")){
+
+                                    ProdBacklogEntity s = temp.getBacklogEntity();
+                                    SprintBacklogEntity sbe = new SprintBacklogEntity();
+                                    sbe.setProjectName(s.getProjectName());
+                                    sbe.setSprintID(sprintID);
+                                    sbe.setIssueID(parentPanel.sc.getNewestStoryId());
+                                    sbe.setDescription(s.getDescription());
+                                    sbe.setIssueType(s.getSubType());
+                                    sbe.setPriority(s.getPriority());
+                                    sbe.setStoryLink(s.getStoryNumber());
+                                    sbe.setStoryPoints(s.getEffortEstimation());
+                                    sbe.setCompletionStatus("ToDo");
+                                    sbe.setAssignedUser("none");
+                                    //sbe.setDateStarted(s.get);
+                                    //sbe.setDateEnded(s.getDateEnded());
+
+                                    parentPanel.sc.createSprintBL(sbe);
+                                    //assign pbi to sprint
+                                    System.out.println("MSV248: assigning proj to sprint " + sprintID);
+                                    temp.getBacklogEntity().setAssignedToSprint(sprintID);
+                                    parentPanel.sc.modifyBacklog(temp.getBacklogEntity());
+
+                                    partnerPanel.addSBElement(sbe);
+                                    partnerPanel.updateView();
+                                    remove(temp);
+                                    updateView();
+                                }
+
+                                /*
+                                descPanel.displayIssue(temp.getBacklogEntity());
+                                selectedIssue = temp.getBacklogEntity().getStoryNumber();
+                                commentsPanel.load(selectedIssue);
+                                //remove(temp);
+                                update();
+                                */
+                            }
+                        }
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
+                }
+
+            }
+        });
+
+        add(temp);
+    }
+
+    public void addSBElement(SprintBacklogEntity s){
+        s.setAssignedUser("none");
+        parentPanel.sc.modifySprintBL(s);
+        final SprintBLTextArea temp = new SprintBLTextArea(s);
+
+
+        UIarray.add(temp);
+
+        //use buffer to add additional dummy elements while list is small
+        //keeps element sizes consistent and removes excess space at end of list.
+        int buffer = 8 - UIarray.size();
+        if(buffer > -1){
+            setLayout(new GridLayout(buffer + UIarray.size(),1));
+        }
+        else{
+            setLayout(new GridLayout(UIarray.size(),1));
+        }
+
+
+        //reference: http://stackoverflow.com/questions/548180/java-ignore-single-click-on-double-click
+        temp.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    System.out.println("double clicked");
+                    DetailedBacklogItemView detailedBacklogItemView = new DetailedBacklogItemView(parentFrame,currentView,parentPanel);
+                    parentFrame.remove(currentView);
                     parentFrame.add(detailedBacklogItemView);
                     parentFrame.revalidate();
                     parentFrame.repaint();
-                    parentPanel.setCurrentView(detailedBacklogItemView);
 
                     wasDoubleClick = true;
                 }else{
@@ -183,8 +316,10 @@ class ModifySprintScrollPanel extends JPanel{
                             if (wasDoubleClick) {
                                 wasDoubleClick = false; // reset flag
                             } else {
-                                partnerPanel.addElement(temp.getText());
-                                partnerPanel.updateView();
+                                temp.getSBE().setAssignedUser(parentPanel.getUsername());
+                                parentPanel.sc.modifySprintBL(temp.getSBE());
+                               // userBacklogPanel.addElement(temp.getSBE());
+                                //userBacklogPanel.update();
                                 remove(temp);
                                 updateView();
                             }
@@ -198,13 +333,14 @@ class ModifySprintScrollPanel extends JPanel{
         });
 
         add(temp);
-        updateView();
     }
 
     public void updateView(){
         revalidate();
         repaint();
     }
+
+
 
 
 }

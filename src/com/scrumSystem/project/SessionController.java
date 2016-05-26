@@ -319,8 +319,8 @@ public class SessionController
         spc.modifySprintBL(s);
     }
 
-    public ArrayList<SprintBacklogEntity> getSprinBLsFromSprint(int id){
-        return spc.getSprinBLsFromSprint(id);
+    public ArrayList<SprintBacklogEntity> getSprintBLsFromSprint(int id){
+        return spc.getSprintBLsFromSprint(id);
     }
 
     public ArrayList<SprintBacklogEntity> getSprintBoardBLs(int sprintID, String username){

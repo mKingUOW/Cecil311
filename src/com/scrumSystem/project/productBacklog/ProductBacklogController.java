@@ -48,6 +48,7 @@ public class ProductBacklogController {
                 temp.setSubType(fields[7]);
                 temp.setEpicRef(Integer.parseInt(fields[8]));
                 temp.setCompleteionStatus(fields[9]);
+                temp.setAssignedToSprint(Integer.parseInt(fields[10]));
 
                 backlogs.add(temp);
                 //read the next line in the file
@@ -96,6 +97,7 @@ public class ProductBacklogController {
                 temp.setSubType(p.getSubType());
                 temp.setEpicRef(p.getEpicRef());
                 temp.setCompleteionStatus(p.getCompleteionStatus());
+                temp.setAssignedToSprint(p.getAssignedToSprint());
             }
         }
         saveBacklogs();

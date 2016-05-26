@@ -49,7 +49,7 @@ public class SprintManagementView extends JPanel{
             }
         });
         buttonPanel.add(createSprintButton);
-        //northPanel.add(buttonPanel,BorderLayout.EAST);
+        northPanel.add(buttonPanel,BorderLayout.EAST);
 
         add(northPanel, BorderLayout.NORTH);
 
@@ -76,7 +76,7 @@ class SprintManagementScrollPanel extends JPanel{
         parentPanel = pp;
         sprintListUI = new ArrayList<JTextArea>();
         sprintData = new ArrayList<String>();
-        loadSprints();
+        //loadSprints();
     }
 
     public void loadSprints(){
@@ -87,10 +87,6 @@ class SprintManagementScrollPanel extends JPanel{
             addElement();
         }
 
-        //dummy data
-        for(int i = 0; i<5; i++){
-            addElement();
-        }
        update();
     }
 
@@ -98,15 +94,7 @@ class SprintManagementScrollPanel extends JPanel{
     public void addElement(){
         //CHECK HOW MANY SPRINTS IN PROJ, ADD ONLY IF CREATED sPRINTS < TOTAL SPRINTS
 
-
-        final JTextArea temp = new JTextArea(3,50);
-        temp.setText("Sprint " + (sprintListUI.size()+1) );
-        temp.setEditable(false);
-        temp.setLineWrap(true);
-        temp.setBackground(Color.white);
-        temp.setOpaque(true);
-        Border margin = new EmptyBorder(0,10,0,10);
-        temp.setBorder(new CompoundBorder(LineBorder.createGrayLineBorder(),margin));
+        final SprintManagementTextArea temp = new SprintManagementTextArea(sprintListUI.size()+1);
 
         sprintListUI.add(temp);
 
@@ -115,6 +103,8 @@ class SprintManagementScrollPanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 //show sprint editor
                 ModifySprintView modifySprintView = new ModifySprintView(parentFrame,currentView,parentPanel);
+                modifySprintView.setSprintID(temp.getSprintID());
+                modifySprintView.prepare();
                 parentFrame.remove(parentPanel.getCurrentView());
                 parentFrame.add(modifySprintView);
                 parentFrame.revalidate();
@@ -140,5 +130,30 @@ class SprintManagementScrollPanel extends JPanel{
     public void update(){
         revalidate();
         repaint();
+    }
+}
+
+class SprintManagementTextArea extends JTextArea{
+
+    private int sprintID;
+
+    public SprintManagementTextArea(int i){
+        super(3,50);
+        sprintID = i;
+        prepare();
+    }
+
+    public void prepare(){
+        setText("Sprint " + sprintID);
+        setEditable(false);
+        setLineWrap(true);
+        setBackground(Color.white);
+        setOpaque(true);
+        Border margin = new EmptyBorder(0,10,0,10);
+        setBorder(new CompoundBorder(LineBorder.createGrayLineBorder(),margin));
+    }
+
+    public int getSprintID(){
+        return sprintID;
     }
 }

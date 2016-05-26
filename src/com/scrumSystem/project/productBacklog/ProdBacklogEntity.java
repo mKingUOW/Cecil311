@@ -18,6 +18,7 @@ public class ProdBacklogEntity implements Entity
     private String subType;
     private int epicRef;
     private String completeionStatus;
+    private int assignedToSprint;
 
     public ProdBacklogEntity(){
         projectName = "null";
@@ -30,10 +31,19 @@ public class ProdBacklogEntity implements Entity
         subType = "null";
         epicRef = -1;
         completeionStatus = "incomplete";
+        assignedToSprint = -1;
     }
 
     public String toCSV(){
-        return projectName + "," + storyNumber + "," + title + "," + storyType + "," + description + "," + priority + "," + effortEstimation + "," + subType + "," + epicRef + "," + completeionStatus;
+        return projectName + "," + storyNumber + "," + title + "," + storyType + "," + description + "," + priority + "," + effortEstimation + "," + subType + "," + epicRef + "," + completeionStatus + "," + assignedToSprint;
+    }
+
+    public int getAssignedToSprint(){
+        return assignedToSprint;
+    }
+
+    public void setAssignedToSprint(int a){
+        assignedToSprint = a;
     }
 
 

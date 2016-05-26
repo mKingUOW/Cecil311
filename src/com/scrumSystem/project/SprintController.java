@@ -34,9 +34,11 @@ public class SprintController {
         return sprintbls.size();
     }
 
-    public ArrayList<SprintBacklogEntity> getSprinBLsFromSprint(int id){
+    public ArrayList<SprintBacklogEntity> getSprintBLsFromSprint(int id){
+        loadSprintBLs();
         ArrayList<SprintBacklogEntity> ret = new ArrayList<SprintBacklogEntity>();
         for(int i = 0; i< sprintbls.size(); i++){
+            System.out.println("SPC41: " + sprintbls.get(i).getSprintID() + ":" + id);
             if(sprintbls.get(i).getSprintID() == id){
                 ret.add(sprintbls.get(i));
             }

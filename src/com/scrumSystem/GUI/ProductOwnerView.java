@@ -16,12 +16,14 @@ public class ProductOwnerView extends MemberView {
     private ProductBacklogView productBacklogView;
     private SprintManagementView sprintManagementView;
     private ActiveProjectDetailsView activeProjectDetailsView;
+    private BurnDownChartView burnDownChartView;
     private MyDetailsView myDetailsView;
 
     private NavButton projectDetailsButton;
     private NavButton projectBacklogButton;
     private NavButton sprintButton;
     private NavButton myDetailsButton;
+    private NavButton burnDownChartButton;
     private NavButton logOutButton;
 
 
@@ -37,6 +39,7 @@ public class ProductOwnerView extends MemberView {
         productBacklogView = new ProductBacklogView("ProductOwner",frame,this);
         sprintManagementView = new SprintManagementView(frame,this);
         activeProjectDetailsView = new ActiveProjectDetailsView(frame,this);
+        burnDownChartView = new BurnDownChartView(frame,this);
         myDetailsView = new MyDetailsView(frame,this);
         setCurrentView(this);
 
@@ -107,6 +110,18 @@ public class ProductOwnerView extends MemberView {
             }
         });
 
+        burnDownChartButton = new NavButton("Burn Down Chart", this);
+        burnDownChartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.remove(getCurrentView());
+                frame.add(burnDownChartView,BorderLayout.CENTER);
+                frame.revalidate();
+                frame.repaint();
+                setCurrentView(burnDownChartView);
+            }
+        });
+
         logOutButton = new NavButton("Log Out", this);
         logOutButton.addActionListener(new ActionListener() {
             @Override
@@ -128,6 +143,7 @@ public class ProductOwnerView extends MemberView {
         navigator.add(projectBacklogButton);
         navigator.add(sprintButton);
         navigator.add(myDetailsButton);
+        navigator.add(burnDownChartButton);
         navigator.add(logOutButton);
 
 

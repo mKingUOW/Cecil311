@@ -434,7 +434,14 @@ class ProductBacklogTextArea extends JTextArea{
 
     public void prepare(){
 
-        String text = "Title: " + pbe.getTitle() + "\t" + "Story#: " + pbe.getStoryNumber() + "\n Description: " + pbe.getDescription();
+        String text = "Title: " + pbe.getTitle() + "\t" + "Story#: " + pbe.getStoryNumber() + "\n Description: " + pbe.getDescription()
+                + "\nAssigned to Sprint: ";
+        if(pbe.getAssignedToSprint() == -1){
+            text = text + "none";
+        }
+        else{
+            text = text + pbe.getAssignedToSprint();
+        }
         setText(text);
         setEditable(false);
         setLineWrap(true);
