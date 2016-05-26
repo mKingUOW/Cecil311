@@ -33,11 +33,11 @@ public class BurnDownChart extends JPanel {
     private DefaultCategoryDataset createDataset( )
     {
         int numberOfSprints = parentPanel.sc.getCurrentSprint();
-
-        int totalStoryPoints = Integer.parseInt(parentPanel.sc.getStoryPoint());
+//        parentPanel.sc.getCompletedFromSprint(1);
+        int totalStoryPoints = parentPanel.sc.getTotalSprintPointsInProj(parentPanel.getActiveProj());
 //        System.out.println("Number of Sprints " + numberOfSprints);
 
-//        System.out.println("Total Story Points " + totalStoryPoints);
+        System.out.println("Total Story Points " + totalStoryPoints);
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (int i = 0; i <= numberOfSprints; i++){
