@@ -40,7 +40,7 @@ public class ModifySprintView extends JPanel {
         setLayout(new BorderLayout());
 
         //header
-        JLabel headerLabel = new JLabel("Modify Sprint", SwingConstants.CENTER);
+        JLabel headerLabel = new JLabel("Modify Sprint" + sprintID, SwingConstants.CENTER);
         headerLabel.setPreferredSize(new Dimension(100,40));
 
 
@@ -208,17 +208,19 @@ class ModifySprintScrollPanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     System.out.println("double clicked");
-                    /*
-                    if(memberType.equals("ProductOwner")){
-                        CreateNewIssueView createNewIssueView = new CreateNewIssueView("MODIFY",parentFrame,returnView,parentPanel);
-                        createNewIssueView.setupModifyBacklogItem(temp.getBacklogEntity());
-                        parentFrame.remove(returnView);
-                        parentFrame.add(createNewIssueView);
+
+                    if(mode.equals("PRODUCTBACKLOG")){
+                        DetailedBacklogItemView detailedBacklogItemView = new DetailedBacklogItemView(parentFrame,currentView,parentPanel);
+                        detailedBacklogItemView.setPBE(temp.getBacklogEntity());
+                        detailedBacklogItemView.displayDesc();
+                        detailedBacklogItemView.displayComments();
+                        parentFrame.remove(parentPanel.getCurrentView());
+                        parentFrame.add(detailedBacklogItemView);
                         parentFrame.revalidate();
                         parentFrame.repaint();
-                        selectedIssue = temp.getBacklogEntity().getStoryNumber();
+                        parentPanel.setCurrentView(detailedBacklogItemView);
                     }
-                    */
+
                     wasDoubleClick = true;
                 }else{
                     Integer timerinterval = (Integer) Toolkit.getDefaultToolkit().getDesktopProperty( "awt.multiClickInterval");
@@ -230,31 +232,38 @@ class ModifySprintScrollPanel extends JPanel{
 
                                 if(mode.equals("PRODUCTBACKLOG")){
 
-                                    ProdBacklogEntity s = temp.getBacklogEntity();
-                                    SprintBacklogEntity sbe = new SprintBacklogEntity();
-                                    sbe.setProjectName(s.getProjectName());
-                                    sbe.setSprintID(sprintID);
-                                    sbe.setIssueID(parentPanel.sc.getNewestStoryId());
-                                    sbe.setDescription(s.getDescription());
-                                    sbe.setIssueType(s.getSubType());
-                                    sbe.setPriority(s.getPriority());
-                                    sbe.setStoryLink(s.getStoryNumber());
-                                    sbe.setStoryPoints(s.getEffortEstimation());
-                                    sbe.setCompletionStatus("ToDo");
-                                    sbe.setAssignedUser("none");
-                                    //sbe.setDateStarted(s.get);
-                                    //sbe.setDateEnded(s.getDateEnded());
+                                    if(sprintID > parentPanel.sc.getCurrentSprint()){
+                                        ProdBacklogEntity s = temp.getBacklogEntity();
+                                        SprintBacklogEntity sbe = new SprintBacklogEntity();
+                                        sbe.setProjectName(s.getProjectName());
+                                        sbe.setSprintID(sprintID);
+                                        sbe.setIssueID(parentPanel.sc.getNewestStoryId());
+                                        sbe.setDescription(s.getDescription());
+                                        sbe.setIssueType(s.getSubType());
+                                        sbe.setPriority(s.getPriority());
+                                        sbe.setStoryLink(s.getStoryNumber());
+                                        sbe.setStoryPoints(s.getEffortEstimation());
+                                        sbe.setCompletionStatus("ToDo");
+                                        sbe.setAssignedUser("none");
+                                        //sbe.setDateStarted(s.get);
+                                        //sbe.setDateEnded(s.getDateEnded());
 
-                                    parentPanel.sc.createSprintBL(sbe);
-                                    //assign pbi to sprint
-                                    System.out.println("MSV248: assigning proj to sprint " + sprintID);
-                                    temp.getBacklogEntity().setAssignedToSprint(sprintID);
-                                    parentPanel.sc.modifyBacklog(temp.getBacklogEntity());
+                                        parentPanel.sc.createSprintBL(sbe);
+                                        //assign pbi to sprint
+                                        System.out.println("MSV248: assigning proj to sprint " + sprintID);
+                                        temp.getBacklogEntity().setAssignedToSprint(sprintID);
+                                        parentPanel.sc.modifyBacklog(temp.getBacklogEntity());
 
-                                    partnerPanel.addSBElement(sbe);
-                                    partnerPanel.updateView();
-                                    remove(temp);
-                                    updateView();
+                                        partnerPanel.addSBElement(sbe);
+                                        partnerPanel.updateView();
+                                        remove(temp);
+                                        updateView();
+                                    }
+                                    else{
+                                        JOptionPane.showMessageDialog(parentFrame, "Sprint" + sprintID + " has already started or has ended. You cannot modify the sprint backlog");
+                                    }
+
+
                                 }
 
                                 /*
@@ -302,11 +311,17 @@ class ModifySprintScrollPanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     System.out.println("double clicked");
-                    DetailedBacklogItemView detailedBacklogItemView = new DetailedBacklogItemView(parentFrame,currentView,parentPanel);
-                    parentFrame.remove(currentView);
-                    parentFrame.add(detailedBacklogItemView);
-                    parentFrame.revalidate();
-                    parentFrame.repaint();
+                    if(mode.equals("SPRINTBACKLOG")){
+                        DetailedBacklogItemView detailedBacklogItemView = new DetailedBacklogItemView(parentFrame,currentView,parentPanel);
+                        detailedBacklogItemView.setSBE(temp.getSBE());
+                        detailedBacklogItemView.displayDesc();
+                        detailedBacklogItemView.displayComments();
+                        parentFrame.remove(parentPanel.getCurrentView());
+                        parentFrame.add(detailedBacklogItemView);
+                        parentFrame.revalidate();
+                        parentFrame.repaint();
+                        parentPanel.setCurrentView(detailedBacklogItemView);
+                    }
 
                     wasDoubleClick = true;
                 }else{
@@ -316,12 +331,40 @@ class ModifySprintScrollPanel extends JPanel{
                             if (wasDoubleClick) {
                                 wasDoubleClick = false; // reset flag
                             } else {
-                                temp.getSBE().setAssignedUser(parentPanel.getUsername());
-                                parentPanel.sc.modifySprintBL(temp.getSBE());
-                               // userBacklogPanel.addElement(temp.getSBE());
-                                //userBacklogPanel.update();
-                                remove(temp);
-                                updateView();
+
+                                if(mode.equals("SPRINTBACKLOG")){
+
+                                    ProdBacklogEntity pbe;
+                                    if(temp.getSBE().getStoryLink() == -1){
+                                        //no prod backlog associated with this
+                                        pbe = new ProdBacklogEntity();
+                                        pbe.setProjectName(parentPanel.getActiveProj());
+                                        pbe.setTitle("Sprint Backlog Item " + temp.getSBE().getIssueID());
+                                        pbe.setStoryType("UserStory");
+                                        pbe.setDescription(temp.getSBE().getDescription());
+                                        pbe.setPriority("Stretch");
+                                        pbe.setEffortEstimation(temp.getSBE().getStoryPoints());
+                                        pbe.setSubType("Feature");
+                                        pbe.setStoryNumber(parentPanel.sc.getNewestStoryId());
+                                        pbe.setAssignedToSprint(-1);
+
+                                        parentPanel.sc.addBacklog(pbe);
+                                    }
+                                    else{
+                                        pbe = parentPanel.sc.getBacklog(temp.getSBE().getStoryLink());
+                                        pbe.setAssignedToSprint(-1);
+                                        parentPanel.sc.modifyBacklog(pbe);
+                                        parentPanel.sc.removeSprintBL(temp.getSBE());
+                                    }
+
+                                    partnerPanel.addPBElement(pbe.getStoryNumber());
+                                    partnerPanel.updateView();
+
+                                    remove(temp);
+                                    updateView();
+                                }
+
+
                             }
                         }
                     });

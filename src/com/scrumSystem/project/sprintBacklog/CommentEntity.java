@@ -14,6 +14,8 @@ public class CommentEntity implements Entity
     private String comment;
     private String username;
     private String date;
+    private String issueType; //used for identifying sprintBL,productBL
+    private int sprintID; // used for identifying sprint in sprint review
 
     public CommentEntity(){
         projectName = "null";
@@ -21,6 +23,8 @@ public class CommentEntity implements Entity
         comment = "null";
         username = "null";
         date = null;
+        issueType = "null";
+        sprintID = -1;
     }
 
     public String getProjectName(){
@@ -63,8 +67,25 @@ public class CommentEntity implements Entity
         date = d;
     }
 
+    public String getIssueType(){
+        return issueType;
+    }
+
+    public void setIssueType(String t){
+        issueType = t;
+    }
+
+    public int getSprintID(){
+        return sprintID;
+    }
+
+    public void setSprintID(int i){
+        sprintID = i;
+    }
+
+
     public String toCSV(){
-        return projectName + "," + issueNumber + "," + comment  + "," + username  + "," + date;
+        return projectName + "," + issueNumber + "," + comment  + "," + username + "," + date + "," + issueType + "," + sprintID;
     }
 
 

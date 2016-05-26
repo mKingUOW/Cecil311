@@ -308,6 +308,9 @@ class SprintBoardScrollPanel extends MyScollPanel{
                     System.out.println("double clicked");
 
                     DetailedBacklogItemView detailedBacklogItemView = new DetailedBacklogItemView(parentFrame,parentPanel.getCurrentView(),parentPanel);
+                    detailedBacklogItemView.setSBE(temp.getSBE());
+                    detailedBacklogItemView.displayDesc();
+                    detailedBacklogItemView.displayComments();
                     parentFrame.remove(parentPanel.getCurrentView());
                     parentFrame.add(detailedBacklogItemView);
                     parentPanel.setCurrentView(detailedBacklogItemView);

@@ -2,6 +2,7 @@ package com.scrumSystem.GUI;
 
 import com.scrumSystem.project.productBacklog.ProdBacklogEntity;
 import com.scrumSystem.project.sprintBacklog.CommentEntity;
+import com.scrumSystem.project.sprintBacklog.SprintBacklogEntity;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -276,7 +277,7 @@ class DescPanel extends JPanel{
         add(area);
     }
 
-    public void displayIssue(ProdBacklogEntity pbe){
+    public void displayPBEIssue(ProdBacklogEntity pbe){
 
         String text = "Title: \t\t" + pbe.getTitle() + "\n"
                 + "Story#: \t\t" + pbe.getStoryNumber() + "\n"
@@ -287,6 +288,23 @@ class DescPanel extends JPanel{
                 + "Sub Type: \t\t" + pbe.getSubType() + "\n"
                 + "Epic reference: \t\t" + pbe.getEpicRef() + "\n"
                 + "Completion Status: \t" + pbe.getCompleteionStatus() + "\n";
+        area.setText(text);
+    }
+
+    public void displaySBEIssue(SprintBacklogEntity sbe){
+
+        String text = "Project Name: \t\t" + sbe.getProjectName() + "\n"
+                + "Sprint ID: \t\t" + sbe.getSprintID() + "\n"
+                + "Issue ID: \t\t" + sbe.getIssueID() + "\n"
+                + "Description: \t\t" + sbe.getDescription() + "\n"
+                + "Issue Type: \t\t" + sbe.getIssueType() + "\n"
+                + "Priority: \t" + sbe.getPriority() + "\n"
+                + "Story Reference: \t\t" + sbe.getStoryLink() + "\n"
+                + "Story Points: \t\t" + sbe.getStoryPoints() + "\n"
+                + "Completion Status: \t" + sbe.getCompletionStatus() + "\n"
+                + "Date Created: \t\t" + sbe.getDateStarted() + "\n"
+                + "Date Ended: \t\t" + sbe.getDateEnded();
+
         area.setText(text);
     }
 }
@@ -339,16 +357,6 @@ class ProductBacklogScrollPanel extends JPanel{
 
     public void addElement(int id){
 
-        /*
-        final JTextArea temp = new JTextArea(3,50);
-        temp.setText(data);
-        temp.setEditable(false);
-        temp.setLineWrap(true);
-        temp.setBackground(Color.white);
-        temp.setOpaque(true);
-        Border margin = new EmptyBorder(0,10,0,10);
-        temp.setBorder(new CompoundBorder(LineBorder.createGrayLineBorder(),margin));
-        */
         ProdBacklogEntity bl = parentPanel.sc.getBacklog(id);
         final ProductBacklogTextArea temp = new ProductBacklogTextArea(bl);
 
@@ -389,9 +397,9 @@ class ProductBacklogScrollPanel extends JPanel{
                             if (wasDoubleClick) {
                                 wasDoubleClick = false; // reset flag
                             } else {
-                                descPanel.displayIssue(temp.getBacklogEntity());
+                                descPanel.displayPBEIssue(temp.getBacklogEntity());
                                 selectedIssue = temp.getBacklogEntity().getStoryNumber();
-                                commentsPanel.load(selectedIssue);
+                                commentsPanel.load(selectedIssue,"Product Backlog");
                                 //remove(temp);
                                 update();
                             }
@@ -434,14 +442,7 @@ class ProductBacklogTextArea extends JTextArea{
 
     public void prepare(){
 
-        String text = "Title: " + pbe.getTitle() + "\t" + "Story#: " + pbe.getStoryNumber() + "\n Description: " + pbe.getDescription()
-                + "\nAssigned to Sprint: ";
-        if(pbe.getAssignedToSprint() == -1){
-            text = text + "none";
-        }
-        else{
-            text = text + pbe.getAssignedToSprint();
-        }
+        String text = "Title: " + pbe.getTitle() + "\t" + "Story#: " + pbe.getStoryNumber() + "\n Description: " + pbe.getDescription();
         setText(text);
         setEditable(false);
         setLineWrap(true);
@@ -515,12 +516,13 @@ class CommentsPanel extends JPanel{
         elements = new ArrayList<JTextArea>();
     }
 
-    public void load(int id){
+    public void load(int id, String issType){
         removeAll();
-        ArrayList<CommentEntity> CEs = parentPanel.sc.getCommentsByIssue(id);
+        ArrayList<CommentEntity> CEs = parentPanel.sc.getCommentsByIssue(id,issType);
         for(int i = 0; i<CEs.size(); i++){
             JTextArea temp = addComment();
             temp.setText(CEs.get(i).getComment() + "\nDate: " + CEs.get(i).getDate());
+            temp.setEditable(false);
         }
         revalidate();
         repaint();
@@ -568,6 +570,16 @@ class CommentsPanel extends JPanel{
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date date = new Date();
         ce.setDate(dateFormat.format(date));
+
+        if(parentPanel.getCurrentView() instanceof ProductBacklogView){
+            ce.setIssueType("Product Backlog");
+        }
+        else if(parentPanel.getCurrentView() instanceof DetailedBacklogItemView){
+            ce.setIssueType("Sprint Backlog");
+        }
+
+        ce.setSprintID(parentPanel.sc.getCurrentSprint());
+
         parentPanel.sc.createComment(ce);
 
         //set last element in elements to non editable

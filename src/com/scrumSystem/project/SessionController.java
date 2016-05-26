@@ -247,6 +247,10 @@ public class SessionController
         return pd.getStartDate();
     }
 
+    public String getProjectName(){
+        return pd.getName();
+    }
+
     public String getEndDate() {
         return pd.getEndDate();
     }
@@ -304,8 +308,8 @@ public class SessionController
         cc.createComment(c);
     }
 
-    public ArrayList<CommentEntity> getCommentsByIssue(int i){
-        return cc.getCommentsByIssue(i);
+    public ArrayList<CommentEntity> getCommentsByIssue(int id, String issType){
+        return cc.getCommentsByIssue(id, issType);
     }
 
      /* ---------- Sprint FUNCTIONS -------------- */
@@ -325,5 +329,17 @@ public class SessionController
 
     public ArrayList<SprintBacklogEntity> getSprintBoardBLs(int sprintID, String username){
         return spc.getSprintBoardBLs(sprintID,username);
+    }
+
+    public ArrayList<SprintBacklogEntity> getAllSprintBLs(){
+        return spc.getAllSprintBLs();
+    }
+
+    public int getMaxSprint(){
+        return spc.getMaxSprint();
+    }
+
+    public void removeSprintBL(SprintBacklogEntity s){
+        spc.removeSprintBl(s);
     }
 }

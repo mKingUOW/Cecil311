@@ -3,6 +3,7 @@ package com.scrumSystem.GUI;
 import com.scrumSystem.project.ProjectDetails;
 import com.scrumSystem.project.ProjectPOEntity;
 import com.scrumSystem.project.ProjectTMEntity;
+import com.scrumSystem.role.ScrumMaster;
 import com.scrumSystem.user.UserEntity;
 
 import javax.swing.*;
@@ -36,7 +37,8 @@ public class ModifyProjectView extends JPanel{
     private JPanel buttonPanel;
     private JPanel poSelectPanel;
     private JPanel tmAssignPanel;
-
+    private JPanel searchPanel;
+    private JPanel currSprintPanel;
 
 
     private JTextField projNameField;
@@ -45,7 +47,8 @@ public class ModifyProjectView extends JPanel{
     private JTextField pointField;
     private DefaultComboBoxModel<String> model;
     private JTextField durField;
-    private JPanel searchPanel;
+    private JTextField currSprintField;
+
 
     private DefaultComboBoxModel poModel;
     private DefaultComboBoxModel availTMsModel;
@@ -89,6 +92,7 @@ public class ModifyProjectView extends JPanel{
                     startDateField.setText(temp.getStartDate());
                     endDateField.setText(temp.getEndDate());
                     pointField.setText(temp.getStoryPointValue());
+                    currSprintField.setText(Integer.toString(temp.getCurrentSprint()));
 
                     //set scrum mester combo box
                     model.addElement(temp.getScrumMaster());
@@ -121,6 +125,11 @@ public class ModifyProjectView extends JPanel{
         searchPanel.add(searchButton);
         searchPanel.add(errorLabel);
 
+        if(parentPanel.sc.getUserRoleType().equals("SM")){
+            searchField.setText(parentPanel.sc.getProjectName());
+            searchField.setEditable(false);
+        }
+
         //header panel
         JLabel header = new JLabel("Modify Existing Project",SwingConstants.CENTER);
         header.setPreferredSize(new Dimension(1000,100));
@@ -128,7 +137,7 @@ public class ModifyProjectView extends JPanel{
 
         //center panel
         JPanel centerLeftLayout = new JPanel();
-        centerLeftLayout.setLayout(new GridLayout(8,1));
+        centerLeftLayout.setLayout(new GridLayout(9,1));
 
         centerLeftLayout.add(searchPanel);
 
@@ -193,6 +202,17 @@ public class ModifyProjectView extends JPanel{
         durPanel.add(durLabel);
         durPanel.add(durField);
         centerLeftLayout.add(durPanel);
+
+        //current sprint panel
+        currSprintPanel = new JPanel();
+        currSprintPanel.setLayout(new GridBagLayout());
+        JLabel currSprintLabel = new JLabel("Current Sprint: ");
+        currSprintField = new JTextField();
+        currSprintField.setPreferredSize(new Dimension(150,35));
+        currSprintPanel.add(currSprintLabel);
+        currSprintPanel.add(currSprintField);
+        centerLeftLayout.add(currSprintPanel);
+
 
         //center right layout
         JPanel centerRightLayout = new JPanel();
@@ -277,6 +297,7 @@ public class ModifyProjectView extends JPanel{
                     durField.setText("");
                     model.removeAllElements();
                     poModel.removeAllElements();
+                    currSprintField.setText("");
                     availTMsModel.removeAllElements();
                     teamMembersScrollPanel.clear();
 
@@ -336,6 +357,13 @@ public class ModifyProjectView extends JPanel{
                     pd.setDurationOfSprint(Integer.parseInt(durField.getText()));
                 }
 
+                if(currSprintField.getText().equals("")){
+                    pd.setCurrentSprint(0);
+                }
+                else{
+                    pd.setCurrentSprint(Integer.parseInt(currSprintField.getText()));
+                }
+
                 System.out.println(pd.toCSV());
 
 
@@ -378,6 +406,7 @@ public class ModifyProjectView extends JPanel{
         buttonPanel.setVisible(state);
         tmAssignPanel.setVisible(state);
         poSelectPanel.setVisible(state);
+        currSprintPanel.setVisible(state);
     }
 
 }

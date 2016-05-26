@@ -62,6 +62,8 @@ public class SystemAdminView extends MemberView{
             @Override
             public void actionPerformed(ActionEvent e) {
                 parentFrame.remove(getCurrentView());
+                createNewProjectView.removeAll();
+                createNewProjectView.prepare();
                 parentFrame.add(createNewProjectView,BorderLayout.CENTER);
                 parentFrame.revalidate();
                 parentFrame.repaint();
@@ -74,6 +76,8 @@ public class SystemAdminView extends MemberView{
             @Override
             public void actionPerformed(ActionEvent e) {
                 parentFrame.remove(getCurrentView());
+                modifyProjectView.removeAll();
+                modifyProjectView.prepare();
                 parentFrame.add(modifyProjectView,BorderLayout.CENTER);
                 parentFrame.revalidate();
                 parentFrame.repaint();
@@ -86,6 +90,8 @@ public class SystemAdminView extends MemberView{
             @Override
             public void actionPerformed(ActionEvent e) {
                 parentFrame.remove(getCurrentView());
+                createNewUserView.removeAll();
+                createNewUserView.prepare();
                 parentFrame.add(createNewUserView,BorderLayout.CENTER);
                 parentFrame.revalidate();
                 parentFrame.repaint();
@@ -97,6 +103,8 @@ public class SystemAdminView extends MemberView{
             @Override
             public void actionPerformed(ActionEvent e) {
                 parentFrame.remove(getCurrentView());
+                modifyUserView.removeAll();
+                modifyUserView.prepare();
                 parentFrame.add(modifyUserView,BorderLayout.CENTER);
                 parentFrame.revalidate();
                 parentFrame.repaint();

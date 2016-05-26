@@ -34,11 +34,32 @@ public class SprintController {
         return sprintbls.size();
     }
 
+    public ArrayList<SprintBacklogEntity> getAllSprintBLs(){
+        sprintbls.clear();
+        loadSprintBLs();
+        ArrayList<SprintBacklogEntity> ret = new ArrayList<SprintBacklogEntity>();
+        for(int i = 0; i< sprintbls.size(); i++){
+                ret.add(sprintbls.get(i));
+        }
+        return ret;
+    }
+
+    public int getMaxSprint(){
+        sprintbls.clear();
+        loadSprintBLs();
+        int ret = 0;
+        for(int i = 0; i< sprintbls.size(); i++){
+            if(sprintbls.get(i).getSprintID() > ret){
+                ret = sprintbls.get(i).getSprintID();
+            }
+        }
+        return ret;
+    }
+
     public ArrayList<SprintBacklogEntity> getSprintBLsFromSprint(int id){
         loadSprintBLs();
         ArrayList<SprintBacklogEntity> ret = new ArrayList<SprintBacklogEntity>();
         for(int i = 0; i< sprintbls.size(); i++){
-            System.out.println("SPC41: " + sprintbls.get(i).getSprintID() + ":" + id);
             if(sprintbls.get(i).getSprintID() == id){
                 ret.add(sprintbls.get(i));
             }

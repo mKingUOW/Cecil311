@@ -36,6 +36,9 @@ public class ModifyUserView extends JPanel {
     private JTextField lNameField;
     private JTextField emailField;
 
+    private JTextField searchField;
+    private JLabel errorLabel;
+
     public ModifyUserView(JFrame p, MemberView pp){
         parentFrame = p;
         parentPanel = pp;
@@ -51,9 +54,9 @@ public class ModifyUserView extends JPanel {
         searchPanel = new JPanel();
         searchPanel.setLayout(new GridBagLayout());
         JLabel searchLabel = new JLabel("Search for a user: ", SwingConstants.LEFT);
-        final JTextField searchField = new JTextField();
+        searchField = new JTextField();
         searchField.setPreferredSize(new Dimension(150,35));
-        final JLabel errorLabel = new JLabel("",SwingConstants.RIGHT);
+        errorLabel = new JLabel("",SwingConstants.RIGHT);
         JButton searchButton = new JButton("Search");
         searchButton.addActionListener(new ActionListener() {
             @Override
@@ -65,7 +68,20 @@ public class ModifyUserView extends JPanel {
                     setPanelsVisible(true);
                     usernameField.setText(user.getUsername());
                     passwordField.setText(user.getPassword());
-                    typeComboBox.setSelectedItem(user.getUserType());
+
+                    if(user.getUserType().equals("SA")){
+                        typeComboBox.setSelectedItem("System Administrator");
+                    }
+                    else if(user.getUserType().equals("PO")){
+                        typeComboBox.setSelectedItem("Product Owner");
+                    }
+                    else if(user.getUserType().equals("SM")){
+                        typeComboBox.setSelectedItem("Scrum Master");
+                    }
+                    else if(user.getUserType().equals("TM")){
+                        typeComboBox.setSelectedItem("Team Member");
+                    }
+
                     projModel.setSelectedItem(user.getActiveProject());
                     fNameField.setText(user.getFirstName());
                     lNameField.setText(user.getLastName());
@@ -91,13 +107,6 @@ public class ModifyUserView extends JPanel {
         panelOne = new JPanel();
         panelOne.setLayout(new GridBagLayout());
         JLabel usernameLabel = new JLabel("Username: ", SwingConstants.CENTER);
-
-        if(parentPanel instanceof SystemAdminView){
-            //usernameField = new JLabel(searchField.getText());
-        }
-        else{
-            usernameField = new JLabel(parentPanel.getUsername());
-        }
 
 
         //final JTextField usernameField = new JTextField();
@@ -220,7 +229,7 @@ public class ModifyUserView extends JPanel {
             public void actionPerformed(ActionEvent e) {
 
 
-                if (parentPanel instanceof SystemAdminView) {
+               // if (parentPanel instanceof SystemAdminView) {
                     //save user to db
                     UserEntity newUser = new UserEntity();
                     newUser.setUsername(usernameField.getText());
@@ -247,7 +256,7 @@ public class ModifyUserView extends JPanel {
                     newUser.setEmail(emailField.getText());
                     //set skills
 
-                    parentPanel.sc.addUser(newUser);
+                    parentPanel.sc.modifyUser(newUser);
 
 
                     //show alert
@@ -264,9 +273,10 @@ public class ModifyUserView extends JPanel {
                     lNameField.setText("");
                     emailField.setText("");
                     model.removeAllElements();
-                    setPanelsVisible(false);
+                   // setPanelsVisible(false);
 
-                }
+               // }
+                /*
                 else{
                     parentFrame.remove(parentPanel.getCurrentView());
                     MyDetailsView myDetailsView = new MyDetailsView(parentFrame,parentPanel);
@@ -275,6 +285,8 @@ public class ModifyUserView extends JPanel {
                     parentFrame.repaint();
                     parentPanel.setCurrentView(myDetailsView);
                 }
+                */
+
 
             }
         });
@@ -331,12 +343,43 @@ public class ModifyUserView extends JPanel {
         add(panelEight);
         add(buttonPanel);
 
+
         if(parentPanel instanceof SystemAdminView){
             setPanelsVisible(false);
         }
+        else{
+            UserEntity user = parentPanel.sc.getUser(parentPanel.getUsername());
+            usernameField.setText(parentPanel.getUsername());
+            usernameField.setText(parentPanel.getUsername());
+            searchField.setText(parentPanel.getUsername());
+            //setPanelsVisible(true);
+            usernameField.setText(user.getUsername());
+            passwordField.setText(user.getPassword());
 
+            if(user.getUserType().equals("SA")){
+                typeComboBox.setSelectedItem("System Administrator");
+            }
+            else if(user.getUserType().equals("PO")){
+                typeComboBox.setSelectedItem("Product Owner");
+            }
+            else if(user.getUserType().equals("SM")){
+                typeComboBox.setSelectedItem("Scrum Master");
+            }
+            else if(user.getUserType().equals("TM")){
+                typeComboBox.setSelectedItem("Team Member");
+            }
+
+            projModel.setSelectedItem(user.getActiveProject());
+            fNameField.setText(user.getFirstName());
+            lNameField.setText(user.getLastName());
+            emailField.setText(user.getEmail());
+            //set skills field
+
+            errorLabel.setText("");
+        }
 
     }
+
 
     public void setPanelsVisible(Boolean state){
         panelOne.setVisible(state);

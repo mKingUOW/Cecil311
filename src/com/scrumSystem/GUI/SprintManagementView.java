@@ -1,5 +1,7 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.project.sprintBacklog.SprintBacklogEntity;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -76,14 +78,16 @@ class SprintManagementScrollPanel extends JPanel{
         parentPanel = pp;
         sprintListUI = new ArrayList<JTextArea>();
         sprintData = new ArrayList<String>();
-        //loadSprints();
+        loadSprints();
     }
 
     public void loadSprints(){
         //load sprint data from DB into sprintData array
 
+        int maxSprint = parentPanel.sc.getMaxSprint();
+
         //add all elements from array into ui
-        for(int i = 0; i<sprintData.size(); i++){
+        for(int i = 0; i<maxSprint; i++){
             addElement();
         }
 

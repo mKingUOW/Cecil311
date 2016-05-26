@@ -24,7 +24,6 @@ public class CommentController {
     }
 
     public void loadComments(){
-        allComments.clear();
         String lineInFile;
 
         try {
@@ -39,6 +38,8 @@ public class CommentController {
                 temp.setComment(fields[2]);
                 temp.setUsername(fields[3]);
                 temp.setDate(fields[4]);
+                temp.setIssueType(fields[5]);
+                temp.setSprintID(Integer.parseInt(fields[6]));
                 allComments.add(temp);
                 //read the next line in the file
                 lineInFile = reader.readLine();
@@ -61,15 +62,16 @@ public class CommentController {
     }
 
     public void createComment(CommentEntity c){
+        allComments.clear();
         loadComments();
         allComments.add(c);
         saveComments();
     }
 
-    public ArrayList<CommentEntity> getCommentsByIssue(int issueNum){
+    public ArrayList<CommentEntity> getCommentsByIssue(int issueNum, String issType){
         ArrayList<CommentEntity> ret = new ArrayList<CommentEntity>();
         for(int i = 0; i<allComments.size(); i++){
-            if(allComments.get(i).getIssueNumber() == issueNum){
+            if(allComments.get(i).getIssueNumber() == issueNum && allComments.get(i).getIssueType().equals(issType)){
                 ret.add(allComments.get(i));
             }
         }

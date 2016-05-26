@@ -1,5 +1,8 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.project.productBacklog.ProdBacklogEntity;
+import com.scrumSystem.project.sprintBacklog.SprintBacklogEntity;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,6 +22,9 @@ public class DetailedBacklogItemView extends JPanel {
     private BacklogScrollPane descScrollPane;
     private CommentsPanel commentsPanel;
     private BacklogScrollPane commentsScrollPane;
+
+    private ProdBacklogEntity pbe;
+    private SprintBacklogEntity sbe;
 
 
     public DetailedBacklogItemView(JFrame p, JPanel ret, MemberView pp){
@@ -50,7 +56,7 @@ public class DetailedBacklogItemView extends JPanel {
                 }
                 else if(newCommentButton.getText().equals("Submit Comment")){
                     newCommentButton.setText("Create Comment");
-                    commentsPanel.submitComment(-1);
+                    commentsPanel.submitComment(sbe.getIssueID());
                     //save comments section?
                 }
 
@@ -103,5 +109,41 @@ public class DetailedBacklogItemView extends JPanel {
         add(southLayout,BorderLayout.SOUTH);
 
         setVisible(true);
+    }
+
+    public void setPBE(ProdBacklogEntity p){
+        pbe = p;
+        sbe = null;
+    }
+
+    public void setSBE(SprintBacklogEntity s){
+        sbe = s;
+        pbe = null;
+    }
+
+    public void displayDesc(){
+        if(pbe != null){
+            descPanel.displayPBEIssue(pbe);
+            revalidate();
+            repaint();
+        }
+        else if(sbe != null){
+            descPanel.displaySBEIssue(sbe);
+            revalidate();
+            repaint();
+        }
+    }
+
+    public void displayComments(){
+        if(pbe != null){
+            commentsPanel.load(pbe.getStoryNumber(), "Product Backlog");
+            commentsPanel.revalidate();
+            commentsPanel.repaint();
+        }
+        else if(sbe != null){
+            commentsPanel.load(sbe.getIssueID(), "Sprint Backlog");
+            commentsPanel.revalidate();
+            commentsPanel.repaint();
+        }
     }
 }

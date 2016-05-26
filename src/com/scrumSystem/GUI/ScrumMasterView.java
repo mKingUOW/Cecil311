@@ -95,6 +95,8 @@ public class ScrumMasterView extends MemberView{
             @Override
             public void actionPerformed(ActionEvent e) {
                 parentFrame.remove(getCurrentView());
+                createNewProjectView.removeAll();
+                createNewProjectView.prepare();
                 parentFrame.add(createNewProjectView,BorderLayout.CENTER);
                 parentFrame.revalidate();
                 parentFrame.repaint();
@@ -107,6 +109,8 @@ public class ScrumMasterView extends MemberView{
             @Override
             public void actionPerformed(ActionEvent e) {
                 parentFrame.remove(getCurrentView());
+                modifyProjectView.removeAll();
+                modifyProjectView.prepare();
                 parentFrame.add(modifyProjectView,BorderLayout.CENTER);
                 parentFrame.revalidate();
                 parentFrame.repaint();
@@ -119,6 +123,8 @@ public class ScrumMasterView extends MemberView{
             @Override
             public void actionPerformed(ActionEvent e) {
                 parentFrame.remove(getCurrentView());
+                createNewUserView.removeAll();
+                createNewUserView.prepare();
                 parentFrame.add(createNewUserView,BorderLayout.CENTER);
                 parentFrame.revalidate();
                 parentFrame.repaint();
@@ -130,6 +136,8 @@ public class ScrumMasterView extends MemberView{
             @Override
             public void actionPerformed(ActionEvent e) {
                 parentFrame.remove(getCurrentView());
+                modifyUserView.removeAll();
+                modifyUserView.prepare();
                 parentFrame.add(modifyUserView,BorderLayout.CENTER);
                 parentFrame.revalidate();
                 parentFrame.repaint();
@@ -159,6 +167,8 @@ public class ScrumMasterView extends MemberView{
             @Override
             public void actionPerformed(ActionEvent e) {
                 parentFrame.remove(getCurrentView());
+                activeProjectDetailsView.removeAll();
+                activeProjectDetailsView.prepare();
                 parentFrame.add(activeProjectDetailsView,BorderLayout.CENTER);
                 parentFrame.revalidate();
                 parentFrame.repaint();
@@ -172,6 +182,8 @@ public class ScrumMasterView extends MemberView{
             public void actionPerformed(ActionEvent e)
             {
                 parentFrame.remove(getCurrentView());
+                productBacklogView.removeAll();
+                productBacklogView.prepare();
                 parentFrame.add(productBacklogView,BorderLayout.CENTER);
                 parentFrame.revalidate();
                 parentFrame.repaint();
@@ -185,6 +197,8 @@ public class ScrumMasterView extends MemberView{
             public void actionPerformed(ActionEvent e)
             {
                 parentFrame.remove(getCurrentView());
+                sprintManagementView.removeAll();
+                sprintManagementView.prepare();
                 parentFrame.add(sprintManagementView,BorderLayout.CENTER);
                 parentFrame.revalidate();
                 parentFrame.repaint();
@@ -197,6 +211,8 @@ public class ScrumMasterView extends MemberView{
             @Override
             public void actionPerformed(ActionEvent e) {
                 parentFrame.remove(getCurrentView());
+                myDetailsView.removeAll();
+                myDetailsView.prepare();
                 parentFrame.add(myDetailsView,BorderLayout.CENTER);
                 parentFrame.revalidate();
                 parentFrame.repaint();
@@ -212,6 +228,8 @@ public class ScrumMasterView extends MemberView{
             public void actionPerformed(ActionEvent e)
             {
                 parentFrame.remove(getCurrentView());
+                sprintBacklogView.removeAll();
+                sprintBacklogView.prepare();
                 parentFrame.add(sprintBacklogView,BorderLayout.CENTER);
                 parentFrame.revalidate();
                 parentFrame.repaint();
@@ -224,6 +242,8 @@ public class ScrumMasterView extends MemberView{
             public void actionPerformed(ActionEvent e)
             {
                 parentFrame.remove(getCurrentView());
+                sprintBoardView.removeAll();
+                sprintBoardView.prepare();
                 sprintBoardView.loadUserBacklog();
                 parentFrame.add(sprintBoardView,BorderLayout.CENTER);
                 parentFrame.revalidate();
@@ -237,6 +257,7 @@ public class ScrumMasterView extends MemberView{
             public void actionPerformed(ActionEvent e)
             {
                 parentFrame.remove(getCurrentView());
+                //prepare reports view
                 parentFrame.add(reportsView,BorderLayout.CENTER);
                 parentFrame.revalidate();
                 parentFrame.repaint();
@@ -294,6 +315,5 @@ public class ScrumMasterView extends MemberView{
         sprintBacklogButton.deSelect();
         sprintBoardButton.deSelect();
         reportsButton.deSelect();
-
     }
 }

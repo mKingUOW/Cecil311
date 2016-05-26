@@ -68,7 +68,7 @@ public class SprintBacklogView extends JPanel{
 
 
         //add sprint backlog to leftLayoutPanel
-        userBacklogScrollPanel = new UserBacklogScrollPanel(parentPanel);
+        userBacklogScrollPanel = new UserBacklogScrollPanel(parentFrame,parentPanel,currentView);
         sprintBacklogScrollPanel = new SprintBacklogScrollPanel(userBacklogScrollPanel,currentView,parentFrame,parentPanel);
         sprintBacklogScrollPane = new BacklogScrollPane(600,610);
         sprintBacklogScrollPane.setScrollPanel(sprintBacklogScrollPanel); //reference to user backlog
@@ -99,14 +99,22 @@ class UserBacklogScrollPanel extends JPanel{
     private ArrayList<JTextArea> userBacklogUI;
     private ArrayList<String> userBacklogData;
     private MemberView parentPanel;
+    private JFrame parentFrame;
+    private JPanel currentView;
 
     private SprintBacklogScrollPanel sprintBacklogScrollPanel;
 
+    private Boolean wasDoubleClick = false;
+    private Timer timer;
 
-    public UserBacklogScrollPanel(MemberView p){
+
+    public UserBacklogScrollPanel(JFrame f,MemberView p, JPanel c){
         userBacklogUI = new ArrayList<JTextArea>();
         userBacklogData = new ArrayList<String>();
         parentPanel = p;
+        parentFrame = f;
+        currentView = c;
+
         load();
     }
 
@@ -138,16 +146,46 @@ class UserBacklogScrollPanel extends JPanel{
         }
 
 
+        //reference: http://stackoverflow.com/questions/548180/java-ignore-single-click-on-double-click
         temp.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //descPanel.displayIssue(temp.getText());
-                sprintBacklogScrollPanel.addElement(temp.getSBE());
-                sprintBacklogScrollPanel.update();
-                remove(temp);
-                update();
+                if (e.getClickCount() == 2) {
+                    System.out.println("double clicked");
+                    DetailedBacklogItemView detailedBacklogItemView = new DetailedBacklogItemView(parentFrame,currentView,parentPanel);
+                    detailedBacklogItemView.setSBE(temp.getSBE());
+                    detailedBacklogItemView.displayDesc();
+                    detailedBacklogItemView.displayComments();
+                    parentFrame.remove(parentPanel.getCurrentView());
+                    parentFrame.add(detailedBacklogItemView);
+                    parentFrame.revalidate();
+                    parentFrame.repaint();
+                    parentPanel.setCurrentView(detailedBacklogItemView);
+
+                    wasDoubleClick = true;
+                }else{
+                    Integer timerinterval = (Integer) Toolkit.getDefaultToolkit().getDesktopProperty( "awt.multiClickInterval");
+                    timer = new Timer(timerinterval.intValue(), new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            if (wasDoubleClick) {
+                                wasDoubleClick = false; // reset flag
+                            } else {
+                                temp.getSBE().setAssignedUser("none");
+                                parentPanel.sc.modifySprintBL(temp.getSBE());
+                                sprintBacklogScrollPanel.addElement(temp.getSBE());
+                                sprintBacklogScrollPanel.update();
+                                remove(temp);
+                                update();
+                            }
+                        }
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
+                }
+
             }
         });
+
 
         add(temp);
         //revalidate();
@@ -230,10 +268,14 @@ class SprintBacklogScrollPanel extends MyScollPanel{
                 if (e.getClickCount() == 2) {
                     System.out.println("double clicked");
                     DetailedBacklogItemView detailedBacklogItemView = new DetailedBacklogItemView(parentFrame,currentView,parentPanel);
-                    parentFrame.remove(currentView);
+                    detailedBacklogItemView.setSBE(temp.getSBE());
+                    detailedBacklogItemView.displayDesc();
+                    detailedBacklogItemView.displayComments();
+                    parentFrame.remove(parentPanel.getCurrentView());
                     parentFrame.add(detailedBacklogItemView);
                     parentFrame.revalidate();
                     parentFrame.repaint();
+                    parentPanel.setCurrentView(detailedBacklogItemView);
 
                     wasDoubleClick = true;
                 }else{

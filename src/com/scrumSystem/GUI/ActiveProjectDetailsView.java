@@ -31,6 +31,7 @@ public class ActiveProjectDetailsView extends JPanel{
     private JPanel pointPanel;
     private JPanel smPanel;
     private JPanel durPanel;
+    private JPanel currSprintPanel;
     private JPanel buttonPanel;
     private JPanel poSelectPanel;
     private JPanel tmAssignPanel;
@@ -42,6 +43,7 @@ public class ActiveProjectDetailsView extends JPanel{
     private JLabel endDateField;
     private JLabel pointField;
     private JLabel durField;
+    private JLabel currSprintField;
 
     private TeamMembersScrollPanel teamMembersScrollPanel;
 
@@ -122,6 +124,15 @@ public class ActiveProjectDetailsView extends JPanel{
         durPanel.add(durLabel);
         durPanel.add(durField);
         centerLeftLayout.add(durPanel);
+
+        //current Sprint panel
+        currSprintPanel = new JPanel();
+        currSprintPanel.setLayout(new GridBagLayout());
+        JLabel currSprintLabel = new JLabel("Current Sprint: ");
+        currSprintField = new JLabel(Integer.toString(parentPanel.sc.getCurrentSprint()));
+        currSprintPanel.add(currSprintLabel);
+        currSprintPanel.add(currSprintField);
+        centerLeftLayout.add(currSprintPanel);
 
         //center right layout
         JPanel centerRightLayout = new JPanel();
