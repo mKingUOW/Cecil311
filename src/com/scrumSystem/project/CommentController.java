@@ -81,6 +81,7 @@ public class CommentController {
     public ArrayList<CommentEntity> getCommentsBySprint(int sprintID){
         ArrayList<CommentEntity> ret = new ArrayList<CommentEntity>();
         for(int i = 0; i<allComments.size(); i++){
+            System.out.println("CC84: " + allComments.get(i).getSprintID() + ":" + sprintID + " " + allComments.get(i).getIssueType());
             if(allComments.get(i).getSprintID() == sprintID && allComments.get(i).getIssueType().equals("Review")){
                 ret.add(allComments.get(i));
             }

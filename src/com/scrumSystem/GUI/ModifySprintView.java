@@ -323,34 +323,39 @@ class ModifySprintScrollPanel extends JPanel{
 
                                 if(mode.equals("SPRINTBACKLOG")){
 
-                                    ProdBacklogEntity pbe;
-                                    if(temp.getSBE().getStoryLink() == -1){
-                                        //no prod backlog associated with this
-                                        pbe = new ProdBacklogEntity();
-                                        pbe.setProjectName(parentPanel.getActiveProj());
-                                        pbe.setTitle("Sprint Backlog Item " + temp.getSBE().getIssueID());
-                                        pbe.setStoryType("UserStory");
-                                        pbe.setDescription(temp.getSBE().getDescription());
-                                        pbe.setPriority("Stretch");
-                                        pbe.setEffortEstimation(temp.getSBE().getStoryPoints());
-                                        pbe.setSubType("Feature");
-                                        pbe.setStoryNumber(parentPanel.sc.getNewestStoryId());
-                                        pbe.setAssignedToSprint(-1);
+                                    if(sprintID > parentPanel.sc.getCurrentSprint()){
+                                        ProdBacklogEntity pbe;
+                                        if(temp.getSBE().getStoryLink() == -1){
+                                            //no prod backlog associated with this
+                                            pbe = new ProdBacklogEntity();
+                                            pbe.setProjectName(parentPanel.getActiveProj());
+                                            pbe.setTitle("Sprint Backlog Item " + temp.getSBE().getIssueID());
+                                            pbe.setStoryType("UserStory");
+                                            pbe.setDescription(temp.getSBE().getDescription());
+                                            pbe.setPriority("Stretch");
+                                            pbe.setEffortEstimation(temp.getSBE().getStoryPoints());
+                                            pbe.setSubType("Feature");
+                                            pbe.setStoryNumber(parentPanel.sc.getNewestStoryId());
+                                            pbe.setAssignedToSprint(-1);
 
-                                        parentPanel.sc.addBacklog(pbe);
+                                            parentPanel.sc.addBacklog(pbe);
+                                        }
+                                        else{
+                                            pbe = parentPanel.sc.getBacklog(temp.getSBE().getStoryLink());
+                                            pbe.setAssignedToSprint(-1);
+                                            parentPanel.sc.modifyBacklog(pbe);
+                                            parentPanel.sc.removeSprintBL(temp.getSBE());
+                                        }
+
+                                        partnerPanel.addPBElement(pbe.getStoryNumber());
+                                        partnerPanel.updateView();
+
+                                        remove(temp);
+                                        updateView();
                                     }
                                     else{
-                                        pbe = parentPanel.sc.getBacklog(temp.getSBE().getStoryLink());
-                                        pbe.setAssignedToSprint(-1);
-                                        parentPanel.sc.modifyBacklog(pbe);
-                                        parentPanel.sc.removeSprintBL(temp.getSBE());
+                                        JOptionPane.showMessageDialog(parentFrame, "Sprint" + sprintID + " has already started or has ended. You cannot modify the sprint backlog");
                                     }
-
-                                    partnerPanel.addPBElement(pbe.getStoryNumber());
-                                    partnerPanel.updateView();
-
-                                    remove(temp);
-                                    updateView();
                                 }
 
 

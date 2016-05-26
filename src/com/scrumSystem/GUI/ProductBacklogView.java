@@ -530,7 +530,8 @@ class CommentsPanel extends JPanel{
 
     public void loadReviewComments(int sprintID){
         removeAll();
-        ArrayList<CommentEntity> CEs = parentPanel.sc.getCommentsBySprint(parentPanel.sc.getCurrentSprint()-1);
+        ArrayList<CommentEntity> CEs = parentPanel.sc.getCommentsBySprint(sprintID);
+        System.out.println(CEs.size() + " " + sprintID);
         for(int i = 0; i<CEs.size(); i++){
             JTextArea temp = addComment();
             temp.setText(CEs.get(i).getComment() + "\nDate: " + CEs.get(i).getDate());
@@ -568,10 +569,9 @@ class CommentsPanel extends JPanel{
         return temp;
     }
 
+
     public void submitComment(int issNum){
         //add
-
-
 
         //write to db
         CommentEntity ce = new CommentEntity();
@@ -585,15 +585,18 @@ class CommentsPanel extends JPanel{
 
         if(parentPanel.getCurrentView() instanceof ProductBacklogView){
             ce.setIssueType("Product Backlog");
+            ce.setSprintID(parentPanel.sc.getCurrentSprint());
         }
         else if(parentPanel.getCurrentView() instanceof DetailedBacklogItemView){
             ce.setIssueType("Sprint Backlog");
+            ce.setSprintID(parentPanel.sc.getCurrentSprint());
         }
         else if(parentPanel.getCurrentView() instanceof SprintReviewView){
             ce.setIssueType("Review");
+            ce.setSprintID(parentPanel.sc.getCurrentSprint() - 1);
         }
 
-        ce.setSprintID(parentPanel.sc.getCurrentSprint());
+
 
         parentPanel.sc.createComment(ce);
 

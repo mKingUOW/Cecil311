@@ -155,7 +155,8 @@ public class ActiveProjectDetailsView extends JPanel{
 
 
         teamMembersScrollPanel = new TeamMembersScrollPanel(parentFrame,parentPanel,this);
-        teamMembersScrollPanel.addElement(parentPanel.getUsername());
+       // teamMembersScrollPanel.addElement(parentPanel.getUsername());
+        //teamMembersScrollPanel.load();
         BacklogScrollPane backlogScrollPane = new BacklogScrollPane(1000,1000);
         backlogScrollPane.setScrollPanel(teamMembersScrollPanel);
         tmAssignPanel.add(backlogScrollPane,BorderLayout.CENTER);
@@ -167,6 +168,10 @@ public class ActiveProjectDetailsView extends JPanel{
         centerLayout.add(centerRightLayout);
         add(centerLayout,BorderLayout.CENTER);
 
+    }
+
+    public void loadTMs(){
+        teamMembersScrollPanel.load();
     }
 
 

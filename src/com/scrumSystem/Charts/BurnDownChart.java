@@ -33,6 +33,7 @@ public class BurnDownChart extends JPanel {
     private DefaultCategoryDataset createDataset( )
     {
         int numberOfSprints = parentPanel.sc.getCurrentSprint();
+        System.out.println("numOfSprints :" + numberOfSprints);
 //        parentPanel.sc.getCompletedFromSprint(1);
         int totalStoryPoints = parentPanel.sc.getTotalSprintPointsInProj(parentPanel.getActiveProj());
 //        System.out.println("Number of Sprints " + numberOfSprints);
@@ -40,15 +41,18 @@ public class BurnDownChart extends JPanel {
         System.out.println("Total Story Points " + totalStoryPoints);
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        for (int i = 1; i <= numberOfSprints; i++){
-            int completedSprintPoints = parentPanel.sc.getCompletedPointFromSprint(parentPanel.getActiveProj(),i);
-            int difference = totalStoryPoints - completedSprintPoints;
-//            System.out.println("Total Sprint Points " + totalSprintPoints);
-            if (totalStoryPoints > 0) {
-                dataset.addValue(totalStoryPoints, "Points", "" + i);
-                totalStoryPoints -= difference;
+        for (int i = 0; i <= numberOfSprints; i++){
+            if(i > 0){
+                int completedSprintPoints = parentPanel.sc.getCompletedPointFromSprint(parentPanel.getActiveProj(),i);
+                totalStoryPoints = totalStoryPoints - completedSprintPoints;
+                System.out.println("curr: " + totalStoryPoints);
+                if (totalStoryPoints >= 0) {
+                    dataset.addValue(totalStoryPoints, "Points", "" + i);
+                }
             }
-
+            else{
+                dataset.addValue(totalStoryPoints, "Points", "" + i);
+            }
         }
 
 //        dataset.addValue( 360 , "Task Estimates (Days)" , "0" );

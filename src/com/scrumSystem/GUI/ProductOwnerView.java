@@ -16,14 +16,14 @@ public class ProductOwnerView extends MemberView {
     private ProductBacklogView productBacklogView;
     private SprintManagementView sprintManagementView;
     private ActiveProjectDetailsView activeProjectDetailsView;
-    private BurnDownChartView burnDownChartView;
+    private ReportsView reportsView;
     private MyDetailsView myDetailsView;
 
     private NavButton projectDetailsButton;
     private NavButton projectBacklogButton;
     private NavButton sprintButton;
     private NavButton myDetailsButton;
-    private NavButton burnDownChartButton;
+    private NavButton reportsButton;
     private NavButton logOutButton;
 
 
@@ -39,7 +39,7 @@ public class ProductOwnerView extends MemberView {
         productBacklogView = new ProductBacklogView("ProductOwner",frame,this);
         sprintManagementView = new SprintManagementView(frame,this);
         activeProjectDetailsView = new ActiveProjectDetailsView(frame,this);
-        burnDownChartView = new BurnDownChartView(frame,this);
+        reportsView = new ReportsView(frame,this);
         myDetailsView = new MyDetailsView(frame,this);
         setCurrentView(this);
 
@@ -110,17 +110,17 @@ public class ProductOwnerView extends MemberView {
             }
         });
 
-        burnDownChartButton = new NavButton("Burn Down Chart", this);
-        burnDownChartButton.addActionListener(new ActionListener() {
+        reportsButton = new NavButton("Reports", this);
+        reportsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.remove(getCurrentView());
-                burnDownChartView.removeAll();
-                burnDownChartView.prepare();
-                frame.add(burnDownChartView,BorderLayout.CENTER);
+                reportsView.removeAll();
+                reportsView.prepare();
+                frame.add(reportsView,BorderLayout.CENTER);
                 frame.revalidate();
                 frame.repaint();
-                setCurrentView(burnDownChartView);
+                setCurrentView(reportsView);
             }
         });
 
@@ -145,7 +145,7 @@ public class ProductOwnerView extends MemberView {
         navigator.add(projectBacklogButton);
         navigator.add(sprintButton);
         navigator.add(myDetailsButton);
-        navigator.add(burnDownChartButton);
+        navigator.add(reportsButton);
         navigator.add(logOutButton);
 
 

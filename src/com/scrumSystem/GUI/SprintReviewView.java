@@ -74,16 +74,41 @@ public class SprintReviewView extends JPanel {
 
         //RETROSPECTIVE LAYOUT SECTION - holds comment section
         JPanel commentsLayoutPanel = new JPanel();
-        JLabel commentsHeader = new JLabel("Sprint Review Comments");
-        commentsLayoutPanel.add(commentsHeader,BorderLayout.NORTH);
 
-        CommentsPanel commentsPanel = new CommentsPanel(parentPanel);
+        final CommentsPanel commentsPanel = new CommentsPanel(parentPanel);
         commentsPanel.loadReviewComments(parentPanel.sc.getCurrentSprint()-1);
         BacklogScrollPane commentsBacklogScrollPane = new BacklogScrollPane(1210,640);
         commentsBacklogScrollPane.setScrollPanel(commentsPanel);
-        commentsLayoutPanel.add(commentsBacklogScrollPane,BorderLayout.CENTER);
-        outerScrollPanel.add(commentsLayoutPanel);
 
+
+        //header panel
+        JPanel commentsHeaderLayout = new JPanel();
+        commentsHeaderLayout.setLayout(new BorderLayout());
+        JLabel commentsHeader = new JLabel("Sprint Review Comments",SwingConstants.CENTER);
+        final JButton addCommentButton = new JButton("Create Comment");
+        addCommentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(addCommentButton.getText().equals("Create Comment")){
+                    addCommentButton.setText("Submit Comment");
+                    commentsPanel.addComment();
+                }
+                else if(addCommentButton.getText().equals("Submit Comment")){
+                    addCommentButton.setText("Create Comment");
+                    commentsPanel.submitComment(-1);
+                    //save comments section?
+                }
+
+            }
+        });
+        commentsHeaderLayout.add(commentsHeader, BorderLayout.CENTER);
+        commentsHeaderLayout.add(addCommentButton,BorderLayout.EAST);
+        commentsLayoutPanel.add(commentsHeaderLayout,BorderLayout.NORTH);
+
+        commentsLayoutPanel.add(commentsBacklogScrollPane,BorderLayout.CENTER);
+
+
+        outerScrollPanel.add(commentsLayoutPanel);
         outerScrollPane.getViewport().add(outerScrollPanel);
         add(outerScrollPane);
     }
@@ -115,6 +140,7 @@ class SprintReviewScrollPanel extends MyScollPanel{
     public void loadCompleted(int sid){
         //load sprint backlog data from DB into array
         removeAll();
+        System.out.println(parentPanel.sc.getProjectName() + " " + sid);
         ArrayList<SprintBacklogEntity> bls = parentPanel.sc.getCompletedFromSprint(parentPanel.sc.getProjectName(),sid);
         for(int i = 0; i<bls.size(); i++){
             addElement(bls.get(i));

@@ -48,7 +48,7 @@ public class SprintController {
         loadSprintBLs();
         ArrayList<SprintBacklogEntity> ret = new ArrayList<SprintBacklogEntity>();
         for(int i = 0; i<sprintbls.size(); i++){
-            if(sprintbls.get(i).getProjectName() == proj && sprintbls.get(i).getSprintID() == sid){
+            if(sprintbls.get(i).getProjectName().equals(proj) && sprintbls.get(i).getSprintID() == sid){
                 if(sprintbls.get(i).getCompletionStatus().equals("Complete")){
                     ret.add(sprintbls.get(i));
                 }
@@ -70,10 +70,15 @@ public class SprintController {
     public int getCompletedPointFromSprint(String proj, int sprintID){
         int ret = 0;
         for(int i = 0; i<sprintbls.size(); i++){
+            //System.out.println(sprintbls.get(i).getProjectName() + " " + proj);
+            //System.out.println(sprintbls.get(i).getSprintID() + " " + sprintID);
+            //System.out.println(sprintbls.get(i).getCompletionStatus());
             if(sprintbls.get(i).getProjectName().equals(proj) && sprintbls.get(i).getSprintID() == sprintID && sprintbls.get(i).getCompletionStatus().equals("Complete")){
                 ret = ret + sprintbls.get(i).getStoryPoints();
+                //System.out.println("\tadded");
             }
         }
+        //System.out.println("RET: " + ret);
         return ret;
     }
 

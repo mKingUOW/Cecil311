@@ -21,7 +21,7 @@ public class TeamMemberView extends MemberView {
     private SprintBacklogView sprintBacklogView;
     private ActiveProjectDetailsView activeProjectDetailsView;
     private SprintBoardView sprintBoardView;
-    private JPanel reportsView;
+    private ReportsView reportsView;
     private MyDetailsView myDetailsView;
 
 
@@ -170,7 +170,7 @@ public class TeamMemberView extends MemberView {
         productBacklogView = new ProductBacklogView("TeamMember",frame,this);
         sprintBacklogView = new SprintBacklogView(frame,getCurrentView(),this);
         sprintBoardView = new SprintBoardView(frame,getCurrentView(),this);
-        reportsView = new SprintReviewView(frame,getCurrentView(),this);
+        reportsView = new ReportsView(frame,this);
         myDetailsView = new MyDetailsView(frame,this);
 
         //set projectBacklogView as default landing page

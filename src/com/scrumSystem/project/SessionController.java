@@ -275,6 +275,13 @@ public class SessionController
         return pd.getCurrentSprint();
     }
 
+    public void setCurrentSprint(int s){
+        if(pd != null){
+            pd.setCurrentSprint(s);
+        }
+
+    }
+
     public ArrayList<String> getTMs(){
         return pd.getAvailableTMs();
 

@@ -363,9 +363,10 @@ public class ModifyProjectView extends JPanel{
                 }
                 else{
                     pd.setCurrentSprint(Integer.parseInt(currSprintField.getText()));
+                    parentPanel.sc.setCurrentSprint(Integer.parseInt(currSprintField.getText()));
                 }
 
-                System.out.println(pd.toCSV());
+
 
 
                 teamMembersScrollPanel.setCurrentProject(searchField.getText());

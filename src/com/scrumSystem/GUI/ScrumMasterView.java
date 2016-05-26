@@ -28,7 +28,7 @@ public class ScrumMasterView extends MemberView{
     //team member views
     private SprintBacklogView sprintBacklogView;
     private SprintBoardView sprintBoardView;
-    private JPanel reportsView;
+    private ReportsView reportsView;
 
     //sys admin buttons
     private NavButton createNewProject;
@@ -69,7 +69,7 @@ public class ScrumMasterView extends MemberView{
         myDetailsView = new MyDetailsView(parentFrame,this);
         sprintBacklogView = new SprintBacklogView(parentFrame,getCurrentView(),this);
         sprintBoardView = new SprintBoardView(parentFrame,getCurrentView(),this);
-        reportsView = new SprintReviewView(parentFrame,getCurrentView(),this);
+        reportsView = new ReportsView(parentFrame,this);
 
         setLayout(new BorderLayout());
 
