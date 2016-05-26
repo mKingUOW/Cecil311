@@ -1,7 +1,14 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.project.sprintBacklog.SprintBacklogEntity;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 /**
  * Created by Darryl on 11/05/2016.
@@ -40,7 +47,8 @@ public class SprintReviewView extends JPanel {
         completedLayoutPanel.add(completedHeader,BorderLayout.NORTH);
 
         //completed scroll pane
-        ScrollPanel completedPanel = new ScrollPanel(null);
+        SprintReviewScrollPanel completedPanel = new SprintReviewScrollPanel(null,this,parentFrame,parentPanel);
+        completedPanel.loadCompleted(parentPanel.sc.getCurrentSprint()-1);
         BacklogScrollPane completedScrollPane = new BacklogScrollPane(600,600);
         completedScrollPane.setScrollPanel(completedPanel);
         completedLayoutPanel.add(completedScrollPane,BorderLayout.CENTER);
@@ -51,7 +59,8 @@ public class SprintReviewView extends JPanel {
         uncompletedLayoutPanel.add(uncompletedHeader,BorderLayout.NORTH);
 
         //uncompleted scroll pane
-        ScrollPanel uncompletedPanel = new ScrollPanel(null);
+        SprintReviewScrollPanel uncompletedPanel = new SprintReviewScrollPanel(null,this,parentFrame,parentPanel);
+        uncompletedPanel.loadIncomplete(parentPanel.sc.getCurrentSprint()-1);
         BacklogScrollPane uncompletedScrollPane = new BacklogScrollPane(600,600);
         uncompletedScrollPane.setScrollPanel(uncompletedPanel);
         uncompletedLayoutPanel.add(uncompletedScrollPane,BorderLayout.CENTER);
@@ -76,6 +85,119 @@ public class SprintReviewView extends JPanel {
 
         outerScrollPane.getViewport().add(outerScrollPanel);
         add(outerScrollPane);
+    }
+
+}
+
+class SprintReviewScrollPanel extends MyScollPanel{
+
+    private ArrayList<JTextArea> sprintBacklogUI;
+    private ArrayList<String> sprintBacklogData;
+
+    private UserBacklogScrollPanel userBacklogPanel;
+    private JPanel currentView;
+    private JFrame parentFrame;
+    private MemberView parentPanel;
+
+    private Boolean wasDoubleClick = false;
+    private Timer timer;
+
+    public SprintReviewScrollPanel(UserBacklogScrollPanel ubl, JPanel curr, JFrame p, MemberView pp){
+        userBacklogPanel = ubl;
+        currentView = curr;
+        parentFrame = p;
+        parentPanel = pp;
+        sprintBacklogUI = new ArrayList<JTextArea>();
+        sprintBacklogData = new ArrayList<String>();
+    }
+
+    public void loadCompleted(int sid){
+        //load sprint backlog data from DB into array
+        removeAll();
+        ArrayList<SprintBacklogEntity> bls = parentPanel.sc.getCompletedFromSprint(sid);
+        for(int i = 0; i<bls.size(); i++){
+            addElement(bls.get(i));
+        }
+        update();
+    }
+
+    public void loadIncomplete(int sid){
+        //load sprint backlog data from DB into array
+        removeAll();
+        ArrayList<SprintBacklogEntity> bls = parentPanel.sc.getIncompleteFromSprint(sid);
+        for(int i = 0; i<bls.size(); i++){
+            addElement(bls.get(i));
+        }
+        update();
+    }
+
+    public void addElement(SprintBacklogEntity s){
+        s.setAssignedUser("none");
+        parentPanel.sc.modifySprintBL(s);
+        final SprintBLTextArea temp = new SprintBLTextArea(s);
+
+
+        sprintBacklogUI.add(temp);
+
+        //use buffer to add additional dummy elements while list is small
+        //keeps element sizes consistent and removes excess space at end of list.
+        int buffer = 8 - sprintBacklogUI.size();
+        if(buffer > -1){
+            setLayout(new GridLayout(buffer + sprintBacklogUI.size(),1));
+        }
+        else{
+            setLayout(new GridLayout(sprintBacklogUI.size(),1));
+        }
+
+
+        //reference: http://stackoverflow.com/questions/548180/java-ignore-single-click-on-double-click
+        temp.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    System.out.println("double clicked");
+                    DetailedBacklogItemView detailedBacklogItemView = new DetailedBacklogItemView(parentFrame,currentView,parentPanel);
+                    detailedBacklogItemView.setSBE(temp.getSBE());
+                    detailedBacklogItemView.displayDesc();
+                    detailedBacklogItemView.displayComments();
+                    parentFrame.remove(parentPanel.getCurrentView());
+                    parentFrame.add(detailedBacklogItemView);
+                    parentFrame.revalidate();
+                    parentFrame.repaint();
+                    parentPanel.setCurrentView(detailedBacklogItemView);
+
+                    wasDoubleClick = true;
+                }else{
+                    Integer timerinterval = (Integer) Toolkit.getDefaultToolkit().getDesktopProperty( "awt.multiClickInterval");
+                    timer = new Timer(timerinterval.intValue(), new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            if (wasDoubleClick) {
+                                wasDoubleClick = false; // reset flag
+                            } else {
+                                /*
+                                temp.getSBE().setAssignedUser(parentPanel.getUsername());
+                                parentPanel.sc.modifySprintBL(temp.getSBE());
+                                userBacklogPanel.addElement(temp.getSBE());
+                                userBacklogPanel.update();
+                                remove(temp);
+                                update();
+                                */
+                            }
+                        }
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
+                }
+
+            }
+        });
+
+        add(temp);
+    }
+
+    public void update(){
+        revalidate();
+        repaint();
     }
 
 }

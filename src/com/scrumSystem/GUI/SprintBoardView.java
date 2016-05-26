@@ -198,7 +198,7 @@ public class SprintBoardView extends JPanel{
         compButtonLayout.add(compLeft);
         compHeaderLayout.add(compButtonLayout,BorderLayout.EAST);
 
-        completeScrollPanel = new SprintBoardScrollPanel("Complaete", parentFrame,parentPanel);
+        completeScrollPanel = new SprintBoardScrollPanel("Complete", parentFrame,parentPanel);
         completeBacklogScrollPane = new BacklogScrollPane(100,100);
         completeBacklogScrollPane.setScrollPanel(completeScrollPanel);
         completePanel.add(compHeaderLayout,BorderLayout.NORTH);

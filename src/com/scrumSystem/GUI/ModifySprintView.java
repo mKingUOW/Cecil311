@@ -174,16 +174,6 @@ class ModifySprintScrollPanel extends JPanel{
 
     public void addPBElement(int id){
 
-        /*
-        final JTextArea temp = new JTextArea(3,50);
-        temp.setText(data);
-        temp.setEditable(false);
-        temp.setLineWrap(true);
-        temp.setBackground(Color.white);
-        temp.setOpaque(true);
-        Border margin = new EmptyBorder(0,10,0,10);
-        temp.setBorder(new CompoundBorder(LineBorder.createGrayLineBorder(),margin));
-        */
         ProdBacklogEntity bl = parentPanel.sc.getBacklog(id);
         bl.setAssignedToSprint(-1);
         parentPanel.sc.modifyBacklog(bl);
@@ -287,7 +277,6 @@ class ModifySprintScrollPanel extends JPanel{
     }
 
     public void addSBElement(SprintBacklogEntity s){
-        s.setAssignedUser("none");
         parentPanel.sc.modifySprintBL(s);
         final SprintBLTextArea temp = new SprintBLTextArea(s);
 

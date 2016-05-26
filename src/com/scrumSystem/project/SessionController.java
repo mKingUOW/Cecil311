@@ -346,4 +346,12 @@ public class SessionController
     public int getTotalStoryPointsForSprint(int sid){
         return spc.getTotalStoryPointsForSprint(sid);
     }
+
+    public ArrayList<SprintBacklogEntity> getIncompleteFromSprint(int sid){
+        return spc.getIncompleteFromSprint(sid);
+    }
+
+    public ArrayList<SprintBacklogEntity> getCompletedFromSprint(int sid){
+        return spc.getCompletedFromSprint(sid);
+    }
 }

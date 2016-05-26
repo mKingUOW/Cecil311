@@ -58,6 +58,32 @@ public class SprintController {
         return ret;
     }
 
+    public ArrayList<SprintBacklogEntity> getCompletedFromSprint(int sid){
+        loadSprintBLs();
+        ArrayList<SprintBacklogEntity> ret = new ArrayList<SprintBacklogEntity>();
+        for(int i = 0; i<sprintbls.size(); i++){
+            if(sprintbls.get(i).getSprintID() == sid){
+                if(sprintbls.get(i).getCompletionStatus().equals("Complete")){
+                    ret.add(sprintbls.get(i));
+                }
+            }
+        }
+        return ret;
+    }
+
+    public ArrayList<SprintBacklogEntity> getIncompleteFromSprint(int sid){
+        loadSprintBLs();
+        ArrayList<SprintBacklogEntity> ret = new ArrayList<SprintBacklogEntity>();
+        for(int i = 0; i<sprintbls.size(); i++){
+            if(sprintbls.get(i).getSprintID() == sid){
+                if(!sprintbls.get(i).getCompletionStatus().equals("Complete")){
+                    ret.add(sprintbls.get(i));
+                }
+            }
+        }
+        return ret;
+    }
+
     public int getMaxSprint(){
         sprintbls.clear();
         loadSprintBLs();
