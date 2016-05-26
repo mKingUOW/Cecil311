@@ -342,4 +342,8 @@ public class SessionController
     public void removeSprintBL(SprintBacklogEntity s){
         spc.removeSprintBl(s);
     }
+
+    public int getTotalStoryPointsForSprint(int sid){
+        return spc.getTotalStoryPointsForSprint(sid);
+    }
 }

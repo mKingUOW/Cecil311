@@ -44,10 +44,25 @@ public class SprintController {
         return ret;
     }
 
+    public int getTotalStoryPointsForSprint(int sid){
+        sprintbls.clear();
+        loadSprintBLs();
+        int ret = 0;
+
+        for(int i = 0; i<sprintbls.size(); i++){
+            if(sprintbls.get(i).getSprintID() == sid){
+                ret = ret + sprintbls.get(i).getStoryPoints();
+            }
+        }
+
+        return ret;
+    }
+
     public int getMaxSprint(){
         sprintbls.clear();
         loadSprintBLs();
         int ret = 0;
+
         for(int i = 0; i< sprintbls.size(); i++){
             if(sprintbls.get(i).getSprintID() > ret){
                 ret = sprintbls.get(i).getSprintID();

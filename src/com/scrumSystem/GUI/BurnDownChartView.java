@@ -32,12 +32,9 @@ public class BurnDownChartView extends JPanel {
 
         // Panel
         JPanel panel1 = new JPanel();
-        panel1.setLayout(new BorderLayout());
-        //center
-        //add chart to BorderLayout.CETER
-        burnDownChart = new BurnDownChart("Burn down chart", "Current Project" + " " + parentPanel.getActiveProj());
-        burnDownChart.pack();
+        burnDownChart = new BurnDownChart("Current Project" + " " + parentPanel.getActiveProj(), parentPanel);
+        //burnDownChart.pack();
         burnDownChart.setVisible(true);
-        panel1.add(burnDownChart, BorderLayout.CENTER);
+        add(burnDownChart, BorderLayout.CENTER);
     }
 }

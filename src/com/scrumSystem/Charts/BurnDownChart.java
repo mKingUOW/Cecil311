@@ -13,19 +13,21 @@ import org.jfree.data.category.DefaultCategoryDataset;
 /**
  * Created by peter on 26/05/2016.
  */
-public class BurnDownChart extends JFrame {
+public class BurnDownChart extends JPanel {
 
     MemberView mv;
     private static final long serialVersionUID = 1L;
+    private ChartPanel chartPanel;
+    private MemberView parentPanel;
 
-    public BurnDownChart(String applicationTitle, String chartTitle) {
+    public BurnDownChart(String chartTitle, MemberView pp) {
 
-        super(applicationTitle);
+        parentPanel = pp;
         JFreeChart lineChart = ChartFactory.createLineChart(chartTitle, "Sprints", "Story Points", createDataset(), PlotOrientation.VERTICAL, true, true, false);
-
-        ChartPanel chartPanel = new ChartPanel(lineChart);
+        chartPanel = new ChartPanel(lineChart);
         chartPanel.setPreferredSize(new java.awt.Dimension(560, 367));
-        setContentPane(chartPanel);
+        loadData();
+        add(chartPanel);
     }
 
     private DefaultCategoryDataset createDataset( )
@@ -44,5 +46,9 @@ public class BurnDownChart extends JFrame {
         dataset.addValue( 91 , "Task Estimates (Days)" , "5" );
         dataset.addValue( 0 , "Task Estimates (Days)" , "6" );
         return dataset;
+    }
+
+    public void loadData(){
+        System.out.println(parentPanel.sc.getTotalStoryPointsForSprint(3));
     }
 }
