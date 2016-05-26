@@ -34,7 +34,7 @@ public class BurnDownChart extends JFrame {
     private DefaultCategoryDataset createDataset( )
     {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        dataset.addValue( 15 , "" , "1970" );
+        dataset.addValue( 15 , "" , "" );
         return dataset;
     }
 }
