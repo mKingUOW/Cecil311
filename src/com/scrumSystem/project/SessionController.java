@@ -344,14 +344,19 @@ public class SessionController
     }
 
     public int getTotalStoryPointsForSprint(int sid){
-        return spc.getTotalStoryPointsForSprint(sid);
+        //return spc.getTotalStoryPointsForSprint(sid);
+        return 0;
     }
 
     public ArrayList<SprintBacklogEntity> getIncompleteFromSprint(int sid){
         return spc.getIncompleteFromSprint(sid);
     }
 
-    public ArrayList<SprintBacklogEntity> getCompletedFromSprint(int sid){
-        return spc.getCompletedFromSprint(sid);
+    public ArrayList<SprintBacklogEntity> getCompletedFromSprint(String proj,int sid){
+        return spc.getCompletedFromSprint(proj,sid);
+    }
+
+    public int getTotalSprintPointsInProj(String projName){
+        return spc.getTotalSprintPointsInProj(projName);
     }
 }

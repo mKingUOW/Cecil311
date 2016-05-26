@@ -102,6 +102,7 @@ public class ModifyProjectView extends JPanel{
                     }
 
                     //set available product owner combobox
+                    System.out.println("amtPOs : " + temp.getAvailablePOs().size());
                     for(int i = 0; i<temp.getAvailablePOs().size(); i++){
                         poModel.addElement(temp.getAvailablePOs().get(i));
                     }

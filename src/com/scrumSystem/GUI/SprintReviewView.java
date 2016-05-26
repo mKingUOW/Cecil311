@@ -114,7 +114,7 @@ class SprintReviewScrollPanel extends MyScollPanel{
     public void loadCompleted(int sid){
         //load sprint backlog data from DB into array
         removeAll();
-        ArrayList<SprintBacklogEntity> bls = parentPanel.sc.getCompletedFromSprint(sid);
+        ArrayList<SprintBacklogEntity> bls = parentPanel.sc.getCompletedFromSprint(parentPanel.sc.getProjectName(),sid);
         for(int i = 0; i<bls.size(); i++){
             addElement(bls.get(i));
         }

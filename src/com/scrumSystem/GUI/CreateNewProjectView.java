@@ -181,6 +181,8 @@ public class CreateNewProjectView extends JPanel {
                     pd.setDurationOfSprint(Integer.parseInt(durField.getText()));
                 }
 
+                pd.setScrumMaster((String)smComboBox.getSelectedItem());
+
 
                 System.out.println(pd.toCSV());
                 parentPanel.sc.saveProject(pd);

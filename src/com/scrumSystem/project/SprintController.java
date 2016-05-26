@@ -44,28 +44,24 @@ public class SprintController {
         return ret;
     }
 
-    public int getTotalStoryPointsForSprint(int sid){
-        sprintbls.clear();
-        loadSprintBLs();
-        int ret = 0;
-
-        for(int i = 0; i<sprintbls.size(); i++){
-            if(sprintbls.get(i).getSprintID() == sid){
-                ret = ret + sprintbls.get(i).getStoryPoints();
-            }
-        }
-
-        return ret;
-    }
-
-    public ArrayList<SprintBacklogEntity> getCompletedFromSprint(int sid){
+    public ArrayList<SprintBacklogEntity> getCompletedFromSprint(String proj,int sid){
         loadSprintBLs();
         ArrayList<SprintBacklogEntity> ret = new ArrayList<SprintBacklogEntity>();
         for(int i = 0; i<sprintbls.size(); i++){
-            if(sprintbls.get(i).getSprintID() == sid){
+            if(sprintbls.get(i).getProjectName() == proj && sprintbls.get(i).getSprintID() == sid){
                 if(sprintbls.get(i).getCompletionStatus().equals("Complete")){
                     ret.add(sprintbls.get(i));
                 }
+            }
+        }
+        return ret;
+    }
+
+    public int getTotalSprintPointsInProj(String projName){
+        int ret = 0;
+        for(int i = 0; i<sprintbls.size(); i++){
+            if(sprintbls.get(i).getProjectName() == projName){
+                ret = ret + sprintbls.get(i).getStoryPoints();
             }
         }
         return ret;
