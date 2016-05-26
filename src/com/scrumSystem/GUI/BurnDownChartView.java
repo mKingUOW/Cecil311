@@ -19,7 +19,7 @@ public class BurnDownChartView extends JPanel {
         parentFrame = f;
         parentPanel = pp;
 
-        prepare();
+//        prepare();
     }
 
     public void prepare(){

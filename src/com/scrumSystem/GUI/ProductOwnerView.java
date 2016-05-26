@@ -115,6 +115,8 @@ public class ProductOwnerView extends MemberView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.remove(getCurrentView());
+                burnDownChartView.removeAll();
+                burnDownChartView.prepare();
                 frame.add(burnDownChartView,BorderLayout.CENTER);
                 frame.revalidate();
                 frame.repaint();
