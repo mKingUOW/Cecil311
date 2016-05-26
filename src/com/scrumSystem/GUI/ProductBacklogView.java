@@ -513,7 +513,7 @@ class CommentsPanel extends JPanel{
         ArrayList<CommentEntity> CEs = parentPanel.sc.getCommentsByIssue(id);
         for(int i = 0; i<CEs.size(); i++){
             JTextArea temp = addComment();
-            temp.setText(CEs.get(i).getComment());
+            temp.setText(CEs.get(i).getComment() + "\nDate: " + CEs.get(i).getDate());
         }
         revalidate();
         repaint();
@@ -550,8 +550,7 @@ class CommentsPanel extends JPanel{
     public void submitComment(int issNum){
         //add
 
-        //set last element in elements to non editable
-        elements.get(elements.size()-1).setEditable(false);
+
 
         //write to db
         CommentEntity ce = new CommentEntity();
@@ -564,6 +563,10 @@ class CommentsPanel extends JPanel{
         ce.setDate(dateFormat.format(date));
         parentPanel.sc.createComment(ce);
 
+        //set last element in elements to non editable
+        JTextArea temp = elements.get(elements.size()-1);
+        temp.setEditable(false);
+        temp.setText(temp.getText() + "\nDate: " + ce.getDate());
     }
 }
 

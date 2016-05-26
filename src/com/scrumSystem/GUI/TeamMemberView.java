@@ -100,6 +100,7 @@ public class TeamMemberView extends MemberView {
             public void actionPerformed(ActionEvent e)
             {
                 frame.remove(getCurrentView());
+                sprintBoardView.loadUserBacklog();
                 frame.add(sprintBoardView,BorderLayout.CENTER);
                 frame.revalidate();
                 frame.repaint();

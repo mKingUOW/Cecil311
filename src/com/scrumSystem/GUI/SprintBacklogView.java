@@ -1,5 +1,7 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.project.sprintBacklog.SprintBacklogEntity;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -45,11 +47,28 @@ public class SprintBacklogView extends JPanel{
         leftLayoutPanel.setLayout(new BorderLayout());
 
         //add leftLayoutPanel header
-        JLabel leftHeader = new JLabel("Sprint Backlog");
-        leftLayoutPanel.add(leftHeader,BorderLayout.NORTH);
+        JPanel leftHeaderLayout = new JPanel();
+        leftHeaderLayout.setLayout(new BorderLayout());
+        JLabel leftHeader = new JLabel("Sprint Backlog",SwingConstants.CENTER);
+        leftHeaderLayout.add(leftHeader,BorderLayout.CENTER);
+        JButton createSBLButton = new JButton("Add Task");
+        createSBLButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CreateSprintBacklogItemView createSprintBacklogItemView = new CreateSprintBacklogItemView("CREATE",parentFrame,currentView,parentPanel,sprintBacklogScrollPanel);
+                parentFrame.remove(parentPanel.getCurrentView());
+                parentFrame.add(createSprintBacklogItemView);
+                parentFrame.revalidate();
+                parentFrame.repaint();
+                parentPanel.setCurrentView(createSprintBacklogItemView);
+            }
+        });
+        leftHeaderLayout.add(createSBLButton,BorderLayout.EAST);
+        leftLayoutPanel.add(leftHeaderLayout,BorderLayout.NORTH);
+
 
         //add sprint backlog to leftLayoutPanel
-        userBacklogScrollPanel = new UserBacklogScrollPanel();
+        userBacklogScrollPanel = new UserBacklogScrollPanel(parentPanel);
         sprintBacklogScrollPanel = new SprintBacklogScrollPanel(userBacklogScrollPanel,currentView,parentFrame,parentPanel);
         sprintBacklogScrollPane = new BacklogScrollPane(600,610);
         sprintBacklogScrollPane.setScrollPanel(sprintBacklogScrollPanel); //reference to user backlog
@@ -79,38 +98,33 @@ class UserBacklogScrollPanel extends JPanel{
 
     private ArrayList<JTextArea> userBacklogUI;
     private ArrayList<String> userBacklogData;
+    private MemberView parentPanel;
 
     private SprintBacklogScrollPanel sprintBacklogScrollPanel;
 
 
-    public UserBacklogScrollPanel(){
+    public UserBacklogScrollPanel(MemberView p){
         userBacklogUI = new ArrayList<JTextArea>();
         userBacklogData = new ArrayList<String>();
-        loadUserBacklog();
+        parentPanel = p;
+        load();
     }
 
-    public void loadUserBacklog(){
-        //load user backlog from DB into array
+    public void load(){
+        //load sprint backlog data from DB into array
+        removeAll();
+        ArrayList<SprintBacklogEntity> bls = parentPanel.sc.getSprinBLsFromSprint(parentPanel.sc.getCurrentSprint());
+        for(int i = 0; i<bls.size(); i++){
+            if(bls.get(i).getAssignedUser().equals(parentPanel.getUsername())){
+                addElement(bls.get(i));
+            }
 
-        //load all elements in array into UI
-        for(int i = 0; i<userBacklogData.size();i++){
-            addElement(userBacklogData.get(i));
         }
-
-        //repaint
-        revalidate();
-        repaint();
+        update();
     }
 
-    public void addElement(String data){
-        final JTextArea temp = new JTextArea(3,50);
-        temp.setText(data);
-        temp.setEditable(false);
-        temp.setLineWrap(true);
-        temp.setBackground(Color.white);
-        temp.setOpaque(true);
-        Border margin = new EmptyBorder(0,10,0,10);
-        temp.setBorder(new CompoundBorder(LineBorder.createGrayLineBorder(),margin));
+    public void addElement(SprintBacklogEntity s){
+        final SprintBLTextArea temp = new SprintBLTextArea(s);
 
         userBacklogUI.add(temp);
 
@@ -129,7 +143,7 @@ class UserBacklogScrollPanel extends JPanel{
             @Override
             public void mouseClicked(MouseEvent e) {
                 //descPanel.displayIssue(temp.getText());
-                sprintBacklogScrollPanel.addElement(temp.getText());
+                sprintBacklogScrollPanel.addElement(temp.getSBE());
                 sprintBacklogScrollPanel.update();
                 remove(temp);
                 update();
@@ -154,7 +168,7 @@ class UserBacklogScrollPanel extends JPanel{
 }
 
 
-class SprintBacklogScrollPanel extends JPanel{
+class SprintBacklogScrollPanel extends MyScollPanel{
 
     private ArrayList<JTextArea> sprintBacklogUI;
     private ArrayList<String> sprintBacklogData;
@@ -174,36 +188,28 @@ class SprintBacklogScrollPanel extends JPanel{
         parentPanel = pp;
         sprintBacklogUI = new ArrayList<JTextArea>();
         sprintBacklogData = new ArrayList<String>();
-        loadSprintBacklog();
+        load();
     }
 
-    public void loadSprintBacklog(){
+    public void load(){
         //load sprint backlog data from DB into array
-        sprintBacklogData.add("One");
-        sprintBacklogData.add("Two");
-        sprintBacklogData.add("Three");
-        sprintBacklogData.add("Four");
+        removeAll();
+        ArrayList<SprintBacklogEntity> bls = parentPanel.sc.getSprinBLsFromSprint(parentPanel.sc.getCurrentSprint());
+        for(int i = 0; i<bls.size(); i++){
+            if(bls.get(i).getAssignedUser().equals("none")){
+                addElement(bls.get(i));
+            }
 
-        //add all elements from array into ui
-        for(int i = 0; i<sprintBacklogData.size(); i++){
-            addElement(sprintBacklogData.get(i));
         }
-
-        //repaint
-        revalidate();
-        repaint();
+        update();
 
     }
 
-    public void addElement(String data){
-        final JTextArea temp = new JTextArea(3,50);
-        temp.setText(data);
-        temp.setEditable(false);
-        temp.setLineWrap(true);
-        temp.setBackground(Color.white);
-        temp.setOpaque(true);
-        Border margin = new EmptyBorder(0,10,0,10);
-        temp.setBorder(new CompoundBorder(LineBorder.createGrayLineBorder(),margin));
+    public void addElement(SprintBacklogEntity s){
+        s.setAssignedUser("none");
+        parentPanel.sc.modifySprintBL(s);
+        final SprintBLTextArea temp = new SprintBLTextArea(s);
+
 
         sprintBacklogUI.add(temp);
 
@@ -238,7 +244,9 @@ class SprintBacklogScrollPanel extends JPanel{
                             if (wasDoubleClick) {
                                 wasDoubleClick = false; // reset flag
                             } else {
-                                userBacklogPanel.addElement(temp.getText());
+                                temp.getSBE().setAssignedUser(parentPanel.getUsername());
+                                parentPanel.sc.modifySprintBL(temp.getSBE());
+                                userBacklogPanel.addElement(temp.getSBE());
                                 userBacklogPanel.update();
                                 remove(temp);
                                 update();
@@ -260,6 +268,33 @@ class SprintBacklogScrollPanel extends JPanel{
         repaint();
     }
 
+}
 
+class SprintBLTextArea extends JTextArea{
 
+    private SprintBacklogEntity sbe;
+
+    public SprintBLTextArea(SprintBacklogEntity s){
+        super(3,50);
+        sbe = s;
+        prepare();
+    }
+
+    public void prepare(){
+        //temp.setText(data);
+        String text = "ID: " + sbe.getIssueID() + "\tType: "+ sbe.getIssueType() + "\tStory Points: " + sbe.getStoryPoints() + "\t      Priority: " + sbe.getPriority()
+                +"\n\n" + "Description: " + sbe.getDescription();
+        setText(text);
+        setEditable(false);
+        setLineWrap(true);
+        setBackground(Color.white);
+        setOpaque(true);
+        Border margin = new EmptyBorder(0,10,0,10);
+        setBorder(new CompoundBorder(LineBorder.createGrayLineBorder(),margin));
+
+    }
+
+    public SprintBacklogEntity getSBE(){
+        return  sbe;
+    }
 }

@@ -5,6 +5,7 @@ import com.scrumSystem.interfaces.Entity;
 import com.scrumSystem.project.productBacklog.ProdBacklogEntity;
 import com.scrumSystem.project.productBacklog.ProductBacklogController;
 import com.scrumSystem.project.sprintBacklog.CommentEntity;
+import com.scrumSystem.project.sprintBacklog.SprintBacklogEntity;
 import com.scrumSystem.user.UserController;
 import com.scrumSystem.user.UserEntity;
 
@@ -30,6 +31,7 @@ public class SessionController
     private ProjectController pc;
     private ProductBacklogController pbc;
     private CommentController cc;
+    private SprintController spc;
     /**
      * Default constructor
      */
@@ -39,6 +41,7 @@ public class SessionController
         pc = new ProjectController();
         pbc = new ProductBacklogController();
         cc = new CommentController();
+        spc = new SprintController();
         pd = null;
     }
 
@@ -264,6 +267,10 @@ public class SessionController
         return pd.getProductOwner(uc.getUserActiveProject());
     }
 
+    public int getCurrentSprint(){
+        return pd.getCurrentSprint();
+    }
+
     public ArrayList<String> getTMs(){
         return pd.getAvailableTMs();
 
@@ -299,5 +306,24 @@ public class SessionController
 
     public ArrayList<CommentEntity> getCommentsByIssue(int i){
         return cc.getCommentsByIssue(i);
+    }
+
+     /* ---------- Sprint FUNCTIONS -------------- */
+
+    public void createSprintBL(SprintBacklogEntity s){
+        s.setIssueID(spc.getNextID());
+        spc.addSprintBL(s);
+    }
+
+    public void modifySprintBL(SprintBacklogEntity s){
+        spc.modifySprintBL(s);
+    }
+
+    public ArrayList<SprintBacklogEntity> getSprinBLsFromSprint(int id){
+        return spc.getSprinBLsFromSprint(id);
+    }
+
+    public ArrayList<SprintBacklogEntity> getSprintBoardBLs(int sprintID, String username){
+        return spc.getSprintBoardBLs(sprintID,username);
     }
 }

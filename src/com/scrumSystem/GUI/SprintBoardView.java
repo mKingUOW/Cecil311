@@ -1,5 +1,7 @@
 package com.scrumSystem.GUI;
 
+import com.scrumSystem.project.sprintBacklog.SprintBacklogEntity;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -70,7 +72,7 @@ public class SprintBoardView extends JPanel{
         });
         todoHeaderLayout.add(todoRight,BorderLayout.EAST);
         //todoHeader.setPreferredSize(new Dimension(250,40));
-        todoScrollPanel = new SprintBoardScrollPanel(parentFrame,parentPanel);
+        todoScrollPanel = new SprintBoardScrollPanel("ToDo",parentFrame,parentPanel);
         todoScrollPanel.loadUserBacklog();
         todoBacklogScrollPane = new BacklogScrollPane(100,100);
         todoBacklogScrollPane.setScrollPanel(todoScrollPanel);
@@ -105,7 +107,7 @@ public class SprintBoardView extends JPanel{
         ipbLayout.add(inProgRight);
 
         inProgHeaderLayout.add(ipbLayout,BorderLayout.EAST);
-        inProgressScrollPanel = new SprintBoardScrollPanel(parentFrame, parentPanel);
+        inProgressScrollPanel = new SprintBoardScrollPanel("InProgress",parentFrame, parentPanel);
         inProgressBacklogScrollPane = new BacklogScrollPane(100,100);
         inProgressBacklogScrollPane.setScrollPanel(inProgressScrollPanel);
         inProgressPanel.add(inProgHeaderLayout,BorderLayout.NORTH);
@@ -138,7 +140,7 @@ public class SprintBoardView extends JPanel{
         revButtonPanel.add(reviewRight);
         reviewHeaderPanel.add(revButtonPanel,BorderLayout.EAST);
 
-        reviewScrollPanel = new SprintBoardScrollPanel(parentFrame,parentPanel);
+        reviewScrollPanel = new SprintBoardScrollPanel("Ready For Review",parentFrame,parentPanel);
         reviewBacklogScrollPane = new BacklogScrollPane(100,100);
         reviewBacklogScrollPane.setScrollPanel(reviewScrollPanel);
         reviewPanel.add(reviewHeaderPanel,BorderLayout.NORTH);
@@ -171,7 +173,7 @@ public class SprintBoardView extends JPanel{
         testButtonLayout.add(testRight);
         testHeaderLayout.add(testButtonLayout,BorderLayout.EAST);
 
-        testingScrollPanel = new SprintBoardScrollPanel(parentFrame,parentPanel);
+        testingScrollPanel = new SprintBoardScrollPanel("Ready For Testing", parentFrame,parentPanel);
         testingBacklogScrollPane = new BacklogScrollPane(100,100);
         testingBacklogScrollPane.setScrollPanel(testingScrollPanel);
         testingPanel.add(testHeaderLayout,BorderLayout.NORTH);
@@ -196,7 +198,7 @@ public class SprintBoardView extends JPanel{
         compButtonLayout.add(compLeft);
         compHeaderLayout.add(compButtonLayout,BorderLayout.EAST);
 
-        completeScrollPanel = new SprintBoardScrollPanel(parentFrame,parentPanel);
+        completeScrollPanel = new SprintBoardScrollPanel("Complaete", parentFrame,parentPanel);
         completeBacklogScrollPane = new BacklogScrollPane(100,100);
         completeBacklogScrollPane.setScrollPanel(completeScrollPanel);
         completePanel.add(compHeaderLayout,BorderLayout.NORTH);
@@ -229,10 +231,18 @@ public class SprintBoardView extends JPanel{
         add(outerScrollPane);
     }
 
+    public void loadUserBacklog(){
+        todoScrollPanel.loadUserBacklog();
+        inProgressScrollPanel.loadUserBacklog();
+        reviewScrollPanel.loadUserBacklog();
+        testingScrollPanel.loadUserBacklog();
+        completeScrollPanel.loadUserBacklog();
+    }
+
 }
 
 
-class SprintBoardScrollPanel extends JPanel{
+class SprintBoardScrollPanel extends MyScollPanel{
     private ArrayList<JTextArea> uiElementArray;
     private ArrayList<String> dataArray;
 
@@ -245,45 +255,37 @@ class SprintBoardScrollPanel extends JPanel{
     private Boolean wasDoubleClick = false;
     private Timer timer;
 
-    private JTextArea currSelected;
+    private SprintBoardTextArea currSelected;
+    private String mode;
 
-    public SprintBoardScrollPanel(JFrame p, MemberView pp){
+    public SprintBoardScrollPanel(String m, JFrame p, MemberView pp){
         parentFrame = p;
         parentPanel = pp;
         uiElementArray = new ArrayList<JTextArea>();
         dataArray = new ArrayList<String>();
         left = null;
         right = null;
+        mode = m;
         //loadUserBacklog();
     }
 
     public void loadUserBacklog(){
         //load sprint backlog data from DB into array
-        dataArray.add("One");
-        dataArray.add("Two");
-        dataArray.add("Three");
-        dataArray.add("Four");
-
+        removeAll();
         //add all elements from array into ui
-        for(int i = 0; i<dataArray.size(); i++){
-            addElement(dataArray.get(i));
+        ArrayList<SprintBacklogEntity> bls = parentPanel.sc.getSprintBoardBLs(parentPanel.sc.getCurrentSprint(), parentPanel.getUsername());
+        System.out.println(bls.size());
+        for(int i = 0; i<bls.size(); i++){
+            if(bls.get(i).getCompletionStatus().equals(mode))
+            addElement(bls.get(i));
         }
-
-        //repaint
-        revalidate();
-        repaint();
-
+        update();
     }
 
-    public void addElement(String data){
-        final JTextArea temp = new JTextArea(4,30);
-        temp.setText(data);
-        temp.setEditable(false);
-        temp.setLineWrap(true);
-        temp.setBackground(Color.white);
-        temp.setOpaque(true);
-        Border margin = new EmptyBorder(0,10,0,10);
-        temp.setBorder(new CompoundBorder(LineBorder.createGrayLineBorder(),margin));
+    public void addElement(SprintBacklogEntity s){
+        s.setCompletionStatus(mode);
+        parentPanel.sc.modifySprintBL(s);
+        final SprintBoardTextArea temp = new SprintBoardTextArea(s);
 
         uiElementArray.add(temp);
 
@@ -359,7 +361,7 @@ class SprintBoardScrollPanel extends JPanel{
 
     public void moveLeft(){
         if(left != null && currSelected != null){
-            left.addElement(currSelected.getText());
+            left.addElement(currSelected.getSBE());
             remove(currSelected);
             currSelected = null;
             update();
@@ -369,7 +371,7 @@ class SprintBoardScrollPanel extends JPanel{
 
     public void moveRight(){
         if(right != null && currSelected != null){
-            right.addElement(currSelected.getText());
+            right.addElement(currSelected.getSBE());
             remove(currSelected);
             currSelected = null;
             update();
@@ -385,4 +387,33 @@ class SprintBoardScrollPanel extends JPanel{
     }
 
 
+}
+
+class SprintBoardTextArea extends JTextArea{
+
+    private SprintBacklogEntity sbe;
+
+    public SprintBoardTextArea(SprintBacklogEntity s){
+        super(4,30);
+        sbe = s;
+        prepare();
+    }
+
+    public void prepare(){
+        //temp.setText(data);
+        String text = "ID: " + sbe.getIssueID() + "\tType: "+ sbe.getIssueType() + "\tStory Points: " + sbe.getStoryPoints()
+         +"\n" + "Description: " + sbe.getDescription() + "\nPriority: " + sbe.getPriority();
+        setText(text);
+        setEditable(false);
+        setLineWrap(true);
+        setBackground(Color.white);
+        setOpaque(true);
+        Border margin = new EmptyBorder(0,10,0,10);
+        setBorder(new CompoundBorder(LineBorder.createGrayLineBorder(),margin));
+
+    }
+
+    public SprintBacklogEntity getSBE(){
+        return  sbe;
+    }
 }
