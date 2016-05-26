@@ -31,9 +31,7 @@ public class BurnDownChartView extends JPanel {
         add(header, BorderLayout.NORTH);
 
         // Panel
-        JPanel panel1 = new JPanel();
         burnDownChart = new BurnDownChart("Current Project" + " " + parentPanel.getActiveProj(), parentPanel);
-        //burnDownChart.pack();
         burnDownChart.setVisible(true);
         add(burnDownChart, BorderLayout.CENTER);
     }

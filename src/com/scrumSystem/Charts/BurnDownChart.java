@@ -26,25 +26,37 @@ public class BurnDownChart extends JPanel {
         JFreeChart lineChart = ChartFactory.createLineChart(chartTitle, "Sprints", "Story Points", createDataset(), PlotOrientation.VERTICAL, true, true, false);
         chartPanel = new ChartPanel(lineChart);
         chartPanel.setPreferredSize(new java.awt.Dimension(560, 367));
-        loadData();
+//        loadData();
         add(chartPanel);
     }
 
     private DefaultCategoryDataset createDataset( )
     {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-//        int sprints = 360/6;
-//        for (int i = 0; i <= 6; i++){
-//            dataset.addValue(360 - sprints, "", "" + i);
-//        }
+        int numberOfSprints = parentPanel.sc.getCurrentSprint();
 
-        dataset.addValue( 360 , "Task Estimates (Days)" , "0" );
-        dataset.addValue( 270 , "Task Estimates (Days)" , "1" );
-        dataset.addValue( 300 , "Task Estimates (Days)" , "2" );
-        dataset.addValue( 250 , "Task Estimates (Days)" , "3" );
-        dataset.addValue( 235 , "Task Estimates (Days)" , "4" );
-        dataset.addValue( 91 , "Task Estimates (Days)" , "5" );
-        dataset.addValue( 0 , "Task Estimates (Days)" , "6" );
+        int totalStoryPoints = Integer.parseInt(parentPanel.sc.getStoryPoint());
+//        System.out.println("Number of Sprints " + numberOfSprints);
+
+//        System.out.println("Total Story Points " + totalStoryPoints);
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (int i = 0; i <= numberOfSprints; i++){
+            int totalSprintPoints = parentPanel.sc.getTotalStoryPointsForSprint(i);
+//            System.out.println("Total Sprint Points " + totalSprintPoints);
+            if (totalStoryPoints > 0) {
+                dataset.addValue(totalStoryPoints, "Points", "" + i);
+                totalStoryPoints -= totalSprintPoints;
+            }
+
+        }
+
+//        dataset.addValue( 360 , "Task Estimates (Days)" , "0" );
+//        dataset.addValue( 270 , "Task Estimates (Days)" , "1" );
+//        dataset.addValue( 300 , "Task Estimates (Days)" , "2" );
+//        dataset.addValue( 250 , "Task Estimates (Days)" , "3" );
+//        dataset.addValue( 235 , "Task Estimates (Days)" , "4" );
+//        dataset.addValue( 91 , "Task Estimates (Days)" , "5" );
+//        dataset.addValue( 0 , "Task Estimates (Days)" , "6" );
         return dataset;
     }
 
