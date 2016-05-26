@@ -363,4 +363,8 @@ public class SessionController
     public ArrayList<CommentEntity> getCommentsBySprint(int sprintID){
         return cc.getCommentsBySprint(sprintID);
     }
+
+    public int getCompletedPointFromSprint(String proj, int sprintID){
+        return spc.getCompletedPointFromSprint(proj,sprintID);
+    }
 }

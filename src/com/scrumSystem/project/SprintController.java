@@ -60,7 +60,17 @@ public class SprintController {
     public int getTotalSprintPointsInProj(String projName){
         int ret = 0;
         for(int i = 0; i<sprintbls.size(); i++){
-            if(sprintbls.get(i).getProjectName() == projName){
+            if(sprintbls.get(i).getProjectName().equals(projName)){
+                ret = ret + sprintbls.get(i).getStoryPoints();
+            }
+        }
+        return ret;
+    }
+
+    public int getCompletedPointFromSprint(String proj, int sprintID){
+        int ret = 0;
+        for(int i = 0; i<sprintbls.size(); i++){
+            if(sprintbls.get(i).getProjectName().equals(proj) && sprintbls.get(i).getSprintID() == sprintID && sprintbls.get(i).getCompletionStatus().equals("Complete")){
                 ret = ret + sprintbls.get(i).getStoryPoints();
             }
         }
