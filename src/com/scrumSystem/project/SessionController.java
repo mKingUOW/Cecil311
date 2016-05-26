@@ -359,4 +359,8 @@ public class SessionController
     public int getTotalSprintPointsInProj(String projName){
         return spc.getTotalSprintPointsInProj(projName);
     }
+
+    public ArrayList<CommentEntity> getCommentsBySprint(int sprintID){
+        return cc.getCommentsBySprint(sprintID);
+    }
 }

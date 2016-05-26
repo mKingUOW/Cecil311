@@ -77,4 +77,16 @@ public class CommentController {
         }
         return ret;
     }
+
+    public ArrayList<CommentEntity> getCommentsBySprint(int sprintID){
+        ArrayList<CommentEntity> ret = new ArrayList<CommentEntity>();
+        for(int i = 0; i<allComments.size(); i++){
+            if(allComments.get(i).getSprintID() == sprintID && allComments.get(i).getIssueType().equals("Review")){
+                ret.add(allComments.get(i));
+            }
+        }
+        return ret;
+    }
+
+
 }

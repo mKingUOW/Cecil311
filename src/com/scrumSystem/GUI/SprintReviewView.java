@@ -78,6 +78,7 @@ public class SprintReviewView extends JPanel {
         commentsLayoutPanel.add(commentsHeader,BorderLayout.NORTH);
 
         CommentsPanel commentsPanel = new CommentsPanel(parentPanel);
+        commentsPanel.loadReviewComments(parentPanel.sc.getCurrentSprint()-1);
         BacklogScrollPane commentsBacklogScrollPane = new BacklogScrollPane(1210,640);
         commentsBacklogScrollPane.setScrollPanel(commentsPanel);
         commentsLayoutPanel.add(commentsBacklogScrollPane,BorderLayout.CENTER);

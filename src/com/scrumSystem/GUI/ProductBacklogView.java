@@ -528,6 +528,18 @@ class CommentsPanel extends JPanel{
         repaint();
     }
 
+    public void loadReviewComments(int sprintID){
+        removeAll();
+        ArrayList<CommentEntity> CEs = parentPanel.sc.getCommentsBySprint(parentPanel.sc.getCurrentSprint()-1);
+        for(int i = 0; i<CEs.size(); i++){
+            JTextArea temp = addComment();
+            temp.setText(CEs.get(i).getComment() + "\nDate: " + CEs.get(i).getDate());
+            temp.setEditable(false);
+        }
+        revalidate();
+        repaint();
+    }
+
     public JTextArea addComment(){
         final JTextArea temp = new JTextArea(3,50);
         temp.setText(parentPanel.getUsername() + ": ");
@@ -576,6 +588,9 @@ class CommentsPanel extends JPanel{
         }
         else if(parentPanel.getCurrentView() instanceof DetailedBacklogItemView){
             ce.setIssueType("Sprint Backlog");
+        }
+        else if(parentPanel.getCurrentView() instanceof SprintReviewView){
+            ce.setIssueType("Review");
         }
 
         ce.setSprintID(parentPanel.sc.getCurrentSprint());
