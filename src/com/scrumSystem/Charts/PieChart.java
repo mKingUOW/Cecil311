@@ -52,19 +52,19 @@ public class PieChart extends JFrame {
  * Creates a chart
  */
 
-private JFreeChart createChart(PieDataset dataset, String title) {
+    private JFreeChart createChart(PieDataset dataset, String title) {
 
-    JFreeChart chart = ChartFactory.createPieChart3D(title,          // chart title
-            dataset,                // data
-            true,                   // include legend
-            true,
-            false);
+        JFreeChart chart = ChartFactory.createPieChart3D(title,          // chart title
+                dataset,                // data
+                true,                   // include legend
+                true,
+                false);
 
-    PiePlot3D plot = (PiePlot3D) chart.getPlot();
-    plot.setStartAngle(290);
-    plot.setDirection(Rotation.CLOCKWISE);
-    plot.setForegroundAlpha(0.5f);
-    return chart;
+        PiePlot3D plot = (PiePlot3D) chart.getPlot();
+        plot.setStartAngle(290);
+        plot.setDirection(Rotation.CLOCKWISE);
+        plot.setForegroundAlpha(0.5f);
+        return chart;
 
-}
+    }
 }
